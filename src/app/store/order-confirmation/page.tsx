@@ -108,10 +108,10 @@ function ConfirmationContent() {
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-600 to-navy-700 flex items-center justify-center">
               <Leaf className="w-3.5 h-3.5 text-white" />
             </div>
-            <span className="text-brand-700 text-xs font-semibold">Message from Ntankokazi</span>
+            <span className="text-brand-700 text-xs font-semibold">Message from Nthandokazi</span>
           </div>
           <p className="text-brand-800 text-sm leading-relaxed italic">
-            "Sawubona {name}! 🌿 Thank you so much for your order — it truly means the world to me. I personally oversee every product that leaves my hands to make sure it is made with love and the finest natural ingredients. I hope these remedies bring you healing and wellness. Please don't hesitate to WhatsApp me if you have any questions about your order or how to use the products. Ngiyabonga!"
+            &ldquo;Sawubona {name}! 🌿 Thank you so much for your order &mdash; it truly means the world to me. I personally oversee every product that leaves my hands to make sure it is made with love and the finest natural ingredients. I hope these remedies bring you healing and wellness. Please don&apos;t hesitate to WhatsApp me if you have any questions about your order or how to use the products. Ngiyabonga!&rdquo;
           </p>
         </div>
 

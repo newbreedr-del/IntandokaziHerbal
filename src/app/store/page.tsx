@@ -207,7 +207,7 @@ export default function StorePage() {
                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-brand-700 text-sm leading-relaxed mb-4">"{t.text}"</p>
+                <p className="text-brand-700 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
                 <div>
                   <div className="text-brand-900 font-semibold text-sm">{t.name}</div>
                   <div className="text-brand-600 text-xs">{t.location}</div>
