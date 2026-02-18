@@ -13,10 +13,10 @@ import {
   BookOpen,
   Menu,
   X,
-  Leaf,
   Store,
   Settings,
 } from "lucide-react";
+import Image from "next/image";
 import { classNames } from "@/lib/utils";
 
 const navigation = [
@@ -44,12 +44,12 @@ export default function Sidebar() {
     <div className="flex h-full flex-col">
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-6 border-b border-brand-700/30">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
-          <Leaf className="h-6 w-6 text-white" />
+        <div className="relative h-10 w-10 flex-shrink-0">
+          <Image src="/images/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-white tracking-tight">Sonto&apos;s</h1>
-          <p className="text-xs text-brand-200 font-medium -mt-0.5">Organics</p>
+          <h1 className="text-lg font-bold text-white tracking-tight">Nthandokazi</h1>
+          <p className="text-xs text-brand-200 font-medium -mt-0.5">Herbal</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-brand-700/30 px-6 py-4">
-        <p className="text-xs text-brand-300">© 2026 Sonto&apos;s Organics</p>
+        <p className="text-xs text-brand-300">&copy; {new Date().getFullYear()} Nthandokazi Herbal</p>
         <p className="text-xs text-brand-400 mt-0.5">Business Management</p>
       </div>
     </div>

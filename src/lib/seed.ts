@@ -2,7 +2,7 @@
 
 import { Client, Product, Sale, Payment, AutoMessage, MessageLog, Expense } from "@/types";
 
-const SEEDED_KEY = "sontos_seeded";
+const SEEDED_KEY = "nthandokazi_seeded";
 
 export function seedIfNeeded(): void {
   if (typeof window === "undefined") return;
@@ -49,12 +49,12 @@ export function seedIfNeeded(): void {
   ];
 
   const autoMessages: AutoMessage[] = [
-    { id: "am1", type: "payment_reminder", trigger: "3 days before due date", template: "Hi {name}, this is a friendly reminder that your payment of R{amount} for order #{orderId} is due on {dueDate}. Please let us know if you have any questions! 🌿 — Sonto's Organics", isActive: true, lastSent: d(1), sentCount: 12 },
-    { id: "am2", type: "thank_you", trigger: "After payment received", template: "Thank you {name}! 💚 We've received your payment of R{amount}. We appreciate your support of Sonto's Organics. Your skin will thank you! 🌿", isActive: true, lastSent: d(2), sentCount: 28 },
-    { id: "am3", type: "follow_up", trigger: "14 days after last purchase", template: "Hi {name}, it's been a while! We miss you at Sonto's Organics. 🌸 Check out our latest products and enjoy 10% off your next order with code WELCOME10.", isActive: true, lastSent: d(5), sentCount: 8 },
-    { id: "am4", type: "promotion", trigger: "Monthly newsletter", template: "🌿 Sonto's Organics Monthly Special! Hi {name}, this month we're featuring our {product} at a special price. Order now and get free delivery on orders over R500!", isActive: true, lastSent: d(15), sentCount: 45 },
+    { id: "am1", type: "payment_reminder", trigger: "3 days before due date", template: "Hi {name}, this is a friendly reminder that your payment of R{amount} for order #{orderId} is due on {dueDate}. Please let us know if you have any questions! 🌿 — Nthandokazi Herbal", isActive: true, lastSent: d(1), sentCount: 12 },
+    { id: "am2", type: "thank_you", trigger: "After payment received", template: "Thank you {name}! 💚 We've received your payment of R{amount}. We appreciate your support of Nthandokazi Herbal. Your skin will thank you! 🌿", isActive: true, lastSent: d(2), sentCount: 28 },
+    { id: "am3", type: "follow_up", trigger: "14 days after last purchase", template: "Hi {name}, it's been a while! We miss you at Nthandokazi Herbal. 🌸 Check out our latest products and enjoy 10% off your next order with code WELCOME10.", isActive: true, lastSent: d(5), sentCount: 8 },
+    { id: "am4", type: "promotion", trigger: "Monthly newsletter", template: "🌿 Nthandokazi Herbal Monthly Special! Hi {name}, this month we're featuring our {product} at a special price. Order now and get free delivery on orders over R500!", isActive: true, lastSent: d(15), sentCount: 45 },
     { id: "am5", type: "low_stock_alert", trigger: "When product stock below minimum", template: "⚠️ Stock Alert: {product} is running low ({stock} remaining). Consider reordering soon to avoid stockouts.", isActive: true, lastSent: d(1), sentCount: 6 },
-    { id: "am6", type: "birthday", trigger: "On client birthday", template: "Happy Birthday {name}! 🎂🌿 As a gift from Sonto's Organics, enjoy 20% off your next purchase. Use code BDAY{year}. Have a beautiful day!", isActive: false, lastSent: null, sentCount: 0 },
+    { id: "am6", type: "birthday", trigger: "On client birthday", template: "Happy Birthday {name}! 🎂🌿 As a gift from Nthandokazi Herbal, enjoy 20% off your next purchase. Use code BDAY{year}. Have a beautiful day!", isActive: false, lastSent: null, sentCount: 0 },
   ];
 
   const messageLogs: MessageLog[] = [
@@ -77,12 +77,12 @@ export function seedIfNeeded(): void {
     { id: "e8", category: "Equipment", description: "New mixing bowls and measuring tools", amount: 720, date: d(3), receipt: "" },
   ];
 
-  localStorage.setItem("sontos_clients", JSON.stringify(clients));
-  localStorage.setItem("sontos_products", JSON.stringify(products));
-  localStorage.setItem("sontos_sales", JSON.stringify(sales));
-  localStorage.setItem("sontos_payments", JSON.stringify(payments));
-  localStorage.setItem("sontos_auto_messages", JSON.stringify(autoMessages));
-  localStorage.setItem("sontos_message_logs", JSON.stringify(messageLogs));
-  localStorage.setItem("sontos_expenses", JSON.stringify(expenses));
+  localStorage.setItem("nthandokazi_clients", JSON.stringify(clients));
+  localStorage.setItem("nthandokazi_products", JSON.stringify(products));
+  localStorage.setItem("nthandokazi_sales", JSON.stringify(sales));
+  localStorage.setItem("nthandokazi_payments", JSON.stringify(payments));
+  localStorage.setItem("nthandokazi_auto_messages", JSON.stringify(autoMessages));
+  localStorage.setItem("nthandokazi_message_logs", JSON.stringify(messageLogs));
+  localStorage.setItem("nthandokazi_expenses", JSON.stringify(expenses));
   localStorage.setItem(SEEDED_KEY, "true");
 }
