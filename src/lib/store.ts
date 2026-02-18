@@ -3,13 +3,13 @@
 import { Client, Product, Sale, Payment, AutoMessage, MessageLog, Expense } from "@/types";
 
 const STORAGE_KEYS = {
-  clients: "sontos_clients",
-  products: "sontos_products",
-  sales: "sontos_sales",
-  payments: "sontos_payments",
-  autoMessages: "sontos_auto_messages",
-  messageLogs: "sontos_message_logs",
-  expenses: "sontos_expenses",
+  clients: "nthandokazi_clients",
+  products: "nthandokazi_products",
+  sales: "nthandokazi_sales",
+  payments: "nthandokazi_payments",
+  autoMessages: "nthandokazi_auto_messages",
+  messageLogs: "nthandokazi_message_logs",
+  expenses: "nthandokazi_expenses",
 };
 
 function getItem<T>(key: string, fallback: T[]): T[] {

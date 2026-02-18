@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ["latin"] });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: "Sonto's Organics — Business Manager",
-  description: "Complete business management for Sonto's Organics",
+  title: "Nthandokazi Herbal — Business Manager",
+  description: "Complete business management for Nthandokazi Herbal",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
