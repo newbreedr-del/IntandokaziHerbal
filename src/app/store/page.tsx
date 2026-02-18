@@ -1,0 +1,267 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown } from "lucide-react";
+import { STORE_PRODUCTS, CATEGORIES, StoreProduct } from "@/lib/storeProducts";
+import { useCart } from "@/lib/cartContext";
+import ProductCard from "@/components/store/ProductCard";
+import ProductModal from "@/components/store/ProductModal";
+import CartDrawer from "@/components/store/CartDrawer";
+
+export default function StorePage() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<StoreProduct | null>(null);
+  const { totalItems, setIsOpen } = useCart();
+
+  const filtered = STORE_PRODUCTS.filter((p) => {
+    const matchCat = selectedCategory === "All" || p.category === selectedCategory;
+    const matchSearch =
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-[#0d0a1a]/95 backdrop-blur-md border-b border-brand-800/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <div className="relative w-10 h-10 flex-shrink-0">
+                <Image src="/images/logo.png" alt="Nthandokazi Herbal Logo" fill className="object-contain" />
+              </div>
+              <div>
+                <span className="text-white font-elegant-title text-lg leading-none block">Nthandokazi Herbal</span>
+                <span className="text-brand-300 text-xs">Traditional & Organic Medicines</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <a href="tel:+27000000000" className="hidden sm:flex items-center gap-1.5 text-brand-300 hover:text-white text-sm transition-colors">
+                <Phone className="w-3.5 h-3.5" />
+                <span>WhatsApp Us</span>
+              </a>
+              <button
+                onClick={() => setIsOpen(true)}
+                className="relative flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 shadow-lg shadow-brand-900/40"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                <span className="hidden sm:inline">Cart</span>
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-amber-400 text-amber-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden py-20 px-4">
+        {/* Real hero background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-bg.jpeg"
+            alt="Herbal background"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+        {/* Brand colour tint at 60% opacity over the image */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(45,27,107,0.6), rgba(26,47,110,0.6))" }} />
+        {/* Extra dark gradient at bottom for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-transparent to-brand-900/40" />
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-brand-900/60 border border-brand-700/50 text-brand-300 text-sm px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+            <Leaf className="w-3.5 h-3.5" />
+            <span>100% Natural · Traditional African Healing · Organic</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-elegant-title text-white mb-6 leading-tight">
+            Healing Rooted in{" "}
+            <span className="bg-gradient-to-r from-brand-300 via-purple-300 to-brand-400 bg-clip-text text-transparent">
+              African Tradition
+            </span>
+          </h1>
+          <p className="text-lg text-brand-200/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Handcrafted herbal remedies, traditional medicines and organic wellness products — trusted by thousands across South Africa.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+              className="bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 shadow-xl shadow-brand-900/50 hover:shadow-brand-700/40 hover:-translate-y-0.5"
+            >
+              Shop All Products
+            </button>
+            <a
+              href="https://wa.me/27000000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-brand-600/60 hover:border-brand-400 text-brand-300 hover:text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 hover:bg-brand-900/40"
+            >
+              Ask Nthandokazi
+            </a>
+          </div>
+          <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
+            {[
+              { value: "10+", label: "Herbal Products" },
+              { value: "890+", label: "Happy Clients Daily" },
+              { value: "100%", label: "Natural Ingredients" },
+              { value: "PIXI", label: "Fast Delivery" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="text-brand-400 text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="relative flex justify-center mt-12">
+          <ChevronDown className="w-6 h-6 text-brand-500 animate-bounce" />
+        </div>
+      </section>
+
+      {/* Trust Bar */}
+      <div className="border-y border-brand-200 py-4" style={{background: "#ede9f8"}}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-sm text-brand-700">
+            {["🌿 Wild-Harvested Ingredients", "📦 PIXI Courier Delivery", "💬 AI-Powered Product Advice", "✅ Traditional Healer Formulated", "🔒 Secure Checkout"].map((item) => (
+              <span key={item} className="whitespace-nowrap">{item}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Products Section */}
+      <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Search & Filter */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-elegant-title text-brand-900 mb-6">Our Products</h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400" />
+              <input
+                type="text"
+                placeholder="Search products, conditions, ingredients..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white border border-brand-300 text-brand-900 placeholder-brand-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    selectedCategory === cat
+                      ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30"
+                      : "bg-white border border-brand-300 text-brand-700 hover:border-brand-500 hover:text-brand-900 shadow-sm"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        {filtered.length === 0 ? (
+          <div className="text-center py-20 text-brand-500">
+            <Leaf className="w-12 h-12 mx-auto mb-4 opacity-40" />
+            <p className="text-lg">No products found. Try a different search.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filtered.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                index={index}
+                onOpen={() => setSelectedProduct(product)}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Testimonials */}
+      <section className="border-y border-brand-200 py-16 px-4" style={{background: "#ede9f8"}}>
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-elegant-title text-brand-900 text-center mb-10">What Our Clients Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { name: "Thandi M.", location: "Pretoria", text: "The Intandokazi Yothando cream is incredible! My skin has never felt so soft and nourished. My whole family loves it.", stars: 5 },
+              { name: "Sipho N.", location: "Johannesburg", text: "The Intanmorati Body Butter is amazing — the lavender scent is so calming and my skin stays moisturised all day. Highly recommend!", stars: 5 },
+              { name: "Nomsa K.", location: "Centurion", text: "Nthandokazi really knows her craft. The Mavula Kuvaliwe scrub left my skin glowing. I order every month without fail!", stars: 5 },
+            ].map((t) => (
+              <div key={t.name} className="bg-white border border-brand-200 rounded-2xl p-6 shadow-sm">
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: t.stars }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-brand-700 text-sm leading-relaxed mb-4">"{t.text}"</p>
+                <div>
+                  <div className="text-brand-900 font-semibold text-sm">{t.name}</div>
+                  <div className="text-brand-600 text-xs">{t.location}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-brand-900 border-t border-brand-800 py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="relative w-8 h-8 flex-shrink-0">
+                  <Image src="/images/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
+                </div>
+                <span className="text-white font-elegant-title">Nthandokazi Herbal</span>
+              </div>
+              <p className="text-brand-400 text-sm leading-relaxed">
+                Authentic African herbal remedies formulated by a traditional healer with decades of experience. Healing the natural way.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Contact Us</h4>
+              <div className="space-y-2 text-sm text-brand-400">
+                <div className="flex items-center gap-2"><Phone className="w-4 h-4" /><span>WhatsApp: +27 000 000 0000</span></div>
+                <div className="flex items-center gap-2"><Mail className="w-4 h-4" /><span>info@nthandokazi.co.za</span></div>
+                <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /><span>South Africa — Nationwide Delivery</span></div>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Delivery</h4>
+              <div className="text-sm text-brand-400 space-y-1">
+                <p>We ship via <strong className="text-brand-300">PIXI Courier</strong> nationwide.</p>
+                <p>Orders placed before 12pm ship same day.</p>
+                <p>Delivery: 2–5 business days.</p>
+                <p>Free delivery on orders over R500.</p>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-brand-900/50 pt-6 text-center text-brand-600 text-xs">
+            <p>© {new Date().getFullYear()} Nthandokazi Herbal. All rights reserved. | These products are not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional for medical advice.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Modals & Drawers */}
+      {selectedProduct && (
+        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      )}
+      <CartDrawer />
+    </div>
+  );
+}
