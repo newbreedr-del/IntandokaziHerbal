@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Leaf, ShoppingCart, ChevronLeft, Lock, Eye, EyeOff, Package, CreditCard, Smartphone } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
+import { useStitchPayment } from "@/hooks/useStitchPayment";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
+import Button from "@/components/ui/Button";
 
 interface BillingAddress {
   firstName: string; lastName: string; email: string; phone: string;
@@ -14,7 +18,8 @@ interface BillingAddress {
 
 const PROVINCES = ["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape"];
 const PAYMENT_METHODS = [
-  { id: "eft", label: "EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
+  { id: "stitch", label: "Instant EFT (Stitch)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
+  { id: "eft", label: "Manual EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
   { id: "card", label: "Credit / Debit Card", icon: <CreditCard className="w-4 h-4" /> },
   { id: "mobile", label: "SnapScan / Zapper", icon: <Smartphone className="w-4 h-4" /> },
   { id: "cash", label: "Cash on Delivery", icon: <Package className="w-4 h-4" /> },
@@ -36,8 +41,9 @@ const inputCls = (err?: string) =>
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
+  const { createPayment, loading: paymentLoading } = useStitchPayment();
   const [step, setStep] = useState<"details" | "payment" | "review">("details");
-  const [paymentMethod, setPaymentMethod] = useState("eft");
+  const [paymentMethod, setPaymentMethod] = useState("stitch");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -78,9 +84,35 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1800));
-    clearCart();
-    router.push(`/store/order-confirmation?ref=${orderRef}&email=${encodeURIComponent(billing.email)}&name=${encodeURIComponent(billing.firstName)}&phone=${encodeURIComponent(billing.phone)}`);
+    
+    try {
+      if (paymentMethod === 'stitch') {
+        // Create Stitch payment and redirect
+        await createPayment({
+          amount: total,
+          reference: orderRef,
+          customerEmail: billing.email,
+          customerName: `${billing.firstName} ${billing.lastName}`,
+          customerPhone: billing.phone,
+          description: `Order ${orderRef} - Nthandokazi Herbal`,
+          items: items.map(item => ({
+            name: item.product.name,
+            quantity: item.quantity,
+            price: item.product.price
+          }))
+        });
+        // Stitch will redirect to payment page
+      } else {
+        // For other payment methods, proceed to confirmation
+        await new Promise((r) => setTimeout(r, 1800));
+        clearCart();
+        router.push(`/store/order-confirmation?ref=${orderRef}&email=${encodeURIComponent(billing.email)}&name=${encodeURIComponent(billing.firstName)}&phone=${encodeURIComponent(billing.phone)}&method=${paymentMethod}`);
+      }
+    } catch (error) {
+      console.error('Order placement error:', error);
+      toast.error('Failed to process order. Please try again.');
+      setSubmitting(false);
+    }
   };
 
   if (items.length === 0 && step !== "review") {
@@ -180,9 +212,13 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                <button onClick={() => { if (validate()) setStep("payment"); }} className="w-full bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 text-white py-4 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg shadow-brand-900/40">
+                <Button 
+                  onClick={() => { if (validate()) setStep("payment"); }} 
+                  className="w-full py-4"
+                  size="lg"
+                >
                   Continue to Payment →
-                </button>
+                </Button>
               </div>
             )}
 
@@ -193,15 +229,43 @@ export default function CheckoutPage() {
                   <h2 className="text-brand-900 font-bold text-lg mb-5">Payment Method</h2>
                   <div className="space-y-3">
                     {PAYMENT_METHODS.map((m) => (
-                      <button key={m.id} onClick={() => setPaymentMethod(m.id)} className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${paymentMethod === m.id ? "border-brand-500 bg-brand-50 text-brand-900" : "border-gray-200 bg-white text-brand-700 hover:border-brand-300"}`}>
+                      <motion.button 
+                        key={m.id} 
+                        onClick={() => setPaymentMethod(m.id)} 
+                        className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left relative ${paymentMethod === m.id ? "border-brand-500 bg-brand-50 text-brand-900" : "border-gray-200 bg-white text-brand-700 hover:border-brand-300"}`}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                      >
+                        {m.recommended && (
+                          <span className="absolute -top-2 right-4 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                            Recommended
+                          </span>
+                        )}
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === m.id ? "border-brand-500" : "border-gray-300"}`}>
-                          {paymentMethod === m.id && <div className="w-2.5 h-2.5 rounded-full bg-brand-500" />}
+                          {paymentMethod === m.id && <motion.div layoutId="payment-selected" className="w-2.5 h-2.5 rounded-full bg-brand-500" />}
                         </div>
                         {m.icon}
                         <span className="font-medium text-sm">{m.label}</span>
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
+                  {paymentMethod === "stitch" && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-5 bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-700"
+                    >
+                      <p className="font-semibold text-emerald-900 mb-2">✨ Instant EFT Payment</p>
+                      <p>Pay securely via your bank with Stitch. Fast, secure, and instant confirmation!</p>
+                      <ul className="mt-2 space-y-1 text-xs">
+                        <li>✓ Instant payment confirmation</li>
+                        <li>✓ Bank-level security</li>
+                        <li>✓ No card details required</li>
+                        <li>✓ Supports all major SA banks</li>
+                      </ul>
+                    </motion.div>
+                  )}
                   {paymentMethod === "eft" && (
                     <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700 space-y-1">
                       <p className="font-semibold text-brand-900 mb-2">EFT Banking Details</p>
@@ -222,8 +286,8 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <div className="flex gap-3">
-                  <button onClick={() => setStep("details")} className="flex-1 border border-gray-300 text-brand-600 hover:text-brand-900 hover:border-brand-400 py-3.5 rounded-xl font-medium text-sm transition-all">← Back</button>
-                  <button onClick={() => setStep("review")} className="flex-[2] bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 text-white py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg shadow-brand-900/40">Review Order →</button>
+                  <Button onClick={() => setStep("details")} variant="secondary" className="flex-1 py-3.5">← Back</Button>
+                  <Button onClick={() => setStep("review")} className="flex-[2] py-3.5">Review Order →</Button>
                 </div>
               </div>
             )}
@@ -268,10 +332,14 @@ export default function CheckoutPage() {
                   ✅ A confirmation email and WhatsApp message will be sent to <strong>{billing.email}</strong> and <strong>{billing.phone}</strong> after placing your order.
                 </div>
                 <div className="flex gap-3">
-                  <button onClick={() => setStep("payment")} className="flex-1 border border-gray-300 text-brand-600 hover:text-brand-900 hover:border-brand-400 py-3.5 rounded-xl font-medium text-sm transition-all">← Back</button>
-                  <button onClick={handlePlaceOrder} disabled={submitting} className="flex-[2] bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 disabled:opacity-60 text-white py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg shadow-brand-900/40 flex items-center justify-center gap-2">
-                    {submitting ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Placing Order...</> : "Place Order 🌿"}
-                  </button>
+                  <Button onClick={() => setStep("payment")} variant="secondary" className="flex-1 py-3.5">← Back</Button>
+                  <Button 
+                    onClick={handlePlaceOrder} 
+                    loading={submitting || paymentLoading}
+                    className="flex-[2] py-3.5"
+                  >
+                    {paymentMethod === 'stitch' ? 'Pay with Stitch 🌿' : 'Place Order 🌿'}
+                  </Button>
                 </div>
               </div>
             )}

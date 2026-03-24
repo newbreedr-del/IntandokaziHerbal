@@ -52,3 +52,7 @@ export function daysFromNow(dateStr: string): number {
   const target = new Date(dateStr);
   return Math.ceil((target.getTime() - now.getTime()) / 86400000);
 }
+
+export function cn(...inputs: (string | boolean | undefined | null)[]): string {
+  return inputs.filter(Boolean).join(" ");
+}

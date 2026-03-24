@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/lib/cartContext";
+import RespondIOWidget from "@/components/RespondIOWidget";
 
 export const metadata: Metadata = {
   title: "Ntankokazi Herbal — Natural & Traditional Medicines",
@@ -10,6 +11,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
   return (
     <CartProvider>
       {children}
+      <RespondIOWidget />
     </CartProvider>
   );
 }
