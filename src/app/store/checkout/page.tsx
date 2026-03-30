@@ -166,7 +166,7 @@ export default function CheckoutPage() {
               <div className="space-y-6">
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
                   <h2 className="text-brand-900 font-bold text-lg mb-1">Billing & Delivery Address</h2>
-                  <p className="text-brand-500 text-xs mb-5">Used for your PIXI courier delivery — please ensure accuracy.</p>
+                  <p className="text-brand-500 text-xs mb-5">Used for your PAXI courier delivery — please ensure accuracy.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Field label="First Name *" error={errors.firstName}><input type="text" value={billing.firstName} onChange={(e) => upd("firstName", e.target.value)} className={inputCls(errors.firstName)} placeholder="Thandi" /></Field>
                     <Field label="Last Name *" error={errors.lastName}><input type="text" value={billing.lastName} onChange={(e) => upd("lastName", e.target.value)} className={inputCls(errors.lastName)} placeholder="Mokoena" /></Field>
@@ -311,7 +311,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between text-brand-600"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                    <div className="flex justify-between text-brand-600"><span>Delivery (PIXI)</span><span>{deliveryFee === 0 ? <span className="text-emerald-600">FREE</span> : `R${deliveryFee}`}</span></div>
+                    <div className="flex justify-between text-brand-600"><span>Delivery (PAXI)</span><span>{deliveryFee === 0 ? <span className="text-emerald-600">FREE</span> : `R${deliveryFee}`}</span></div>
                     <div className="flex justify-between text-brand-900 font-bold text-base pt-2 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
                   </div>
                 </div>
@@ -368,7 +368,7 @@ export default function CheckoutPage() {
               </div>
               <div className="mt-4 flex items-center gap-2 text-xs text-brand-400">
                 <Package className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>Delivered via PIXI Courier · 2–5 business days</span>
+                <span>Delivered via PAXI Courier · 2–5 business days</span>
               </div>
             </div>
           </div>

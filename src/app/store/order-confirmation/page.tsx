@@ -89,8 +89,8 @@ function ConfirmationContent() {
           <div className="space-y-3">
             {[
               { step: "1", text: "We prepare your order with fresh, quality ingredients", time: "Today" },
-              { step: "2", text: "Your parcel is handed to PIXI courier for dispatch", time: "1–2 days" },
-              { step: "3", text: "PIXI delivers to your door with a tracking number", time: "2–5 days" },
+              { step: "2", text: "Your parcel is handed to PAXI courier for dispatch", time: "1–2 days" },
+              { step: "3", text: "PAXI delivers to your door with a tracking number", time: "2–5 days" },
             ].map((item) => (
               <div key={item.step} className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{item.step}</div>

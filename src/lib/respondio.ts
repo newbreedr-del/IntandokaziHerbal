@@ -203,7 +203,7 @@ Thank you for your order!
 *Items:*
 ${itemsList}
 
-Your order will be processed and shipped via PIXI Courier within 1-2 business days.
+Your order will be processed and shipped via PAXI Courier within 1-2 business days.
 
 You'll receive tracking information once your order ships.
 

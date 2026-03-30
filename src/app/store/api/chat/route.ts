@@ -85,8 +85,8 @@ function getFallbackResponse(question: string, productName?: string): string {
   if (q.includes("price") || q.includes("cost") || q.includes("discount") || q.includes("bulk")) {
     return `I understand — value matters! For bulk orders or if you are buying for a family or community, please WhatsApp me directly and we can discuss special pricing. I believe everyone deserves access to natural healing, so I always try to find a way to help. 🌿`;
   }
-  if (q.includes("delivery") || q.includes("shipping") || q.includes("pixi")) {
-    return `We deliver nationwide via PIXI courier! Orders placed before 12pm usually ship the same day and arrive within 2–5 business days. Free delivery on orders over R500. You will receive a tracking number as soon as your order is dispatched. 📦`;
+  if (q.includes("delivery") || q.includes("shipping") || q.includes("paxi")) {
+    return `We deliver nationwide via PAXI courier! Orders placed before 12pm usually ship the same day and arrive within 2–5 business days. Free delivery on orders over R500. You will receive a tracking number as soon as your order is dispatched. 📦`;
   }
   return `Sawubona! Thank you for your question about ${productName || "our products"}. This is one of my most trusted remedies — I have seen it help hundreds of clients. Please feel free to ask me anything specific about ingredients, usage or what condition you are trying to address, and I will give you my honest advice. 🌿`;
 }

@@ -4,43 +4,53 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export interface PaymentData {
+interface PaymentRequest {
   amount: number;
   reference: string;
   customerEmail: string;
   customerName: string;
   customerPhone?: string;
   description: string;
-  items?: Array<{
-    name: string;
-    quantity: number;
-    price: number;
-  }>;
 }
 
 export function useStitchPayment() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createPayment = async (data: PaymentData) => {
+  const createPayment = async (request: PaymentRequest) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post('/api/payments/stitch/create', {
-        ...data,
-        currency: 'ZAR'
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+      
+      // Use mock mode if real credentials aren't working
+      const useMockMode = process.env.NEXT_PUBLIC_STITCH_MOCK_MODE === 'true';
+      const endpoint = useMockMode ? '/api/payments/stitch-mock/create' : '/api/payments/stitch-express/create';
+      
+      if (useMockMode) {
+        console.log('🎭 Using MOCK payment mode for testing');
+      }
+      
+      const response = await axios.post(endpoint, {
+        amount: request.amount,
+        reference: request.reference,
+        customerEmail: request.customerEmail,
+        customerName: request.customerName,
+        customerPhone: request.customerPhone,
+        description: request.description,
+        redirectUrl: `${baseUrl}/store/order-confirmation?ref=${request.reference}&email=${encodeURIComponent(request.customerEmail)}&name=${encodeURIComponent(request.customerName)}`
       });
 
-      if (response.data.success) {
-        // Redirect to Stitch payment page
-        window.location.href = response.data.payment.url;
-        return response.data.payment;
+      if (response.data.paymentUrl) {
+        toast.success('Redirecting to payment...');
+        // Redirect to Stitch Express payment page
+        window.location.href = response.data.paymentUrl;
       } else {
-        throw new Error(response.data.error || 'Payment creation failed');
+        throw new Error('No payment URL received');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error || err.message || 'Failed to create payment';
+      const errorMessage = err.response?.data?.error || 'Failed to create payment';
       setError(errorMessage);
       toast.error(errorMessage);
       throw err;

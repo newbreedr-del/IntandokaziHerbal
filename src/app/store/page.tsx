@@ -112,7 +112,7 @@ export default function StorePage() {
               { value: "10+", label: "Herbal Products" },
               { value: "890+", label: "Happy Clients Daily" },
               { value: "100%", label: "Natural Ingredients" },
-              { value: "PIXI", label: "Fast Delivery" },
+              { value: "PAXI", label: "Fast Delivery" },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-2xl font-bold text-white">{stat.value}</div>
@@ -130,7 +130,7 @@ export default function StorePage() {
       <div className="border-y border-brand-200 py-4" style={{background: "#ede9f8"}}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-sm text-brand-700">
-            {["🌿 Wild-Harvested Ingredients", "📦 PIXI Courier Delivery", "💬 AI-Powered Product Advice", "✅ Traditional Healer Formulated", "🔒 Secure Checkout"].map((item) => (
+            {["🌿 Wild-Harvested Ingredients", "📦 PAXI Courier Delivery", "💬 AI-Powered Product Advice", "✅ Traditional Healer Formulated", "🔒 Secure Checkout"].map((item) => (
               <span key={item} className="whitespace-nowrap">{item}</span>
             ))}
           </div>
@@ -244,7 +244,7 @@ export default function StorePage() {
             <div>
               <h4 className="text-white font-semibold mb-4">Delivery</h4>
               <div className="text-sm text-brand-400 space-y-1">
-                <p>We ship via <strong className="text-brand-300">PIXI Courier</strong> nationwide.</p>
+                <p>We ship via <strong className="text-brand-300">PAXI Courier</strong> nationwide.</p>
                 <p>Orders placed before 12pm ship same day.</p>
                 <p>Delivery: 2–5 business days.</p>
                 <p>Free delivery on orders over R500.</p>
