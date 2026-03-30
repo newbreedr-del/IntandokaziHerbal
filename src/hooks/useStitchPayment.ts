@@ -11,6 +11,11 @@ interface PaymentRequest {
   customerName: string;
   customerPhone?: string;
   description: string;
+  items?: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
 }
 
 export function useStitchPayment() {

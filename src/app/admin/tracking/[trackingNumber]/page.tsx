@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+
+export const dynamic = 'force-dynamic';
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Package, MapPin, Clock, CheckCircle, XCircle, Truck } from "lucide-react";
 import Button from "@/components/ui/Button";

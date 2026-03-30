@@ -1,6 +1,8 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
+
+export const dynamic = 'force-dynamic';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { 
@@ -37,7 +39,7 @@ interface Order {
 }
 
 export default function AdminDashboard() {
-  const { data: session, status } = useSession();
+  const session = useSession();
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState({
@@ -50,10 +52,10 @@ export default function AdminDashboard() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (session && session.status === "unauthenticated") {
       router.push("/admin/login");
     }
-  }, [status, router]);
+  }, [session?.status, router]);
 
   useEffect(() => {
     // Load mock data - replace with actual API calls
@@ -93,6 +95,29 @@ export default function AdminDashboard() {
     });
   }, []);
 
+  // Defensive check for undefined session
+  if (!session || !session.status) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+      </div>
+    );
+  }
+
+  // Show loading state while session is loading
+  if (session.status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated
+  if (session.status === "unauthenticated") {
+    return null; // Will redirect via useEffect
+  }
+
   const handleSignOut = () => {
     signOut({ callbackUrl: "/admin/login" });
   };
@@ -117,15 +142,7 @@ export default function AdminDashboard() {
     return matchesSearch && matchesFilter;
   });
 
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
-      </div>
-    );
-  }
-
-  if (!session) {
+  if (!session.data) {
     return null;
   }
 
@@ -151,7 +168,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-brand-900">Admin Dashboard</h1>
-              <p className="text-sm text-brand-600">Welcome back, {session.user?.name}</p>
+              <p className="text-sm text-brand-600">Welcome back, {session.data?.user?.name}</p>
             </div>
             <Button onClick={handleSignOut} variant="secondary" icon={<LogOut className="w-4 h-4" />}>
               Sign Out

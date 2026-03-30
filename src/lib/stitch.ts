@@ -84,7 +84,7 @@ class StitchPaymentGateway {
       // Set expiry to 5 minutes before actual expiry
       this.tokenExpiry = Date.now() + (response.data.expires_in - 300) * 1000;
       
-      return this.accessToken;
+      return this.accessToken!;
     } catch (error) {
       console.error('Failed to get Stitch access token:', error);
       throw new Error('Failed to authenticate with Stitch');
