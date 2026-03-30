@@ -17,6 +17,24 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = paymentSchema.parse(body);
 
+    // Check if Stitch credentials are configured
+    if (!process.env.STITCH_CLIENT_ID || !process.env.STITCH_CLIENT_SECRET) {
+      console.warn('Stitch credentials not configured, using mock payment');
+      
+      // Mock payment response for development/testing
+      const mockPaymentId = `mock_${Date.now()}`;
+      const mockPaymentUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/store/order-confirmation?payment_id=${mockPaymentId}&status=success`;
+      
+      return NextResponse.json({
+        success: true,
+        paymentId: mockPaymentId,
+        paymentUrl: mockPaymentUrl,
+        status: 'success',
+        reference: validated.reference,
+        mock: true
+      });
+    }
+
     const stitch = getStitchExpressClient();
 
     // Create payment link
