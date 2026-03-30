@@ -35,7 +35,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "💪",
     gradient: "from-amber-900 to-orange-800",
     gradientCss: "linear-gradient(135deg, #78350f, #9a3412)",
-    image: "/images/products/imbiza-yamadoda.jpg",
+    image: "/images/products/imbiza-yamadoda.jpeg",
     badge: "Traditional",
   },
   {
@@ -54,7 +54,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🌿",
     gradient: "from-green-900 to-emerald-800",
     gradientCss: "linear-gradient(135deg, #14532d, #065f46)",
-    image: "/images/products/imbiza-yokuchatha.jpg",
+    image: "/images/products/imbiza-yokuchata.jpeg",
   },
   {
     id: "sp3",
@@ -72,7 +72,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🔥",
     gradient: "from-red-900 to-orange-800",
     gradientCss: "linear-gradient(135deg, #7f1d1d, #9a3412)",
-    image: "/images/products/stop-nonsense.jpg",
+    image: "/images/products/stop-nonsence.jpeg",
     badge: "Powerful",
   },
   {
@@ -91,7 +91,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "⚡",
     gradient: "from-blue-900 to-cyan-800",
     gradientCss: "linear-gradient(135deg, #1e3a8a, #155e75)",
-    image: "/images/products/imbiza-yomhlume.jpg",
+    image: "/images/products/imbiza-yomhlume.jpeg",
   },
   {
     id: "sp5",
@@ -109,7 +109,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🛡️",
     gradient: "from-purple-900 to-violet-800",
     gradientCss: "linear-gradient(135deg, #4c1d95, #5b21b6)",
-    image: "/images/products/umabulala-idliso.jpg",
+    image: "/images/products/umabulala-idliso.jpeg",
   },
   {
     id: "sp6",
@@ -127,7 +127,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🏠",
     gradient: "from-teal-900 to-cyan-800",
     gradientCss: "linear-gradient(135deg, #134e4a, #155e75)",
-    image: "/images/products/umhlabelo.jpg",
+    image: "/images/products/umhlabelo.jpeg",
   },
   {
     id: "sp7",
@@ -145,7 +145,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "💚",
     gradient: "from-lime-900 to-green-800",
     gradientCss: "linear-gradient(135deg, #365314, #166534)",
-    image: "/images/products/imbiza-yama-ulcer.jpg",
+    image: "/images/products/imbiza-yama-ulcer-.jpeg",
   },
   {
     id: "sp8",
@@ -163,7 +163,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🦁",
     gradient: "from-orange-900 to-amber-800",
     gradientCss: "linear-gradient(135deg, #7c2d12, #92400e)",
-    image: "/images/products/umvusa-nkunzi.jpg",
+    image: "/images/products/umvusa-nkunizi.jpeg",
     badge: "Men's Health",
   },
   {
@@ -182,7 +182,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "✨",
     gradient: "from-yellow-900 to-amber-800",
     gradientCss: "linear-gradient(135deg, #713f12, #92400e)",
-    image: "/images/products/zakhanya-liquid.jpg",
+    image: "/images/products/zakhanyisa-liquid.jpeg",
   },
   {
     id: "sp10",
@@ -200,7 +200,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "💖",
     gradient: "from-pink-900 to-rose-800",
     gradientCss: "linear-gradient(135deg, #831843, #9f1239)",
-    image: "/images/products/yokuthandeka.jpg",
+    image: "/images/products/yokuthandeka.jpeg",
     badge: "Beauty",
   },
   {
@@ -219,7 +219,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🍀",
     gradient: "from-slate-200 to-gray-300",
     gradientCss: "linear-gradient(135deg, #e2e8f0, #d1d5db)",
-    image: "/images/products/inhlanhla-emhlophe.jpg",
+    image: "/images/products/inhlanhla-emhlophe.jpeg",
   },
   {
     id: "sp12",
@@ -237,7 +237,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🛡️",
     gradient: "from-indigo-900 to-purple-800",
     gradientCss: "linear-gradient(135deg, #312e81, #6d28d9)",
-    image: "/images/products/umakhiphi-isichitho.jpg",
+    image: "/images/products/umakhiphi-isichitho.jpeg",
     badge: "Protection",
   },
   {
@@ -256,7 +256,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🌟",
     gradient: "from-amber-600 to-yellow-500",
     gradientCss: "linear-gradient(135deg, #d97706, #eab308)",
-    image: "/images/products/tissue-oil-eyenenhlannhla.jpg",
+    image: "/images/products/tissue-oil-eyenenhlannhla.jpeg",
   },
   {
     id: "sp14",
@@ -274,7 +274,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🔮",
     gradient: "from-violet-900 to-purple-800",
     gradientCss: "linear-gradient(135deg, #4c1d95, #6d28d9)",
-    image: "/images/products/tissue-oil-yesichitho.jpg",
+    image: "/images/products/tissue-oil-yesichitho.jpeg",
   },
   {
     id: "sp15",
@@ -292,7 +292,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🚿",
     gradient: "from-blue-900 to-indigo-800",
     gradientCss: "linear-gradient(135deg, #1e3a8a, #3730a3)",
-    image: "/images/products/shower-gel-ikhipha-isichitho.jpg",
+    image: "/images/products/shower-gel-ikhipha-isichitho.jpeg",
   },
   {
     id: "sp16",
@@ -310,7 +310,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "💕",
     gradient: "from-pink-800 to-rose-700",
     gradientCss: "linear-gradient(135deg, #9f1239, #be123c)",
-    image: "/images/products/shower-gel-yokuthandeka.jpg",
+    image: "/images/products/shower-gel-yokuthandeka.jpeg",
   },
   {
     id: "sp17",
@@ -328,7 +328,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "🧴",
     gradient: "from-cyan-900 to-blue-800",
     gradientCss: "linear-gradient(135deg, #164e63, #1e40af)",
-    image: "/images/products/umkhanyakude-jelly-vaseline.jpg",
+    image: "/images/products/umkhanyakude-jelly-vaseline.jpeg",
   },
   {
     id: "sp18",
@@ -346,7 +346,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     emoji: "✨",
     gradient: "from-purple-900 to-indigo-800",
     gradientCss: "linear-gradient(135deg, #581c87, #3730a3)",
-    image: "/images/products/umakhiphi-isichitho-vaseline.jpg",
+    image: "/images/products/umakhiphi-isichitho-vaseline.jpeg",
   },
 ];
 
