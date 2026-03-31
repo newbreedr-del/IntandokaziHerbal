@@ -16,6 +16,26 @@ const paymentSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate environment variables first
+    const requiredEnvVars = {
+      PAYFAST_MERCHANT_ID: process.env.PAYFAST_MERCHANT_ID,
+      PAYFAST_MERCHANT_KEY: process.env.PAYFAST_MERCHANT_KEY,
+      PAYFAST_PASSPHRASE: process.env.PAYFAST_PASSPHRASE,
+      PAYFAST_ENVIRONMENT: process.env.PAYFAST_ENVIRONMENT,
+    };
+
+    const missingVars = Object.entries(requiredEnvVars)
+      .filter(([_, value]) => !value)
+      .map(([key]) => key);
+
+    if (missingVars.length > 0) {
+      console.error('Missing environment variables:', missingVars);
+      return NextResponse.json(
+        { error: 'Server configuration error', details: `Missing: ${missingVars.join(', ')}` },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const validated = paymentSchema.parse(body);
 
@@ -43,6 +63,8 @@ export async function POST(request: NextRequest) {
     console.log('Request Data:', validated);
     console.log('Base URL:', baseUrl);
     console.log('Environment:', process.env.PAYFAST_ENVIRONMENT);
+    console.log('Merchant ID:', process.env.PAYFAST_MERCHANT_ID);
+    console.log('Passphrase set:', !!process.env.PAYFAST_PASSPHRASE);
     console.log('=== END PAYFAST DEBUG ===');
 
     // Create payment data

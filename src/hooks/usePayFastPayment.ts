@@ -74,9 +74,16 @@ export function usePayFastPayment() {
         throw new Error('No payment data received');
       }
     } catch (err: any) {
+      console.error('Payment creation error:', err);
+      console.error('Error response:', err.response?.data);
+      
       const errorMessage = err.response?.data?.error || 'Failed to create payment';
-      setError(errorMessage);
-      toast.error(errorMessage);
+      const errorDetails = err.response?.data?.details;
+      
+      const fullError = errorDetails ? `${errorMessage}: ${errorDetails}` : errorMessage;
+      
+      setError(fullError);
+      toast.error(fullError, { duration: 5000 });
       throw err;
     } finally {
       setLoading(false);
