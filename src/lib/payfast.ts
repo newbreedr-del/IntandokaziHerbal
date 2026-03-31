@@ -90,12 +90,23 @@ export class PayFastGateway {
         .replace(/%([0-9a-f]{2})/gi, (match, hex) => '%' + hex.toUpperCase());
     };
     
-    // Create parameter string with alphabetically sorted keys
-    let paramString = '';
-    const sortedKeys = Object.keys(data).sort();
+    // PayFast field order as per documentation (NOT alphabetical!)
+    // Order: merchant details, customer details, transaction details, transaction options, payment method
+    const fieldOrder = [
+      'merchant_id', 'merchant_key', 'return_url', 'cancel_url', 'notify_url',
+      'name_first', 'name_last', 'email_address', 'cell_number',
+      'm_payment_id', 'amount', 'item_name', 'item_description',
+      'custom_int1', 'custom_int2', 'custom_int3', 'custom_int4', 'custom_int5',
+      'custom_str1', 'custom_str2', 'custom_str3', 'custom_str4', 'custom_str5',
+      'email_confirmation', 'confirmation_address',
+      'payment_method'
+    ];
     
-    for (const key of sortedKeys) {
-      if (key !== 'signature') {
+    // Create parameter string in PayFast field order
+    let paramString = '';
+    
+    for (const key of fieldOrder) {
+      if (data[key] !== undefined && data[key] !== null && data[key] !== '' && key !== 'signature') {
         paramString += `${key}=${pfEncode(data[key])}&`;
       }
     }
