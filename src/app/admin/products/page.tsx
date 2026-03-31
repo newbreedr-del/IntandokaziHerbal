@@ -479,18 +479,13 @@ function ProductFormModal({
   };
 
   return (
-    <Modal onClose={onClose}>
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-brand-900">
-            {product ? "Edit Product" : "Add New Product"}
-          </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+    <Modal 
+      isOpen={true}
+      onClose={onClose}
+      title={product ? "Edit Product" : "Add New Product"}
+      size="xl"
+    >
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -647,7 +642,6 @@ function ProductFormModal({
             </Button>
           </div>
         </form>
-      </div>
     </Modal>
   );
 }
