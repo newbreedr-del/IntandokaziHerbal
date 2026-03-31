@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     const image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/Intandokazi Products/${slug}.jpg`;
 
     // Insert product
-    const { data: product, error } = await supabase
+    const { data: insertedProducts, error } = await supabase
       .from('products')
       .insert({
         name,
@@ -161,13 +161,18 @@ export async function POST(request: NextRequest) {
         created_by: session.user.email,
         updated_by: session.user.email,
       })
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error('Database error:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    if (!insertedProducts || insertedProducts.length === 0) {
+      return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+    }
+
+    const product = insertedProducts[0];
 
     // Log activity
     await supabase.from('activity_log').insert({
@@ -210,11 +215,16 @@ export async function PUT(request: NextRequest) {
     }
 
     // Get old values for audit log
-    const { data: oldProduct } = await supabase
+    const { data: oldProduct, error: fetchError } = await supabase
       .from('products')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error('Error fetching product:', fetchError);
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
 
     // Update image URL if slug changed
     if (updates.slug && updates.slug !== oldProduct?.slug) {
@@ -222,20 +232,25 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update product
-    const { data: product, error } = await supabase
+    const { data: updatedProducts, error } = await supabase
       .from('products')
       .update({
         ...updates,
         updated_by: session.user.email,
       })
       .eq('id', id)
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error('Database error:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    if (!updatedProducts || updatedProducts.length === 0) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
+    const product = updatedProducts[0];
 
     // Log activity
     await supabase.from('activity_log').insert({
@@ -283,7 +298,7 @@ export async function DELETE(request: NextRequest) {
       .from('products')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     // Soft delete - set is_active to false instead of actual deletion
     const { error } = await supabase
