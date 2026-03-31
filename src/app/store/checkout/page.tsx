@@ -9,6 +9,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/ui/Button";
+import { SITE_CONFIG, SA_PROVINCES } from "@/lib/constants";
 
 interface BillingAddress {
   firstName: string; lastName: string; email: string; phone: string;
@@ -16,20 +17,10 @@ interface BillingAddress {
   postalCode: string; country: string; deliveryNotes: string;
 }
 
-const PROVINCES = ["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape"];
 const PAYMENT_METHODS = [
   { id: "payfast", label: "PayFast (Card, EFT, Instant EFT)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
   { id: "eft", label: "Manual EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
 ];
-
-const EFT_DETAILS = {
-  accountName: "Miss Mokoatle",
-  bank: "Capitec Bank",
-  accountType: "Active Savings",
-  accountNumber: "1506845620",
-  linkedNumber: "0625842441",
-  paxiFee: "110"
-};
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
@@ -186,8 +177,9 @@ export default function CheckoutPage() {
                     <Field label="Suburb"><input type="text" value={billing.suburb} onChange={(e) => upd("suburb", e.target.value)} className={inputCls()} placeholder="Hatfield" /></Field>
                     <Field label="City / Town *" error={errors.city}><input type="text" value={billing.city} onChange={(e) => upd("city", e.target.value)} className={inputCls(errors.city)} placeholder="Pretoria" /></Field>
                     <Field label="Province *">
-                      <select value={billing.province} onChange={(e) => upd("province", e.target.value)} className={inputCls()}>
-                        {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+                      <select value={billing.province} onChange={(e) => setBilling({...billing, province: e.target.value})} className="input">
+                        <option value="">Select Province</option>
+                        {SA_PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
                       </select>
                     </Field>
                     <Field label="Postal Code *" error={errors.postalCode}><input type="text" value={billing.postalCode} onChange={(e) => upd("postalCode", e.target.value)} className={inputCls(errors.postalCode)} placeholder="0083" /></Field>
@@ -260,15 +252,15 @@ export default function CheckoutPage() {
                   {paymentMethod === "eft" && (
                     <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700 space-y-1.5">
                       <p className="font-semibold text-brand-900 mb-2">💳 EFT Banking Details</p>
-                      <p><span className="text-brand-500">Bank:</span> <strong>{EFT_DETAILS.bank}</strong></p>
-                      <p><span className="text-brand-500">Account Name:</span> <strong>{EFT_DETAILS.accountName}</strong></p>
-                      <p><span className="text-brand-500">Account Type:</span> {EFT_DETAILS.accountType}</p>
-                      <p><span className="text-brand-500">Account Number:</span> <strong className="text-brand-900">{EFT_DETAILS.accountNumber}</strong></p>
-                      <p><span className="text-brand-500">Linked Number:</span> {EFT_DETAILS.linkedNumber}</p>
+                      <p><span className="text-brand-500">Bank:</span> <strong>{SITE_CONFIG.banking.bank}</strong></p>
+                      <p><span className="text-brand-500">Account Name:</span> <strong>{SITE_CONFIG.banking.accountName}</strong></p>
+                      <p><span className="text-brand-500">Account Type:</span> {SITE_CONFIG.banking.accountType}</p>
+                      <p><span className="text-brand-500">Account Number:</span> <strong className="text-brand-900">{SITE_CONFIG.banking.accountNumber}</strong></p>
+                      <p><span className="text-brand-500">Linked Number:</span> {SITE_CONFIG.banking.linkedNumber}</p>
                       <div className="mt-3 pt-3 border-t border-brand-200">
                         <p className="text-xs text-brand-600">📦 Payment Reference: <strong className="text-brand-900">{billing.firstName} {billing.lastName}</strong></p>
-                        <p className="text-xs text-brand-600">� PAXI Delivery Fee: <strong className="text-brand-900">R{EFT_DETAILS.paxiFee}</strong></p>
-                        <p className="text-xs text-brand-500 mt-1">Use your full name as payment reference. Total amount includes R{EFT_DETAILS.paxiFee} PAXI delivery fee.</p>
+                        <p className="text-xs text-brand-600">🚚 PAXI Delivery Fee: <strong className="text-brand-900">R{SITE_CONFIG.banking.paxiFee}</strong></p>
+                        <p className="text-xs text-brand-500 mt-1">Use your full name as payment reference. Total amount includes R{SITE_CONFIG.banking.paxiFee} PAXI delivery fee.</p>
                       </div>
                     </div>
                   )}

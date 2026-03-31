@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Mail, MessageCircle, Package, Leaf, ArrowRight } from "lucide-react";
+import { SITE_CONFIG } from "@/lib/constants";
 
 function ConfirmationContent() {
   const params = useSearchParams();
@@ -103,7 +104,7 @@ function ConfirmationContent() {
                 <button
                   onClick={() => {
                     recordPaymentProof('whatsapp');
-                    window.open(`https://wa.me/27000000000?text=Hi%20Ntankokazi!%20I%20made%20an%20EFT%20payment%20for%20order%20${ref}.%20Here%20is%20my%20proof%20of%20payment.%20My%20name%20is%20${encodeURIComponent(name)}.`, '_blank');
+                    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Ntankokazi!%20I%20made%20an%20EFT%20payment%20for%20order%20${ref}.%20Here%20is%20my%20proof%20of%20payment.%20My%20name%20is%20${encodeURIComponent(name)}.`, '_blank');
                   }}
                   className="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-lg text-xs font-semibold transition-all"
                 >
@@ -207,7 +208,7 @@ function ConfirmationContent() {
             Continue Shopping
           </Link>
           <a
-            href="https://wa.me/27000000000"
+            href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white py-3 rounded-xl text-sm font-semibold transition-all"
