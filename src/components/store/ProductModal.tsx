@@ -104,7 +104,7 @@ Stock: ${product.stock} units available
           {product.image ? (
             <Image src={product.image} alt={product.name} fill className="object-cover" />
           ) : (
-            <div className="absolute inset-0" style={{ background: product.gradientCss }} />
+            <div className="absolute inset-0" style={{ background: product.gradient_css }} />
           )}
           {/* Glass overlay */}
           <div className="absolute inset-0 bg-white/40 backdrop-blur-md" />
