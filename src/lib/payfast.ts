@@ -108,8 +108,20 @@ export class PayFastGateway {
       paramString += `&passphrase=${pfEncode(passphrase)}`;
     }
     
+    // Debug logging - remove in production
+    console.log('=== PAYFAST SIGNATURE DEBUG ===');
+    console.log('Parameter String:', paramString);
+    console.log('Passphrase:', passphrase);
+    console.log('Environment:', this.config.environment);
+    console.log('Merchant ID:', this.config.merchantId);
+    console.log('Merchant Key:', this.config.merchantKey);
+    
     // Generate MD5 hash (must be lowercase)
-    return crypto.createHash('md5').update(paramString).digest('hex');
+    const signature = crypto.createHash('md5').update(paramString).digest('hex');
+    console.log('Generated Signature:', signature);
+    console.log('=== END DEBUG ===');
+    
+    return signature;
   }
 
   /**

@@ -38,6 +38,13 @@ export async function POST(request: NextRequest) {
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
 
+    // Debug logging
+    console.log('=== PAYFAST PAYMENT DEBUG ===');
+    console.log('Request Data:', validated);
+    console.log('Base URL:', baseUrl);
+    console.log('Environment:', process.env.PAYFAST_ENVIRONMENT);
+    console.log('=== END PAYFAST DEBUG ===');
+
     // Create payment data
     const paymentData = payfast.createPayment({
       return_url: validated.returnUrl || `${baseUrl}/store/order-confirmation`,
@@ -54,6 +61,12 @@ export async function POST(request: NextRequest) {
       email_confirmation: '1',
       confirmation_address: validated.customerEmail,
     });
+
+    // Debug logging for payment data
+    console.log('=== PAYFAST RESPONSE DEBUG ===');
+    console.log('Payment URL:', payfast.getPaymentUrl());
+    console.log('Payment Data:', paymentData);
+    console.log('=== END RESPONSE DEBUG ===');
 
     // Return payment data for form submission
     return NextResponse.json({

@@ -45,6 +45,11 @@ export function usePayFastPayment() {
       if (response.data.success && response.data.paymentData) {
         toast.success('Redirecting to PayFast...');
         
+        console.log('=== FRONTEND PAYFAST DEBUG ===');
+        console.log('Payment URL:', response.data.paymentUrl);
+        console.log('Payment Data:', response.data.paymentData);
+        console.log('=== END FRONTEND DEBUG ===');
+        
         // Create and submit form to PayFast
         const form = document.createElement('form');
         form.method = 'POST';
