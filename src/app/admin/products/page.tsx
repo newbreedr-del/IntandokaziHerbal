@@ -440,10 +440,10 @@ function ProductFormModal({
       .replace(/^-|-$/g, "");
   };
 
-  const generateSKU = (name: string, category: string) => {
+  const generateSKU = (name: string, category: string, unit: string) => {
     const categoryPrefix = category.split(" ").map(w => w[0]).join("").toUpperCase();
     const namePrefix = name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
-    return `${categoryPrefix}-${namePrefix}-${formData.unit.replace(/[^a-zA-Z0-9]/g, "")}`;
+    return `${categoryPrefix}-${namePrefix}-${unit.replace(/[^a-zA-Z0-9]/g, "")}`;
   };
 
   // Auto-generate slug and SKU when name changes
@@ -452,7 +452,7 @@ function ProductFormModal({
       ...prev,
       name,
       slug: generateSlug(name),
-      sku: generateSKU(name, prev.category),
+      sku: generateSKU(name, prev.category, prev.unit),
     }));
   };
 
@@ -595,8 +595,12 @@ function ProductFormModal({
                 required
                 value={formData.unit}
                 onChange={(e) => {
-                  setFormData({ ...formData, unit: e.target.value });
-                  if (formData.name) handleNameChange(formData.name);
+                  const newUnit = e.target.value;
+                  setFormData(prev => ({
+                    ...prev,
+                    unit: newUnit,
+                    sku: generateSKU(prev.name, prev.category, newUnit),
+                  }));
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               >
@@ -614,8 +618,12 @@ function ProductFormModal({
                 required
                 value={formData.category}
                 onChange={(e) => {
-                  setFormData({ ...formData, category: e.target.value });
-                  if (formData.name) handleNameChange(formData.name);
+                  const newCategory = e.target.value;
+                  setFormData(prev => ({
+                    ...prev,
+                    category: newCategory,
+                    sku: generateSKU(prev.name, newCategory, prev.unit),
+                  }));
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               >
