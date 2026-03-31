@@ -214,6 +214,9 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
     }
 
+    console.log('PUT request - Product ID:', id);
+    console.log('PUT request - Updates:', updates);
+
     // Get old values for audit log
     const { data: oldProduct, error: fetchError } = await supabase
       .from('products')
@@ -227,7 +230,14 @@ export async function PUT(request: NextRequest) {
     }
 
     if (!oldProduct) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+      console.error('Product not found in database. ID:', id);
+      console.log('Checking if any products exist...');
+      const { data: allProducts } = await supabase.from('products').select('id, name').limit(5);
+      console.log('Sample products in database:', allProducts);
+      return NextResponse.json({ 
+        error: 'Product not found in database. The product may not have been created yet.',
+        productId: id 
+      }, { status: 404 });
     }
 
     // Update image URL if slug changed
