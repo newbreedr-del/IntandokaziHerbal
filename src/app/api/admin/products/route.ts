@@ -1,28 +1,24 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 // GET - Fetch all products (admin view with inactive products)
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    // Check if user is authenticated admin
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Verify admin permissions
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get('category');
@@ -66,25 +62,19 @@ export async function GET(request: NextRequest) {
 // POST - Create new product
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    // Check authentication
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Verify admin permissions
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const body = await request.json();
     const {
@@ -168,8 +158,8 @@ export async function POST(request: NextRequest) {
         is_featured: is_featured || false,
         is_new: is_new || false,
         is_on_sale: is_on_sale || false,
-        created_by: adminUser.id,
-        updated_by: adminUser.id,
+        created_by: session.user.email,
+        updated_by: session.user.email,
       })
       .select()
       .single();
@@ -181,8 +171,7 @@ export async function POST(request: NextRequest) {
 
     // Log activity
     await supabase.from('activity_log').insert({
-      user_id: adminUser.id,
-      user_email: adminUser.email,
+      user_email: session.user.email,
       action: 'create_product',
       entity_type: 'product',
       entity_id: product.id,
@@ -199,23 +188,19 @@ export async function POST(request: NextRequest) {
 // PUT - Update product
 export async function PUT(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const body = await request.json();
     const { id, ...updates } = body;
@@ -241,7 +226,7 @@ export async function PUT(request: NextRequest) {
       .from('products')
       .update({
         ...updates,
-        updated_by: adminUser.id,
+        updated_by: session.user.email,
       })
       .eq('id', id)
       .select()
@@ -254,8 +239,7 @@ export async function PUT(request: NextRequest) {
 
     // Log activity
     await supabase.from('activity_log').insert({
-      user_id: adminUser.id,
-      user_email: adminUser.email,
+      user_email: session.user.email,
       action: 'update_product',
       entity_type: 'product',
       entity_id: product.id,
@@ -273,23 +257,19 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete product
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get('id');
@@ -308,7 +288,7 @@ export async function DELETE(request: NextRequest) {
     // Soft delete - set is_active to false instead of actual deletion
     const { error } = await supabase
       .from('products')
-      .update({ is_active: false, updated_by: adminUser.id })
+      .update({ is_active: false, updated_by: session.user.email })
       .eq('id', id);
 
     if (error) {
@@ -318,8 +298,7 @@ export async function DELETE(request: NextRequest) {
 
     // Log activity
     await supabase.from('activity_log').insert({
-      user_id: adminUser.id,
-      user_email: adminUser.email,
+      user_email: session.user.email,
       action: 'delete_product',
       entity_type: 'product',
       entity_id: id,
