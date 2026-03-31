@@ -7,8 +7,10 @@ import SeedProvider from "@/components/SeedProvider";
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isStore = pathname.startsWith("/store");
+  const isAdmin = pathname.startsWith("/admin");
 
-  if (isStore) {
+  // Store and Admin routes handle their own layout
+  if (isStore || isAdmin) {
     return <>{children}</>;
   }
 
