@@ -82,13 +82,21 @@ export class PayFastGateway {
    * Generate MD5 signature for PayFast
    */
   generateSignature(data: Record<string, string>, passphrase?: string): string {
-    // Create parameter string
+    // Helper function to encode with uppercase hex and spaces as +
+    const pfEncode = (str: string): string => {
+      return encodeURIComponent(str.trim())
+        .replace(/%20/g, '+')
+        .replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase())
+        .replace(/%([0-9a-f]{2})/gi, (match, hex) => '%' + hex.toUpperCase());
+    };
+    
+    // Create parameter string with alphabetically sorted keys
     let paramString = '';
     const sortedKeys = Object.keys(data).sort();
     
     for (const key of sortedKeys) {
       if (key !== 'signature') {
-        paramString += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, '+')}&`;
+        paramString += `${key}=${pfEncode(data[key])}&`;
       }
     }
     
@@ -97,10 +105,10 @@ export class PayFastGateway {
     
     // Add passphrase if provided
     if (passphrase) {
-      paramString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`;
+      paramString += `&passphrase=${pfEncode(passphrase)}`;
     }
     
-    // Generate MD5 hash
+    // Generate MD5 hash (must be lowercase)
     return crypto.createHash('md5').update(paramString).digest('hex');
   }
 
