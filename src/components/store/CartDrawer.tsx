@@ -54,7 +54,7 @@ export default function CartDrawer() {
               items.map((item) => (
                 <div key={item.product.id} className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
                   <div className="flex items-start gap-3">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.product.gradient} flex items-center justify-center flex-shrink-0 text-xl`}>
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-xl" style={{ background: item.product.gradient_css }}>
                       {item.product.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
