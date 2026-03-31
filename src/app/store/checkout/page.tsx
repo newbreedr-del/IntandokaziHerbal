@@ -99,7 +99,8 @@ export default function CheckoutPage() {
             price: item.product.price
           }))
         });
-        // PayFast will redirect to payment page
+        // PayFast will redirect to payment page - cart will be cleared after successful payment
+        // Don't clear cart here in case user cancels or payment fails
       } else {
         // For other payment methods, proceed to confirmation
         await new Promise((r) => setTimeout(r, 1800));
@@ -110,6 +111,7 @@ export default function CheckoutPage() {
       console.error('Order placement error:', error);
       toast.error('Failed to process order. Please try again.');
       setSubmitting(false);
+      // Don't clear cart on error - user should be able to retry
     }
   };
 
