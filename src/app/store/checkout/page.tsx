@@ -20,8 +20,16 @@ const PROVINCES = ["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpop
 const PAYMENT_METHODS = [
   { id: "payfast", label: "PayFast (Card, EFT, Instant EFT)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
   { id: "eft", label: "Manual EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
-  { id: "cash", label: "Cash on Delivery", icon: <Package className="w-4 h-4" /> },
 ];
+
+const EFT_DETAILS = {
+  accountName: "Miss Mokoatle",
+  bank: "Capitec Bank",
+  accountType: "Active Savings",
+  accountNumber: "1506845620",
+  linkedNumber: "0625842441",
+  reference: "PAXI 110"
+};
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
@@ -250,21 +258,18 @@ export default function CheckoutPage() {
                     ))}
                   </div>
                   {paymentMethod === "eft" && (
-                    <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700 space-y-1">
-                      <p className="font-semibold text-brand-900 mb-2">EFT Banking Details</p>
-                      <p><span className="text-brand-500">Bank:</span> FNB</p>
-                      <p><span className="text-brand-500">Account Name:</span> Ntankokazi Herbal</p>
-                      <p><span className="text-brand-500">Account No:</span> 62XXXXXXXXXX</p>
-                      <p><span className="text-brand-500">Branch Code:</span> 250655</p>
-                      <p><span className="text-brand-500">Reference:</span> <strong className="text-brand-900">{orderRef}</strong></p>
-                      <p className="text-xs text-brand-500 mt-2">Use your order reference as payment reference. Order processed once payment is confirmed.</p>
-                    </div>
-                  )}
-                  {paymentMethod === "mobile" && (
-                    <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700">
-                      <p className="font-semibold text-brand-900 mb-2">SnapScan / Zapper</p>
-                      <p>Send payment to <strong className="text-brand-900">snapscan.io/ntankokazi</strong></p>
-                      <p className="text-xs text-brand-500 mt-2">Reference: <strong className="text-brand-900">{orderRef}</strong></p>
+                    <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700 space-y-1.5">
+                      <p className="font-semibold text-brand-900 mb-2">💳 EFT Banking Details</p>
+                      <p><span className="text-brand-500">Bank:</span> <strong>{EFT_DETAILS.bank}</strong></p>
+                      <p><span className="text-brand-500">Account Name:</span> <strong>{EFT_DETAILS.accountName}</strong></p>
+                      <p><span className="text-brand-500">Account Type:</span> {EFT_DETAILS.accountType}</p>
+                      <p><span className="text-brand-500">Account Number:</span> <strong className="text-brand-900">{EFT_DETAILS.accountNumber}</strong></p>
+                      <p><span className="text-brand-500">Linked Number:</span> {EFT_DETAILS.linkedNumber}</p>
+                      <p><span className="text-brand-500">Payment Reference:</span> <strong className="text-brand-900">{EFT_DETAILS.reference}</strong></p>
+                      <div className="mt-3 pt-3 border-t border-brand-200">
+                        <p className="text-xs text-brand-600">📦 Your order reference: <strong className="text-brand-900">{orderRef}</strong></p>
+                        <p className="text-xs text-brand-500 mt-1">Please use "{EFT_DETAILS.reference}" as your payment reference. Order will be processed once payment is confirmed.</p>
+                      </div>
                     </div>
                   )}
                 </div>
