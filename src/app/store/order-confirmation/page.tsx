@@ -11,15 +11,42 @@ function ConfirmationContent() {
   const email = params.get("email") || "";
   const name = params.get("name") || "Valued Customer";
   const phone = params.get("phone") || "";
+  const method = params.get("method") || "";
 
   const [emailSent, setEmailSent] = useState(false);
   const [whatsappSent, setWhatsappSent] = useState(false);
+  const [proofRecorded, setProofRecorded] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setEmailSent(true), 1200);
     const t2 = setTimeout(() => setWhatsappSent(true), 2200);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
+
+  const recordPaymentProof = async (proofType: 'whatsapp' | 'email') => {
+    try {
+      const response = await fetch('/api/payments/eft/confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderRef: ref,
+          customerName: name,
+          customerEmail: email,
+          customerPhone: phone,
+          proofType,
+        }),
+      });
+
+      if (response.ok) {
+        setProofRecorded(true);
+        console.log('Payment proof recorded successfully');
+      }
+    } catch (error) {
+      console.error('Failed to record payment proof:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-16">
@@ -50,6 +77,63 @@ function ConfirmationContent() {
           <p className="text-brand-900 font-bold text-xl tracking-wider">{ref}</p>
           <p className="text-brand-500 text-xs mt-1">Keep this reference for tracking your delivery</p>
         </div>
+
+        {/* EFT Payment Confirmation Reminder */}
+        {method === "eft" && (
+          <div className="bg-amber-50 border border-amber-300 rounded-2xl p-5 mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 rounded-full bg-amber-500 flex items-center justify-center">
+                <Mail className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span className="text-amber-900 text-sm font-semibold">⚠️ Payment Confirmation Required</span>
+            </div>
+            <div className="space-y-3">
+              <p className="text-amber-800 text-sm">
+                Your order is placed, but we need to confirm your EFT payment before processing.
+              </p>
+              <div className="bg-white border border-amber-200 rounded-xl p-3">
+                <p className="text-amber-700 text-xs font-semibold mb-2">Please send us:</p>
+                <ul className="text-amber-600 text-xs space-y-1">
+                  <li>• Proof of payment (screenshot or receipt)</li>
+                  <li>• Your order reference: <strong className="text-amber-900">{ref}</strong></li>
+                  <li>• Your full name used for payment</li>
+                </ul>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    recordPaymentProof('whatsapp');
+                    window.open(`https://wa.me/27000000000?text=Hi%20Ntankokazi!%20I%20made%20an%20EFT%20payment%20for%20order%20${ref}.%20Here%20is%20my%20proof%20of%20payment.%20My%20name%20is%20${encodeURIComponent(name)}.`, '_blank');
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-lg text-xs font-semibold transition-all"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  Send Proof on WhatsApp
+                </button>
+                <button
+                  onClick={() => {
+                    recordPaymentProof('email');
+                    window.location.href = `mailto:info@ntankokazi.co.za?subject=EFT%20Payment%20Proof%20-%20Order%20${ref}&body=Hi%20Ntankokazi,%0A%0AI%20made%20an%20EFT%20payment%20for%20order%20${ref}.%0A%0AMy%20details:%0AName:%20${name}%0AEmail:%20${email}%0APhone:%20${phone}%0A%0APlease%20find%20my%20proof%20of%20payment%20attached.%0A%0AThank%20you!`;
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-amber-700 hover:bg-amber-600 text-white py-2.5 rounded-lg text-xs font-semibold transition-all"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  Email Proof
+                </button>
+              </div>
+              {proofRecorded && (
+                <div className="mt-3 p-2 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <p className="text-emerald-700 text-xs text-center">
+                    ✅ We've recorded your payment proof submission!
+                  </p>
+                </div>
+              )}
+              <p className="text-amber-600 text-xs">
+                ⏰ <strong>Important:</strong> Your order will be processed within 2 hours after payment confirmation.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Notification Status */}
         <div className="space-y-3 mb-8">

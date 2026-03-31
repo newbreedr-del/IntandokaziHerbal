@@ -24,6 +24,7 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import toast from "react-hot-toast";
+import EFTConfirmations from "@/components/EFTConfirmations";
 
 interface Order {
   id: string;
@@ -217,6 +218,11 @@ export default function AdminDashboard() {
           <Button onClick={() => router.push("/")} variant="outline" icon={<Users className="w-4 h-4" />}>
             View Store
           </Button>
+        </div>
+
+        {/* EFT Payment Confirmations */}
+        <div className="mb-8">
+          <EFTConfirmations />
         </div>
 
         {/* Orders Table */}
