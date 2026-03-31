@@ -63,9 +63,9 @@ async function getFinancialSummary(supabase: any, startDate: string | null, endD
 
   const { data: orders } = await revenueQuery;
 
-  const totalRevenue = orders?.reduce((sum, o) => sum + parseFloat(o.total_amount), 0) || 0;
-  const totalShipping = orders?.reduce((sum, o) => sum + parseFloat(o.shipping_cost), 0) || 0;
-  const totalTax = orders?.reduce((sum, o) => sum + parseFloat(o.tax_amount), 0) || 0;
+  const totalRevenue = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.total_amount), 0) || 0;
+  const totalShipping = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.shipping_cost), 0) || 0;
+  const totalTax = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.tax_amount), 0) || 0;
 
   // Expenses
   let expenseQuery = supabase
@@ -77,10 +77,10 @@ async function getFinancialSummary(supabase: any, startDate: string | null, endD
 
   const { data: expenses } = await expenseQuery;
 
-  const totalExpenses = expenses?.reduce((sum, e) => sum + parseFloat(e.total_amount), 0) || 0;
+  const totalExpenses = expenses?.reduce((sum: number, e: any) => sum + parseFloat(e.total_amount), 0) || 0;
 
   // Expenses by category
-  const expensesByCategory = expenses?.reduce((acc: any, e) => {
+  const expensesByCategory = expenses?.reduce((acc: any, e: any) => {
     if (!acc[e.category]) acc[e.category] = 0;
     acc[e.category] += parseFloat(e.total_amount);
     return acc;
@@ -96,7 +96,7 @@ async function getFinancialSummary(supabase: any, startDate: string | null, endD
     .select('balance_due')
     .in('status', ['sent', 'viewed', 'overdue']);
 
-  const accountsReceivable = invoices?.reduce((sum, i) => sum + parseFloat(i.balance_due), 0) || 0;
+  const accountsReceivable = invoices?.reduce((sum: number, i: any) => sum + parseFloat(i.balance_due), 0) || 0;
 
   return NextResponse.json({
     summary: {
@@ -125,8 +125,8 @@ async function getProfitLoss(supabase: any, startDate: string | null, endDate: s
 
   const { data: orders } = await revenueQuery;
 
-  const productSales = orders?.reduce((sum, o) => sum + parseFloat(o.subtotal), 0) || 0;
-  const shippingRevenue = orders?.reduce((sum, o) => sum + parseFloat(o.shipping_cost), 0) || 0;
+  const productSales = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.subtotal), 0) || 0;
+  const shippingRevenue = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.shipping_cost), 0) || 0;
   const totalRevenue = productSales + shippingRevenue;
 
   // Cost of Goods Sold (COGS)
@@ -139,7 +139,7 @@ async function getProfitLoss(supabase: any, startDate: string | null, endDate: s
     `)
     .eq('orders.payment_status', 'paid');
 
-  const cogs = orderItems?.reduce((sum, item) => {
+  const cogs = orderItems?.reduce((sum: number, item: any) => {
     const costPrice = item.products?.cost_price || 0;
     return sum + (parseFloat(costPrice) * item.quantity);
   }, 0) || 0;
@@ -157,7 +157,7 @@ async function getProfitLoss(supabase: any, startDate: string | null, endDate: s
 
   const { data: expenses } = await expenseQuery;
 
-  const operatingExpenses = expenses?.reduce((acc: any, e) => {
+  const operatingExpenses = expenses?.reduce((acc: any, e: any) => {
     if (!acc[e.category]) acc[e.category] = 0;
     acc[e.category] += parseFloat(e.total_amount);
     return acc;
@@ -192,7 +192,7 @@ async function getBalanceSheet(supabase: any) {
     .select('stock_quantity, cost_price')
     .eq('is_active', true);
 
-  const inventory = products?.reduce((sum, p) => {
+  const inventory = products?.reduce((sum: number, p: any) => {
     const cost = parseFloat(p.cost_price || 0);
     return sum + (cost * p.stock_quantity);
   }, 0) || 0;
@@ -202,7 +202,7 @@ async function getBalanceSheet(supabase: any) {
     .select('balance_due')
     .in('status', ['sent', 'viewed', 'overdue']);
 
-  const accountsReceivable = invoices?.reduce((sum, i) => sum + parseFloat(i.balance_due), 0) || 0;
+  const accountsReceivable = invoices?.reduce((sum: number, i: any) => sum + parseFloat(i.balance_due), 0) || 0;
 
   // Get cash from latest bank transaction
   const { data: latestTransaction } = await supabase
@@ -222,7 +222,7 @@ async function getBalanceSheet(supabase: any) {
     .select('total_amount')
     .eq('payment_method', 'credit'); // Assuming unpaid
 
-  const accountsPayable = unpaidExpenses?.reduce((sum, e) => sum + parseFloat(e.total_amount), 0) || 0;
+  const accountsPayable = unpaidExpenses?.reduce((sum: number, e: any) => sum + parseFloat(e.total_amount), 0) || 0;
 
   const totalLiabilities = accountsPayable;
 
@@ -258,7 +258,7 @@ async function getCashFlow(supabase: any, startDate: string | null, endDate: str
   if (endDate) ordersQuery = ordersQuery.lte('created_at', endDate);
 
   const { data: orders } = await ordersQuery;
-  const cashFromSales = orders?.reduce((sum, o) => sum + parseFloat(o.total_amount), 0) || 0;
+  const cashFromSales = orders?.reduce((sum: number, o: any) => sum + parseFloat(o.total_amount), 0) || 0;
 
   // Operating Activities - Cash paid for expenses
   let expensesQuery = supabase
@@ -269,7 +269,7 @@ async function getCashFlow(supabase: any, startDate: string | null, endDate: str
   if (endDate) expensesQuery = expensesQuery.lte('expense_date', endDate);
 
   const { data: expenses } = await expensesQuery;
-  const cashPaidExpenses = expenses?.reduce((sum, e) => sum + parseFloat(e.total_amount), 0) || 0;
+  const cashPaidExpenses = expenses?.reduce((sum: number, e: any) => sum + parseFloat(e.total_amount), 0) || 0;
 
   const netCashFromOperations = cashFromSales - cashPaidExpenses;
 
@@ -309,9 +309,9 @@ async function getExpenses(supabase: any, startDate: string | null, endDate: str
 
   const { data: expenses } = await query;
 
-  const totalExpenses = expenses?.reduce((sum, e) => sum + parseFloat(e.total_amount), 0) || 0;
+  const totalExpenses = expenses?.reduce((sum: number, e: any) => sum + parseFloat(e.total_amount), 0) || 0;
 
-  const byCategory = expenses?.reduce((acc: any, e) => {
+  const byCategory = expenses?.reduce((acc: any, e: any) => {
     if (!acc[e.category]) {
       acc[e.category] = { total: 0, count: 0, items: [] };
     }

@@ -13,7 +13,7 @@ export interface StoreProduct {
   usage: string;
   emoji: string;
   gradient: string;
-  gradientCss: string;
+  gradient_css: string;
   image?: string;
   badge?: string;
 }
@@ -34,7 +34,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Shake well. Take 2 tablespoons (30ml) twice daily after meals, or as directed by your health practitioner. Refrigerate after opening.",
     emoji: "💪",
     gradient: "from-amber-900 to-orange-800",
-    gradientCss: "linear-gradient(135deg, #78350f, #9a3412)",
+    gradient_css: "linear-gradient(135deg, #78350f, #9a3412)",
     image: "/images/products/imbiza-yamadoda.jpeg",
     badge: "Traditional",
   },
@@ -53,7 +53,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Mix half a glass of warm water with half a glass of umuthi. Use the mixture for ukuchatha (enema). Repeat twice a week, or as directed by your practitioner.",
     emoji: "🌿",
     gradient: "from-green-900 to-emerald-800",
-    gradientCss: "linear-gradient(135deg, #14532d, #065f46)",
+    gradient_css: "linear-gradient(135deg, #14532d, #065f46)",
     image: "/images/products/imbiza-yokuchata.jpeg",
   },
   {
@@ -71,7 +71,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Pour 2 litres of umuthi into a bucket. Fill with warm water to make approximately 5 litres. Sit over the bucket and steam cleanse. Use 3-4 times a day, after every 2 days, or as directed.",
     emoji: "🔥",
     gradient: "from-red-900 to-orange-800",
-    gradientCss: "linear-gradient(135deg, #7f1d1d, #9a3412)",
+    gradient_css: "linear-gradient(135deg, #7f1d1d, #9a3412)",
     image: "/images/products/stop-nonsence.jpeg",
     badge: "Powerful",
   },
@@ -90,7 +90,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Mix 2 tablespoons in a quarter cup of warm water. Drink three times a day, 30 minutes before meals, or as directed by your practitioner.",
     emoji: "⚡",
     gradient: "from-blue-900 to-cyan-800",
-    gradientCss: "linear-gradient(135deg, #1e3a8a, #155e75)",
+    gradient_css: "linear-gradient(135deg, #1e3a8a, #155e75)",
     image: "/images/products/imbiza-yomhlume.jpeg",
   },
   {
@@ -108,7 +108,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Take 2 tablespoons 3 times a day after meals, or as directed by your practitioner. Not for use during pregnancy.",
     emoji: "🛡️",
     gradient: "from-purple-900 to-violet-800",
-    gradientCss: "linear-gradient(135deg, #4c1d95, #5b21b6)",
+    gradient_css: "linear-gradient(135deg, #4c1d95, #5b21b6)",
     image: "/images/products/umabulala-idliso.jpeg",
   },
   {
@@ -126,7 +126,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Wash/cleanse home and body with warm water, night and day for 7 days, or as directed by your practitioner.",
     emoji: "🏠",
     gradient: "from-teal-900 to-cyan-800",
-    gradientCss: "linear-gradient(135deg, #134e4a, #155e75)",
+    gradient_css: "linear-gradient(135deg, #134e4a, #155e75)",
     image: "/images/products/umhlabelo.jpeg",
   },
   {
@@ -144,7 +144,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Take 2 tablespoons 3 times a day after meals, or as directed by your practitioner. Consult healthcare provider if you have ulcer diagnosis.",
     emoji: "💚",
     gradient: "from-lime-900 to-green-800",
-    gradientCss: "linear-gradient(135deg, #365314, #166534)",
+    gradient_css: "linear-gradient(135deg, #365314, #166534)",
     image: "/images/products/imbiza-yama-ulcer-.jpeg",
   },
   {
@@ -162,7 +162,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Take 2 tablespoons 3 times a day after meals, or as directed by your practitioner.",
     emoji: "🦁",
     gradient: "from-orange-900 to-amber-800",
-    gradientCss: "linear-gradient(135deg, #7c2d12, #92400e)",
+    gradient_css: "linear-gradient(135deg, #7c2d12, #92400e)",
     image: "/images/products/umvusa-nkunizi.jpeg",
     badge: "Men's Health",
   },
@@ -181,7 +181,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Take 2 tablespoons 3 times a day after meals, or as directed by your practitioner.",
     emoji: "✨",
     gradient: "from-yellow-900 to-amber-800",
-    gradientCss: "linear-gradient(135deg, #713f12, #92400e)",
+    gradient_css: "linear-gradient(135deg, #713f12, #92400e)",
     image: "/images/products/zakhanyisa-liquid.jpeg",
   },
   {
@@ -199,7 +199,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply/rub on the body while bathing, or dissolve desired amount in warm bath water and soak as needed.",
     emoji: "💖",
     gradient: "from-pink-900 to-rose-800",
-    gradientCss: "linear-gradient(135deg, #831843, #9f1239)",
+    gradient_css: "linear-gradient(135deg, #831843, #9f1239)",
     image: "/images/products/yokuthandeka.jpeg",
     badge: "Beauty",
   },
@@ -218,7 +218,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply/rub on the body while bathing, or dissolve desired amount in warm bath water and soak as needed.",
     emoji: "🍀",
     gradient: "from-slate-200 to-gray-300",
-    gradientCss: "linear-gradient(135deg, #e2e8f0, #d1d5db)",
+    gradient_css: "linear-gradient(135deg, #e2e8f0, #d1d5db)",
     image: "/images/products/inhlanhla-emhlophe.jpeg",
   },
   {
@@ -236,7 +236,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply/rub on the body while bathing, or dissolve desired amount in warm bath water and soak as needed.",
     emoji: "🛡️",
     gradient: "from-indigo-900 to-purple-800",
-    gradientCss: "linear-gradient(135deg, #312e81, #6d28d9)",
+    gradient_css: "linear-gradient(135deg, #312e81, #6d28d9)",
     image: "/images/products/umakhiphi-isichitho.jpeg",
     badge: "Protection",
   },
@@ -255,7 +255,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply when you anoint/rub the whole body. Massage a small amount into clean, dry skin as needed.",
     emoji: "🌟",
     gradient: "from-amber-600 to-yellow-500",
-    gradientCss: "linear-gradient(135deg, #d97706, #eab308)",
+    gradient_css: "linear-gradient(135deg, #d97706, #eab308)",
     image: "/images/products/tissue-oil-eyenenhlannhla.jpeg",
   },
   {
@@ -273,7 +273,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply when you anoint/rub the whole body. Massage a small amount into clean, dry skin as needed.",
     emoji: "🔮",
     gradient: "from-violet-900 to-purple-800",
-    gradientCss: "linear-gradient(135deg, #4c1d95, #6d28d9)",
+    gradient_css: "linear-gradient(135deg, #4c1d95, #6d28d9)",
     image: "/images/products/tissue-oil-yesichitho.jpeg",
   },
   {
@@ -291,7 +291,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Wash the whole body. Apply a small amount to wet skin or sponge, lather, then rinse thoroughly.",
     emoji: "🚿",
     gradient: "from-blue-900 to-indigo-800",
-    gradientCss: "linear-gradient(135deg, #1e3a8a, #3730a3)",
+    gradient_css: "linear-gradient(135deg, #1e3a8a, #3730a3)",
     image: "/images/products/shower-gel-ikhipha-isichitho.jpeg",
   },
   {
@@ -309,7 +309,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Wash the whole body. Apply a small amount to wet skin or sponge, lather, then rinse thoroughly.",
     emoji: "💕",
     gradient: "from-pink-800 to-rose-700",
-    gradientCss: "linear-gradient(135deg, #9f1239, #be123c)",
+    gradient_css: "linear-gradient(135deg, #9f1239, #be123c)",
     image: "/images/products/shower-gel-yokuthandeka.jpeg",
   },
   {
@@ -327,7 +327,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply a small amount to clean, dry skin and massage gently. Use as needed on hands, feet, elbows, lips or any dry areas.",
     emoji: "🧴",
     gradient: "from-cyan-900 to-blue-800",
-    gradientCss: "linear-gradient(135deg, #164e63, #1e40af)",
+    gradient_css: "linear-gradient(135deg, #164e63, #1e40af)",
     image: "/images/products/umkhanyakude-jelly-vaseline.jpeg",
   },
   {
@@ -345,7 +345,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     usage: "Apply a small amount to clean, dry skin and massage gently. Use as needed on hands, feet, elbows, lips or any dry areas.",
     emoji: "✨",
     gradient: "from-purple-900 to-indigo-800",
-    gradientCss: "linear-gradient(135deg, #581c87, #3730a3)",
+    gradient_css: "linear-gradient(135deg, #581c87, #3730a3)",
     image: "/images/products/umakhiphi-isichitho-vaseline.jpeg",
   },
 ];

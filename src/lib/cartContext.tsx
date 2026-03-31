@@ -53,7 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, isHydrated]);
 
-  const addToCart = useCallback((product: StoreProduct) => {
+  const addToCart = useCallback((product: Product) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id);
       if (existing) {

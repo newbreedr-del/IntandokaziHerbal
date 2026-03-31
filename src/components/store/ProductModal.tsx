@@ -58,12 +58,12 @@ export default function ProductModal({ product, onClose }: Props) {
       const productContext = `
 Name: ${product.name}
 Category: ${product.category}
-Description: ${product.longDescription}
+Description: ${product.long_description}
 Benefits: ${product.benefits.join(", ")}
 Ingredients: ${product.ingredients.join(", ")}
-Usage: ${product.usage}
+Usage: ${product.usage_instructions}
 Price: R${product.price} per ${product.unit}
-Stock: ${product.stock} units available
+Stock: ${product.stock_quantity} units available
       `.trim();
 
       const res = await fetch("/store/api/chat", {
@@ -101,10 +101,10 @@ Stock: ${product.stock} units available
         {/* Header */}
         <div className="relative p-6 flex-shrink-0 overflow-hidden min-h-[140px]">
           {/* Background: product image or brand gradient */}
-          {product.image ? (
-            <Image src={product.image} alt={product.name} fill className="object-cover" />
+          {product.image_url ? (
+            <Image src={product.image_url} alt={product.name} fill className="object-cover" />
           ) : (
-            <div className="absolute inset-0" style={{ background: product.gradientCss }} />
+            <div className="absolute inset-0" style={{ background: product.gradient_css }} />
           )}
           {/* Glass overlay */}
           <div className="absolute inset-0 bg-white/40 backdrop-blur-md" />
@@ -166,7 +166,7 @@ Stock: ${product.stock} units available
             <div className="p-6 space-y-6">
               <div>
                 <h3 className="text-brand-900 font-semibold mb-2 text-sm uppercase tracking-wider">About This Product</h3>
-                <p className="text-brand-700 text-sm leading-relaxed">{product.longDescription}</p>
+                <p className="text-brand-700 text-sm leading-relaxed">{product.long_description}</p>
               </div>
               <div>
                 <h3 className="text-brand-900 font-semibold mb-3 text-sm uppercase tracking-wider">Benefits</h3>
@@ -182,7 +182,7 @@ Stock: ${product.stock} units available
               <div>
                 <h3 className="text-brand-900 font-semibold mb-2 text-sm uppercase tracking-wider">How to Use</h3>
                 <div className="bg-brand-50 border border-brand-200 rounded-xl p-4">
-                  <p className="text-brand-700 text-sm leading-relaxed">{product.usage}</p>
+                  <p className="text-brand-700 text-sm leading-relaxed">{product.usage_instructions}</p>
                 </div>
               </div>
               <div>

@@ -280,7 +280,7 @@ export default function CheckoutPage() {
                   <div className="space-y-3 mb-5">
                     {items.map((item) => (
                       <div key={item.product.id} className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: item.product.gradientCss }}>{item.product.emoji}</div>
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: item.product.gradient_css }}>{item.product.emoji}</div>
                         <div className="flex-1 min-w-0">
                           <p className="text-brand-900 text-sm font-medium truncate">{item.product.name}</p>
                           <p className="text-brand-500 text-xs">Qty: {item.quantity} × R{item.product.price}</p>
@@ -332,7 +332,7 @@ export default function CheckoutPage() {
               <div className="space-y-3 mb-4">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style={{ background: item.product.gradientCss }}>{item.product.emoji}</div>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style={{ background: item.product.gradient_css }}>{item.product.emoji}</div>
                     <div className="flex-1 min-w-0">
                       <p className="text-brand-900 text-xs font-medium truncate">{item.product.name}</p>
                       <p className="text-brand-400 text-xs">×{item.quantity}</p>

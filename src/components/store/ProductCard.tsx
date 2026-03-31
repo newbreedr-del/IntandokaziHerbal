@@ -44,9 +44,9 @@ export default function ProductCard({ product, index, onOpen }: Props) {
           style={{ backfaceVisibility: "hidden" }}
         >
           {/* Background: image or soft gradient */}
-          {product.image ? (
+          {product.image_url ? (
             <Image
-              src={product.image}
+              src={product.image_url}
               alt={product.name}
               fill
               className="object-cover"
@@ -72,7 +72,7 @@ export default function ProductCard({ product, index, onOpen }: Props) {
             )}
 
             <div>
-              {!product.image && (
+              {!product.image_url && (
                 <div className="text-5xl mb-3 drop-shadow-sm">{product.emoji}</div>
               )}
               <div className="text-white/80 text-xs font-semibold uppercase tracking-wider mb-1">{product.category}</div>
@@ -92,9 +92,9 @@ export default function ProductCard({ product, index, onOpen }: Props) {
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           {/* Background: image or soft gradient */}
-          {product.image ? (
+          {product.image_url ? (
             <Image
-              src={product.image}
+              src={product.image_url}
               alt={product.name}
               fill
               className="object-cover"

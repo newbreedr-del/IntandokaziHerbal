@@ -2,24 +2,42 @@ import { useState, useEffect } from 'react';
 
 export interface Product {
   id: string;
+  sku: string;
   name: string;
   slug: string;
-  description: string;
+  tagline: string;
   short_description: string;
-  price: number;
-  stock_quantity: number;
+  description: string;
+  long_description: string;
   category: string;
-  is_active: boolean;
-  is_featured: boolean;
-  emoji: string;
-  gradient_css: string;
-  tags: string[];
-  weight_kg: number;
-  dimensions_cm: Record<string, number>;
+  price: number;
+  compare_at_price?: number;
+  cost_price?: number;
+  unit: string;
+  stock_quantity: number;
+  low_stock_threshold: number;
+  weight_kg?: number;
+  dimensions_cm?: Record<string, number>;
   image_url?: string;
   gallery_images?: string[];
+  emoji: string;
+  gradient_css: string;
+  badge?: string;
+  benefits: string[];
+  ingredients: string[];
+  usage_instructions: string;
+  warnings?: string;
+  tags: string[];
+  is_active: boolean;
+  is_featured: boolean;
+  is_new: boolean;
+  is_on_sale: boolean;
+  view_count: number;
+  purchase_count: number;
   created_at?: string;
   updated_at?: string;
+  created_by?: string;
+  updated_by?: string;
 }
 
 export interface ProductsResponse {
