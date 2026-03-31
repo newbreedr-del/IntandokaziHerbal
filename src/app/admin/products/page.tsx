@@ -480,12 +480,17 @@ function ProductFormModal({
         setUploading(false);
       }
 
-      // Save product
+      // Save product - map form fields to database schema
       const url = "/api/admin/products";
       const method = product ? "PUT" : "POST";
+      const productData = {
+        ...formData,
+        short_description: formData.description, // Map to short_description for database
+        // description field is required by API, keep it
+      };
       const body = product
-        ? { id: product.id, ...formData }
-        : formData;
+        ? { id: product.id, ...productData }
+        : productData;
 
       const response = await fetch(url, {
         method,
