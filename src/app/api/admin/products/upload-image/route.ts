@@ -1,27 +1,23 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    // Check authentication
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Verify admin permissions
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -87,8 +83,7 @@ export async function POST(request: NextRequest) {
 
     // Log activity
     await supabase.from('activity_log').insert({
-      user_id: adminUser.id,
-      user_email: adminUser.email,
+      user_email: session.user.email,
       action: 'upload_product_image',
       entity_type: 'product_image',
       new_values: { filename, slug, imageType },
@@ -109,23 +104,19 @@ export async function POST(request: NextRequest) {
 // DELETE - Remove image from storage
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check NextAuth session
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: adminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('auth_user_id', user.id)
-      .eq('is_active', true)
-      .single();
-
-    if (!adminUser || !adminUser.can_manage_products) {
+    // Check if user has product management permissions
+    const permissions = (session.user as any).permissions;
+    if (!permissions?.can_manage_products) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
+
+    const supabase = await createClient();
 
     const searchParams = request.nextUrl.searchParams;
     const filename = searchParams.get('filename');
@@ -146,8 +137,7 @@ export async function DELETE(request: NextRequest) {
 
     // Log activity
     await supabase.from('activity_log').insert({
-      user_id: adminUser.id,
-      user_email: adminUser.email,
+      user_email: session.user.email,
       action: 'delete_product_image',
       entity_type: 'product_image',
       old_values: { filename },
