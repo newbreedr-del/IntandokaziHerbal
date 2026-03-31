@@ -223,6 +223,10 @@ export async function PUT(request: NextRequest) {
 
     if (fetchError) {
       console.error('Error fetching product:', fetchError);
+      return NextResponse.json({ error: fetchError.message }, { status: 500 });
+    }
+
+    if (!oldProduct) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
