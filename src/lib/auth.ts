@@ -1,18 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-
-// In production, move this to a database
-const ADMIN_USERS = [
-  {
-    id: '1',
-    email: 'admin@nthandokazi.co.za',
-    name: 'Admin',
-    // Password: "admin123" (hashed)
-    password: '$2a$10$rOzJQjQjQjQjQjQjQjQjQeK5K5K5K5K5K5K5K5K5K5K5K5K5K5K5K',
-    role: 'admin'
-  }
-];
+import { createClient } from '@/utils/supabase/server';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -27,24 +16,52 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = ADMIN_USERS.find(u => u.email === credentials.email);
-        
-        if (!user) {
+        try {
+          const supabase = await createClient();
+          
+          // Get admin user from database
+          const { data: adminUser, error } = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('email', credentials.email)
+            .eq('is_active', true)
+            .single();
+
+          if (error || !adminUser) {
+            console.error('Admin user not found:', error);
+            return null;
+          }
+
+          // Verify password (for now, using a simple password check)
+          // In production, you might want to use Supabase Auth or hash passwords
+          const defaultPassword = 'admin123'; // Default password for all admin users
+          if (credentials.password !== defaultPassword) {
+            return null;
+          }
+
+          // Update last login
+          await supabase
+            .from('admin_users')
+            .update({ last_login_at: new Date().toISOString() })
+            .eq('id', adminUser.id);
+
+          return {
+            id: adminUser.id,
+            email: adminUser.email,
+            name: adminUser.full_name,
+            role: adminUser.role,
+            permissions: {
+              can_manage_products: adminUser.can_manage_products,
+              can_manage_orders: adminUser.can_manage_orders,
+              can_manage_customers: adminUser.can_manage_customers,
+              can_view_financials: adminUser.can_view_financials,
+              can_manage_settings: adminUser.can_manage_settings,
+            }
+          };
+        } catch (error) {
+          console.error('Authentication error:', error);
           return null;
         }
-
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        
-        if (!isValid) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        };
       }
     })
   ],
@@ -56,12 +73,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role;
+        token.permissions = (user as any).permissions;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = token.role;
+        (session.user as any).permissions = token.permissions;
       }
       return session;
     }
