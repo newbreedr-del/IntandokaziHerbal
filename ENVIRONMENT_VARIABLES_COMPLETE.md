@@ -24,7 +24,7 @@ NEXTAUTH_SECRET=your_nextauth_secret_here_generate_random_string
 
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://oaeirdgffwodkbcstdfh.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_JyAloXV06F0SSKRf868Hsg_rAVV3_Bv
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 ```
 
@@ -53,7 +53,7 @@ NEXTAUTH_SECRET=generate_a_random_secret_string_here
 
 # Supabase Configuration (NEW)
 NEXT_PUBLIC_SUPABASE_URL=https://oaeirdgffwodkbcstdfh.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_JyAloXV06F0SSKRf868Hsg_rAVV3_Bv
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
 # Optional: Gemini API
@@ -64,13 +64,18 @@ GEMINI_API_KEY=AIzaSyCKzsID--6ockxc_RdxKFfIXiNqGGwXITo
 
 ## 🔑 How to Get Missing Keys
 
-### 1. Supabase Service Role Key
+### 1. Supabase ANON Key (Public/Client Key)
 1. Go to https://oaeirdgffwodkbcstdfh.supabase.co
 2. Navigate to **Settings** → **API**
-3. Find **Service Role Key** (starts with `eyJ...`)
-4. Copy and paste as `SUPABASE_SERVICE_ROLE_KEY`
+3. Find **anon/public key** (starts with `eyJ...`)
+4. Copy and paste as `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-### 2. NextAuth Secret
+### 2. Supabase Service Role Key (Server/Admin Key)
+1. On the same page, find **service_role key**
+2. Copy and paste as `SUPABASE_SERVICE_ROLE_KEY`
+3. ⚠️ Keep this key secret - never expose in frontend code
+
+### 3. NextAuth Secret
 Generate a secure random string:
 ```bash
 # Option 1: Online generator
@@ -100,8 +105,8 @@ openssl rand -base64 32
 
 ### Supabase Variables
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`: Public key (safe for browser)
-- `SUPABASE_SERVICE_ROLE_KEY`: Server key (admin access, keep secret)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: ANON key (safe for browser, limited by RLS)
+- `SUPABASE_SERVICE_ROLE_KEY`: Service role key (admin access, keep secret)
 
 ### Optional Variables
 - `GEMINI_API_KEY`: For AI chatbot functionality
@@ -112,7 +117,7 @@ openssl rand -base64 32
 
 ### ✅ Safe for Browser (NEXT_PUBLIC_*)
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_BASE_URL`
 
 ### ⚠️ Keep Secret (Server Only)
