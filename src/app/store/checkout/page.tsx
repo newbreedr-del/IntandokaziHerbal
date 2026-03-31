@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Leaf, ShoppingCart, ChevronLeft, Lock, Eye, EyeOff, Package, CreditCard, Smartphone } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
-import { useStitchPayment } from "@/hooks/useStitchPayment";
+import { usePayFastPayment } from "@/hooks/usePayFastPayment";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,10 +18,8 @@ interface BillingAddress {
 
 const PROVINCES = ["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape"];
 const PAYMENT_METHODS = [
-  { id: "stitch", label: "Instant EFT (Stitch)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
+  { id: "payfast", label: "PayFast (Card, EFT, Instant EFT)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
   { id: "eft", label: "Manual EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
-  { id: "card", label: "Credit / Debit Card", icon: <CreditCard className="w-4 h-4" /> },
-  { id: "mobile", label: "SnapScan / Zapper", icon: <Smartphone className="w-4 h-4" /> },
   { id: "cash", label: "Cash on Delivery", icon: <Package className="w-4 h-4" /> },
 ];
 
@@ -41,9 +39,9 @@ const inputCls = (err?: string) =>
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
-  const { createPayment, loading: paymentLoading } = useStitchPayment();
+  const { createPayment, loading: paymentLoading } = usePayFastPayment();
   const [step, setStep] = useState<"details" | "payment" | "review">("details");
-  const [paymentMethod, setPaymentMethod] = useState("stitch");
+  const [paymentMethod, setPaymentMethod] = useState("payfast");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -86,22 +84,22 @@ export default function CheckoutPage() {
     setSubmitting(true);
     
     try {
-      if (paymentMethod === 'stitch') {
-        // Create Stitch payment and redirect
+      if (paymentMethod === 'payfast') {
+        // Create PayFast payment and redirect
         await createPayment({
           amount: total,
           reference: orderRef,
           customerEmail: billing.email,
           customerName: `${billing.firstName} ${billing.lastName}`,
           customerPhone: billing.phone,
-          description: `Order ${orderRef} - Nthandokazi Herbal`,
+          description: `Order ${orderRef} - Intandokazi Herbal`,
           items: items.map(item => ({
             name: item.product.name,
             quantity: item.quantity,
             price: item.product.price
           }))
         });
-        // Stitch will redirect to payment page
+        // PayFast will redirect to payment page
       } else {
         // For other payment methods, proceed to confirmation
         await new Promise((r) => setTimeout(r, 1800));

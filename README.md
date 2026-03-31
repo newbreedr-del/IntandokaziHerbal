@@ -8,12 +8,12 @@ A modern, world-class e-commerce platform for traditional African herbal remedie
 - **Modern Product Catalog** - Beautiful product cards with animations
 - **Smart Shopping Cart** - Real-time cart updates with smooth transitions
 - **Advanced Checkout** - Multi-step checkout with validation
-- **Multiple Payment Methods** - Stitch instant EFT, manual EFT, card, mobile payments
+- **Multiple Payment Methods** - PayFast (Card, EFT, Instant EFT), manual EFT, cash on delivery
 
 ### 💳 Payment Integration
-- **Stitch Payment Gateway** - Instant EFT payments with bank-level security
-- **Real-time Payment Status** - Webhook-based payment confirmations
-- **Secure Transactions** - HMAC signature verification for webhooks
+- **PayFast Payment Gateway** - Card, EFT, and Instant EFT payments
+- **Real-time Payment Status** - ITN webhook-based payment confirmations
+- **Secure Transactions** - MD5 signature verification for webhooks
 
 ### 💬 Customer Communication
 - **Respond.io Integration** - WhatsApp Business API integration
@@ -46,7 +46,7 @@ A modern, world-class e-commerce platform for traditional African herbal remedie
 - **Forms:** React Hook Form + Zod
 - **HTTP Client:** Axios
 - **Notifications:** React Hot Toast
-- **Payment:** Stitch Money API
+- **Payment:** PayFast API
 - **Messaging:** Respond.io API
 
 ## 📦 Installation
@@ -60,8 +60,8 @@ A modern, world-class e-commerce platform for traditional African herbal remedie
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd "Intandokazi Herbal Products"
+git clone https://github.com/newbreedr-del/IntandokaziHerbal.git
+cd IntandokaziHerbal
 ```
 
 2. **Install dependencies**
