@@ -125,7 +125,7 @@ function ConfirmationContent() {
               {proofRecorded && (
                 <div className="mt-3 p-2 bg-emerald-50 border border-emerald-200 rounded-lg">
                   <p className="text-emerald-700 text-xs text-center">
-                    ✅ We've recorded your payment proof submission!
+                    ✅ We&apos;ve recorded your payment proof submission!
                   </p>
                 </div>
               )}
