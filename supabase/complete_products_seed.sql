@@ -175,7 +175,7 @@ INSERT INTO products (
 (
   'Imbiza Yama-Ulcer',
   'imbiza-yama-ulcer',
-  'IH-IY-1L',
+  'IH-IU-1L',
   'Traditional mixture for digestive comfort',
   'A 1-litre traditional herbal mixture formulated to support digestive comfort and general wellness.',
   'A 1-litre traditional herbal mixture formulated to support digestive comfort and general wellness.',
@@ -357,7 +357,7 @@ INSERT INTO products (
 (
   'Tissue Oil (Yesichitho)',
   'tissue-oil-yesichitho',
-  'SB-TO-100ml',
+  'SB-TO-2-100ml',
   'Herbal tissue oil for removing misfortune',
   'A 100ml herbal tissue oil formulated for skin nourishment and associated with removing isichitho (misfortune/negative energy).',
   'A 100ml herbal tissue oil formulated for skin nourishment and associated with removing isichitho (misfortune/negative energy).',
@@ -409,7 +409,7 @@ INSERT INTO products (
 (
   'Shower Gel (Yokuthandeka)',
   'shower-gel-yokuthandeka',
-  'SB-SG-500ml',
+  'SB-SG-2-500ml',
   'Herbal shower gel for love and attraction',
   'A 500ml herbal shower gel formulated for daily cleansing and associated with uthando (love/attraction).',
   'A 500ml herbal shower gel formulated for daily cleansing and associated with uthando (love/attraction).',
