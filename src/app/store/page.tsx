@@ -2,20 +2,22 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown } from "lucide-react";
-import { STORE_PRODUCTS, CATEGORIES, StoreProduct } from "@/lib/storeProducts";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
+import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
 import ProductModal from "@/components/store/ProductModal";
 import CartDrawer from "@/components/store/CartDrawer";
+import { SITE_CONFIG, PRODUCT_CATEGORIES } from "@/lib/constants";
 
 export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<StoreProduct | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { totalItems, setIsOpen } = useCart();
+  const { products, loading, error } = useProducts();
 
-  const filtered = STORE_PRODUCTS.filter((p) => {
+  const filtered = products.filter((p) => {
     const matchCat = selectedCategory === "All" || p.category === selectedCategory;
     const matchSearch =
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -23,6 +25,9 @@ export default function StorePage() {
       p.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCat && matchSearch;
   });
+
+  // Get unique categories from products
+  const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
 
   return (
     <div className="min-h-screen bg-white">
@@ -40,7 +45,7 @@ export default function StorePage() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <a href="tel:+27000000000" className="hidden sm:flex items-center gap-1.5 text-brand-300 hover:text-white text-sm transition-colors">
+              <a href={`tel:${SITE_CONFIG.phone}`} className="hidden sm:flex items-center gap-1.5 text-brand-300 hover:text-white text-sm transition-colors">
                 <Phone className="w-3.5 h-3.5" />
                 <span>WhatsApp Us</span>
               </a>
@@ -154,7 +159,7 @@ export default function StorePage() {
               />
             </div>
             <div className="flex gap-2 flex-wrap">
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
@@ -171,13 +176,36 @@ export default function StorePage() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-20 text-brand-500">
+            <div className="animate-spin w-12 h-12 border-4 border-brand-300 border-t-brand-600 rounded-full mx-auto mb-4"></div>
+            <p className="text-lg">Loading products...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-20 text-red-500">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4" />
+            <p className="text-lg font-semibold">Error loading products</p>
+            <p className="text-sm mt-2">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
         {/* Product Grid */}
-        {filtered.length === 0 ? (
+        {!loading && !error && filtered.length === 0 ? (
           <div className="text-center py-20 text-brand-500">
             <Leaf className="w-12 h-12 mx-auto mb-4 opacity-40" />
             <p className="text-lg">No products found. Try a different search.</p>
           </div>
-        ) : (
+        ) : !loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.map((product, index) => (
               <ProductCard

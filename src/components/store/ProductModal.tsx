@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X, ShoppingCart, Send, Leaf, ChevronDown, ChevronUp } from "lucide-react";
-import { StoreProduct } from "@/lib/storeProducts";
 import { useCart } from "@/lib/cartContext";
+import { Product } from "@/hooks/useProducts";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -12,7 +12,7 @@ interface ChatMessage {
 }
 
 interface Props {
-  product: StoreProduct;
+  product: Product;
   onClose: () => void;
 }
 

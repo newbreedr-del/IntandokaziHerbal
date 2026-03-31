@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { ShoppingCart, Eye, Tag } from "lucide-react";
 import Image from "next/image";
-import { StoreProduct } from "@/lib/storeProducts";
 import { useCart } from "@/lib/cartContext";
+import { Product } from "@/hooks/useProducts";
 
 interface Props {
-  product: StoreProduct;
+  product: Product;
   index: number;
   onOpen: () => void;
 }

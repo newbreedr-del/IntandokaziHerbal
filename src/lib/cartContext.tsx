@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from "react";
-import { StoreProduct } from "./storeProducts";
+import { Product } from "@/hooks/useProducts";
 
 export interface CartItem {
-  product: StoreProduct;
+  product: Product;
   quantity: number;
 }
 
 interface CartContextValue {
   items: CartItem[];
-  addToCart: (product: StoreProduct) => void;
+  addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
