@@ -19,7 +19,11 @@ interface Product {
   slug: string;
   category: string;
   price: number;
+  unit: string;
   stock_quantity: number;
+  description?: string;
+  short_description?: string;
+  long_description?: string;
   is_active: boolean;
   is_featured: boolean;
   image_url: string;
@@ -394,13 +398,24 @@ function ProductFormModal({
     name: product?.name || "",
     slug: product?.slug || "",
     sku: product?.sku || "",
-    category: product?.category || "",
+    category: product?.category || "Internal Health",
     price: product?.price || 0,
     stock_quantity: product?.stock_quantity || 0,
-    description: "",
+    description: product?.description || product?.short_description || "",
+    long_description: product?.long_description || "",
+    unit: product?.unit || "500ml",
     is_active: product?.is_active ?? true,
     is_featured: product?.is_featured ?? false,
   });
+
+  const CATEGORIES = [
+    "Internal Health",
+    "External Health",
+    "Spiritual Health",
+    "Bundles",
+  ];
+
+  const UNITS = ["500ml", "1L", "250ml", "100g", "250g", "500g"];
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(product?.image_url || "");
   const [uploading, setUploading] = useState(false);
@@ -423,6 +438,22 @@ function ProductFormModal({
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
+  };
+
+  const generateSKU = (name: string, category: string) => {
+    const categoryPrefix = category.split(" ").map(w => w[0]).join("").toUpperCase();
+    const namePrefix = name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
+    return `${categoryPrefix}-${namePrefix}-${formData.unit.replace(/[^a-zA-Z0-9]/g, "")}`;
+  };
+
+  // Auto-generate slug and SKU when name changes
+  const handleNameChange = (name: string) => {
+    setFormData(prev => ({
+      ...prev,
+      name,
+      slug: generateSlug(name),
+      sku: generateSKU(name, prev.category),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -530,53 +561,64 @@ function ProductFormModal({
               <input
                 type="text"
                 required
+                placeholder="e.g., Imbiza Yamadoda"
                 value={formData.name}
-                onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    name: e.target.value,
-                    slug: generateSlug(e.target.value),
-                  });
-                }}
+                onChange={(e) => handleNameChange(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
+              <p className="text-xs text-gray-500 mt-1">The name of your product as customers will see it</p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Slug (auto-generated)
-              </label>
-              <input
-                type="text"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                SKU
+                Product Code (auto-generated)
               </label>
               <input
                 type="text"
                 value={formData.sku}
-                onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                readOnly
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
               />
+              <p className="text-xs text-gray-500 mt-1">Automatically created from product name</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Size/Unit *
+              </label>
+              <select
+                required
+                value={formData.unit}
+                onChange={(e) => {
+                  setFormData({ ...formData, unit: e.target.value });
+                  if (formData.name) handleNameChange(formData.name);
+                }}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                {UNITS.map(unit => (
+                  <option key={unit} value={unit}>{unit}</option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category *
               </label>
-              <input
-                type="text"
+              <select
                 required
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, category: e.target.value });
+                  if (formData.name) handleNameChange(formData.name);
+                }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
-              />
+              >
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">Select the type of product</p>
             </div>
 
             <div>
@@ -588,10 +630,12 @@ function ProductFormModal({
                 required
                 step="0.01"
                 min="0"
+                placeholder="800"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
+              <p className="text-xs text-gray-500 mt-1">Price in South African Rand</p>
             </div>
 
             <div>
@@ -601,10 +645,40 @@ function ProductFormModal({
               <input
                 type="number"
                 min="0"
+                placeholder="25"
                 value={formData.stock_quantity}
                 onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
+              <p className="text-xs text-gray-500 mt-1">How many units you have in stock</p>
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Short Description
+              </label>
+              <textarea
+                rows={2}
+                placeholder="Brief description for product cards (1-2 sentences)"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">Appears on product listings and cards</p>
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Full Description
+              </label>
+              <textarea
+                rows={4}
+                placeholder="Detailed description of the product, its benefits, and how to use it"
+                value={formData.long_description}
+                onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">Full product details shown on product page</p>
             </div>
 
             <div>
@@ -615,7 +689,7 @@ function ProductFormModal({
                   onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                   className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
                 />
-                <span className="text-sm font-medium text-gray-700">Active</span>
+                <span className="text-sm font-medium text-gray-700">Active (visible to customers)</span>
               </label>
             </div>
 
@@ -627,7 +701,7 @@ function ProductFormModal({
                   onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
                   className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
                 />
-                <span className="text-sm font-medium text-gray-700">Featured</span>
+                <span className="text-sm font-medium text-gray-700">Featured (show on homepage)</span>
               </label>
             </div>
           </div>
