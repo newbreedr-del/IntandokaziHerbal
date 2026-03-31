@@ -42,7 +42,20 @@ openssl rand -base64 32
 # https://generate-secret.vercel.app/32
 ```
 
-### 4. Optional: AI Chatbot
+### 4. Supabase Configuration (REQUIRED for Live Data)
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://oaeirdgffwodkbcstdfh.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_JyAloXV06F0SSKRf868Hsg_rAVV3_Bv
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+```
+
+**Get Service Role Key:**
+1. Go to Supabase Dashboard → Settings → API
+2. Copy the Service Role Key (starts with `eyJ...`)
+3. Add as `SUPABASE_SERVICE_ROLE_KEY`
+
+### 5. Optional: AI Chatbot
 
 ```bash
 GEMINI_API_KEY=your_gemini_api_key_here
@@ -77,7 +90,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 ## Verification Steps
 
-After setting environment variables:
+### After setting environment variables:
 
 1. **Check the debug endpoint:**
    ```
@@ -91,7 +104,12 @@ After setting environment variables:
    ```
    Should show PayFast as "configured: true"
 
-3. **Test checkout:**
+3. **Test Supabase connection:**
+   - Visit any page that loads data
+   - Check browser console for database errors
+   - Should show no Supabase connection errors
+
+4. **Test checkout:**
    - Add a product to cart
    - Proceed to checkout
    - Fill in details
