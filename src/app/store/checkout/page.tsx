@@ -28,7 +28,7 @@ const EFT_DETAILS = {
   accountType: "Active Savings",
   accountNumber: "1506845620",
   linkedNumber: "0625842441",
-  reference: "PAXI 110"
+  paxiFee: "110"
 };
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
@@ -265,10 +265,10 @@ export default function CheckoutPage() {
                       <p><span className="text-brand-500">Account Type:</span> {EFT_DETAILS.accountType}</p>
                       <p><span className="text-brand-500">Account Number:</span> <strong className="text-brand-900">{EFT_DETAILS.accountNumber}</strong></p>
                       <p><span className="text-brand-500">Linked Number:</span> {EFT_DETAILS.linkedNumber}</p>
-                      <p><span className="text-brand-500">Payment Reference:</span> <strong className="text-brand-900">{EFT_DETAILS.reference}</strong></p>
                       <div className="mt-3 pt-3 border-t border-brand-200">
-                        <p className="text-xs text-brand-600">📦 Your order reference: <strong className="text-brand-900">{orderRef}</strong></p>
-                        <p className="text-xs text-brand-500 mt-1">Please use "{EFT_DETAILS.reference}" as your payment reference. Order will be processed once payment is confirmed.</p>
+                        <p className="text-xs text-brand-600">📦 Payment Reference: <strong className="text-brand-900">{billing.firstName} {billing.lastName}</strong></p>
+                        <p className="text-xs text-brand-600">� PAXI Delivery Fee: <strong className="text-brand-900">R{EFT_DETAILS.paxiFee}</strong></p>
+                        <p className="text-xs text-brand-500 mt-1">Use your full name as payment reference. Total amount includes R{EFT_DETAILS.paxiFee} PAXI delivery fee.</p>
                       </div>
                     </div>
                   )}
