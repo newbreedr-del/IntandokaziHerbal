@@ -10,9 +10,8 @@ export async function GET() {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     integrations: {
-      stitch: {
-        configured: !!(process.env.STITCH_CLIENT_ID && process.env.STITCH_CLIENT_SECRET),
-        environment: process.env.STITCH_ENVIRONMENT || 'not set'
+      payfast: {
+        configured: !!(process.env.PAYFAST_MERCHANT_ID && process.env.PAYFAST_MERCHANT_KEY)
       },
       respondio: {
         configured: !!(process.env.RESPONDIO_API_KEY && process.env.RESPONDIO_CHANNEL_ID),

@@ -247,23 +247,6 @@ export default function CheckoutPage() {
                       </motion.button>
                     ))}
                   </div>
-                  {paymentMethod === "stitch" && (
-                    <motion.div 
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mt-5 bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-700"
-                    >
-                      <p className="font-semibold text-emerald-900 mb-2">✨ Instant EFT Payment</p>
-                      <p>Pay securely via your bank with Stitch. Fast, secure, and instant confirmation!</p>
-                      <ul className="mt-2 space-y-1 text-xs">
-                        <li>✓ Instant payment confirmation</li>
-                        <li>✓ Bank-level security</li>
-                        <li>✓ No card details required</li>
-                        <li>✓ Supports all major SA banks</li>
-                      </ul>
-                    </motion.div>
-                  )}
                   {paymentMethod === "eft" && (
                     <div className="mt-5 bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm text-brand-700 space-y-1">
                       <p className="font-semibold text-brand-900 mb-2">EFT Banking Details</p>
@@ -336,7 +319,7 @@ export default function CheckoutPage() {
                     loading={submitting || paymentLoading}
                     className="flex-[2] py-3.5"
                   >
-                    {paymentMethod === 'stitch' ? 'Pay with Stitch 🌿' : 'Place Order 🌿'}
+                    Place Order 🌿
                   </Button>
                 </div>
               </div>
