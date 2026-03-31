@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
-      .from('product-images')
+      .from('Intandokazi Products')
       .upload(filename, buffer, {
         contentType: file.type,
         upsert: true, // Replace if exists
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('product-images')
+      .from('Intandokazi Products')
       .getPublicUrl(filename);
 
     // Log activity
@@ -136,7 +136,7 @@ export async function DELETE(request: NextRequest) {
 
     // Delete from storage
     const { error } = await supabase.storage
-      .from('product-images')
+      .from('Intandokazi Products')
       .remove([filename]);
 
     if (error) {

@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate image URL based on slug
-    const image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/product-images/${slug}.jpg`;
+    const image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/Intandokazi Products/${slug}.jpg`;
 
     // Insert product
     const { data: product, error } = await supabase
@@ -218,7 +218,7 @@ export async function PUT(request: NextRequest) {
 
     // Update image URL if slug changed
     if (updates.slug && updates.slug !== oldProduct?.slug) {
-      updates.image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/product-images/${updates.slug}.jpg`;
+      updates.image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/Intandokazi Products/${updates.slug}.jpg`;
     }
 
     // Update product
