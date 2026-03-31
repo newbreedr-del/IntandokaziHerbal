@@ -4,7 +4,7 @@
 -- ============================================================================
 
 -- Clear existing products (optional - comment out if you want to keep existing data)
--- DELETE FROM products;
+DELETE FROM products;
 
 -- Insert all 18 products with complete details
 INSERT INTO products (
