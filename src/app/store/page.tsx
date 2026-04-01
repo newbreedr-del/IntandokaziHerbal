@@ -14,16 +14,19 @@ export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(true);
   const { totalItems, setIsOpen } = useCart();
   const { products, loading, error } = useProducts();
 
-  const filtered = products.filter((p) => {
-    const matchCat = selectedCategory === "All" || p.category === selectedCategory;
-    const matchSearch =
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
+  // Filter products based on category and featured status
+  const filteredProducts = products.filter(product => {
+    const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
+    const featuredMatch = !showFeaturedOnly || product.is_featured;
+    const searchMatch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return categoryMatch && featuredMatch && searchMatch;
   });
 
   // Get unique categories from products
@@ -158,20 +161,29 @@ export default function StorePage() {
                 className="w-full bg-white border border-brand-300 text-brand-900 placeholder-brand-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                    selectedCategory === cat
-                      ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30"
-                      : "bg-white border border-brand-300 text-brand-700 hover:border-brand-500 hover:text-brand-900 shadow-sm"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="flex gap-2">
+              {/* Category Dropdown */}
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="bg-white border border-brand-300 text-brand-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
+              >
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              
+              {/* Featured Toggle */}
+              <button
+                onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  showFeaturedOnly
+                    ? "bg-amber-500 text-white shadow-lg shadow-amber-500/30"
+                    : "bg-white border border-brand-300 text-brand-700 hover:border-brand-500 hover:text-brand-900 shadow-sm"
+                }`}
+              >
+                {showFeaturedOnly ? "⭐ Featured Only" : "🌟 All Products"}
+              </button>
             </div>
           </div>
         </div>
@@ -200,14 +212,14 @@ export default function StorePage() {
         )}
 
         {/* Product Grid */}
-        {!loading && !error && filtered.length === 0 ? (
+        {!loading && !error && filteredProducts.length === 0 ? (
           <div className="text-center py-20 text-brand-500">
             <Leaf className="w-12 h-12 mx-auto mb-4 opacity-40" />
             <p className="text-lg">No products found. Try a different search.</p>
           </div>
         ) : !loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((product, index) => (
+            {filteredProducts.map((product: Product, index: number) => (
               <ProductCard
                 key={product.id}
                 product={product}
