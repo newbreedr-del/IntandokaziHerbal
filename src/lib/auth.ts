@@ -15,8 +15,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
+          // TODO: In production, query Supabase admin_users table instead of hardcoded users
           // For now, use the hardcoded admin users as fallback
-          // In production, this should query the database
+          // The users should also be created in Supabase Auth with the same emails/passwords
           const ADMIN_USERS = [
             {
               id: '1',
