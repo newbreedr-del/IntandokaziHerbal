@@ -135,7 +135,7 @@ export default function PaymentsPage() {
                     </div>
                   </td>
                   <td className="table-cell font-mono text-xs text-gray-500">{payment.reference || "—"}</td>
-                  <td className="table-cell font-mono text-xs text-gray-500">#{payment.saleId.slice(0, 8)}</td>
+                  <td className="table-cell font-mono text-xs text-gray-500">#{payment.saleId?.slice(0, 8)}</td>
                 </tr>
               ))}
             </tbody>

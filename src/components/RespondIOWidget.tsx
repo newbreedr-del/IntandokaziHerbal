@@ -21,9 +21,13 @@ export default function RespondIOWidget({
     const wsId = workspaceId || process.env.NEXT_PUBLIC_RESPONDIO_WORKSPACE_ID;
     
     if (!wsId) {
-      console.warn('Respond.io workspace ID not configured');
+      console.warn('Respond.io workspace ID not configured - widget disabled');
       return;
     }
+
+    // Temporarily disable Respond.io widget to prevent crashes
+    console.log('Respond.io widget temporarily disabled');
+    return;
 
     // Load Respond.io widget script
     const script = document.createElement('script');

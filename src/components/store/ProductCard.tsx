@@ -115,7 +115,7 @@ export default function ProductCard({ product, index, onOpen }: Props) {
               </div>
               <p className="text-brand-700 text-xs leading-relaxed line-clamp-3">{product.description}</p>
               <div className="mt-3 space-y-1.5">
-                {product.benefits.slice(0, 3).map((b) => (
+                {product.benefits?.slice(0, 3).map((b) => (
                   <div key={b} className="flex items-start gap-1.5 text-xs text-brand-800">
                     <span className="text-emerald-600 mt-0.5 flex-shrink-0 font-bold">✓</span>
                     <span>{b}</span>

@@ -144,7 +144,7 @@ export default function SalesPage() {
             <tbody className="divide-y divide-gray-100">
               {filtered.map((sale) => (
                 <tr key={sale.id} className="hover:bg-gray-50/50">
-                  <td className="table-cell font-mono text-xs text-gray-500">#{sale.id.slice(0, 8)}</td>
+                  <td className="table-cell font-mono text-xs text-gray-500">#{sale.id?.slice(0, 8)}</td>
                   <td className="table-cell font-medium text-gray-900">{sale.clientName}</td>
                   <td className="table-cell text-gray-500">{sale.items.length} items</td>
                   <td className="table-cell font-semibold">{formatCurrency(sale.total)}</td>
@@ -235,7 +235,7 @@ export default function SalesPage() {
       </Modal>
 
       {/* Sale Detail Modal */}
-      <Modal isOpen={!!showDetail} onClose={() => setShowDetail(null)} title={`Order #${showDetail?.id.slice(0, 8) || ""}`} size="lg">
+      <Modal isOpen={!!showDetail} onClose={() => setShowDetail(null)} title={`Order #${showDetail?.id?.slice(0, 8) || ""}`} size="lg">
         {showDetail && (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
