@@ -71,6 +71,12 @@ export default function AdminProductsPage() {
         setCategories(uniqueCategories as string[]);
       } else {
         toast.error(data.error || "Failed to fetch products");
+        // If it's a 404, retry once after a delay
+        if (response.status === 404) {
+          setTimeout(() => {
+            fetchProducts();
+          }, 2000);
+        }
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -114,6 +120,30 @@ export default function AdminProductsPage() {
 
       if (response.ok) {
         toast.success(`Product ${!product.is_active ? "activated" : "deactivated"}`);
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        toast.error(data.error || "Failed to update product");
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+      toast.error("Failed to update product");
+    }
+  };
+
+  const handleToggleFeatured = async (product: Product) => {
+    try {
+      const response = await fetch("/api/admin/products", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: product.id,
+          is_featured: !product.is_featured,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(`Product ${!product.is_featured ? "marked as featured" : "removed from featured"}`);
         fetchProducts();
       } else {
         const data = await response.json();
@@ -259,6 +289,9 @@ export default function AdminProductsPage() {
                   Stock
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Featured
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -269,7 +302,7 @@ export default function AdminProductsPage() {
             <tbody className="divide-y divide-gray-200">
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                     No products found
                   </td>
                 </tr>
@@ -318,6 +351,28 @@ export default function AdminProductsPage() {
                       }`}>
                         {product.stock_quantity} units
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleToggleFeatured(product)}
+                        className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
+                          product.is_featured
+                            ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
+                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                        }`}
+                      >
+                        {product.is_featured ? (
+                          <>
+                            <TrendingUp className="w-3 h-3" />
+                            Featured
+                          </>
+                        ) : (
+                          <>
+                            <TrendingUp className="w-3 h-3" />
+                            Not Featured
+                          </>
+                        )}
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
@@ -410,9 +465,11 @@ function ProductFormModal({
 
   const CATEGORIES = [
     "Internal Health",
-    "External Health",
-    "Spiritual Health",
-    "Bundles",
+    "Traditional Healing", 
+    "Skin & Body",
+    "Wellness & Spiritual",
+    "Beauty",
+    "Protection",
   ];
 
   const UNITS = ["500ml", "1L", "250ml", "100g", "250g", "500g"];
@@ -501,6 +558,10 @@ function ProductFormModal({
       if (response.ok) {
         toast.success(`Product ${product ? "updated" : "created"} successfully`);
         onSuccess();
+        // Force a refresh after a short delay to ensure the new product appears
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         const data = await response.json();
         toast.error(data.error || "Failed to save product");

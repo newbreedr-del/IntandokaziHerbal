@@ -68,10 +68,25 @@ export function useProducts() {
           throw new Error(data.error);
         }
 
-        setProducts(data.products || []);
+        const productsList = data.products || [];
+        setProducts(productsList);
+
+        // If no products found, retry once after a delay
+        if (productsList.length === 0) {
+          setTimeout(() => {
+            fetchProducts();
+          }, 3000);
+        }
       } catch (err) {
         console.error('Error fetching products:', err);
         setError(err instanceof Error ? err.message : 'Failed to load products');
+        
+        // Retry once after a delay for network errors
+        if (err instanceof Error && err.message.includes('fetch')) {
+          setTimeout(() => {
+            fetchProducts();
+          }, 2000);
+        }
       } finally {
         setLoading(false);
       }
