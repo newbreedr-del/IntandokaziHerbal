@@ -3,15 +3,12 @@
 ## 🔐 Admin Login Credentials
 
 ### Primary Admin Account
-- **Email:** `admin@intandokaziherbal.co.za`
-- **Password:** `Intandokazi@2024`
+- **Email:** `admin@nthandokazi.co.za`
+- **Password:** `admin123`
 
-### Additional Admin Accounts
-- **Email:** `nthandokazi@intandokaziherbal.co.za`
-- **Password:** `Nthandokazi@2024`
-
-- **Email:** `manager@intandokaziherbal.co.za`
-- **Password:** `Manager@2024`
+### Secondary Admin Account
+- **Email:** `mandubusabelo@gmail.com`
+- **Password:** `admin123`
 
 ## 🌐 How to Access Admin Panel
 
