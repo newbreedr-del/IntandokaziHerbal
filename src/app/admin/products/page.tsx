@@ -714,7 +714,7 @@ function ProductFormModal({
                 min="0"
                 placeholder="800"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <p className="text-xs text-gray-500 mt-1">Price in South African Rand</p>
@@ -729,7 +729,7 @@ function ProductFormModal({
                 min="0"
                 placeholder="25"
                 value={formData.stock_quantity}
-                onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) || 0 })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <p className="text-xs text-gray-500 mt-1">How many units you have in stock</p>
