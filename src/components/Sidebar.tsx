@@ -45,7 +45,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-6 border-b border-brand-700/30">
         <div className="relative h-10 w-10 flex-shrink-0">
-          <Image src="/images/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
+          <Image src="/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
         </div>
         <div>
           <h1 className="text-lg font-bold text-white tracking-tight">Nthandokazi</h1>
