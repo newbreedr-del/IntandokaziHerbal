@@ -326,24 +326,40 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete product
 export async function DELETE(request: NextRequest) {
   try {
+    console.log('=== ADMIN PRODUCTS DELETE DEBUG ===');
+    console.log('Request URL:', request.url);
+    console.log('Request method:', request.method);
+    
     // Check NextAuth session
     const session = await getServerSession(authOptions);
+    console.log('Session check:', session ? 'Session found' : 'No session');
+    
     if (!session || !session.user) {
+      console.log('Unauthorized - No session or user');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('User email:', session.user.email);
+    
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
+    console.log('User permissions:', permissions);
+    
     if (!permissions?.can_manage_products) {
+      console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    const supabase = await createClient();
+    // Use service client to bypass RLS for admin operations
+    const supabase = createServiceClient();
 
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get('id');
 
+    console.log('DELETE request - Product ID:', id);
+
     if (!id) {
+      console.log('Missing product ID');
       return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
     }
 
@@ -355,15 +371,19 @@ export async function DELETE(request: NextRequest) {
       .maybeSingle();
 
     // Soft delete - set is_active to false instead of actual deletion
+    console.log('Soft deleting product:', id);
     const { error } = await supabase
       .from('products')
-      .update({ is_active: false, updated_by: session.user.email })
+      .update({ is_active: false }) // Remove updated_by to avoid UUID error
       .eq('id', id);
 
     if (error) {
       console.error('Database error:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    console.log('Product soft deleted successfully');
+    console.log('=== END ADMIN PRODUCTS DELETE DEBUG ===');
 
     // Log activity
     await supabase.from('activity_log').insert({
