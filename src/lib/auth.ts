@@ -20,9 +20,10 @@ export const authOptions: NextAuthOptions = {
           const ADMIN_USERS = [
             {
               id: '1',
-              email: 'admin@nthandokazi.co.za',
+              email: 'admin@intandokaziherbal.co.za',
               name: 'Admin User',
               role: 'super_admin',
+              password: 'Intandokazi@2024',
               permissions: {
                 can_manage_products: true,
                 can_manage_orders: true,
@@ -33,9 +34,24 @@ export const authOptions: NextAuthOptions = {
             },
             {
               id: '2',
-              email: 'mandubusabelo@gmail.com',
-              name: 'Mandu Sabelo',
+              email: 'nthandokazi@intandokaziherbal.co.za',
+              name: 'Nthandokazi Mokoatle',
               role: 'admin',
+              password: 'Nthandokazi@2024',
+              permissions: {
+                can_manage_products: true,
+                can_manage_orders: true,
+                can_manage_customers: true,
+                can_view_financials: true,
+                can_manage_settings: true,
+              }
+            },
+            {
+              id: '3',
+              email: 'manager@intandokaziherbal.co.za',
+              name: 'Manager',
+              role: 'admin',
+              password: 'Manager@2024',
               permissions: {
                 can_manage_products: true,
                 can_manage_orders: true,
@@ -54,9 +70,8 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Verify password
-          const defaultPassword = 'admin123'; // Default password for all admin users
-          if (credentials.password !== defaultPassword) {
+          // Verify password against user's specific password
+          if (credentials.password !== user.password) {
             return null;
           }
 
