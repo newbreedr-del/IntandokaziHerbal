@@ -29,8 +29,23 @@ export default function StorePage() {
     return categoryMatch && featuredMatch && searchMatch;
   });
 
-  // Get unique categories from products
-  const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
+  // Get all categories - use predefined categories plus any from products
+  const allCategories = [
+    "Internal Health",
+    "External Health", 
+    "Mental Wellness",
+    "Traditional Remedies",
+    "Vitamins & Supplements",
+    "Natural Beauty",
+    "Immune Support",
+    "Digestive Health"
+  ];
+  
+  // Get unique categories from products and combine with predefined ones
+  const productCategories = Array.from(new Set(products.map(p => p.category)));
+  const categories = ["All", ...allCategories.filter(cat => 
+    allCategories.includes(cat) || productCategories.includes(cat)
+  )].sort();
 
   return (
     <div className="min-h-screen bg-white">
