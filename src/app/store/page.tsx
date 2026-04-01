@@ -148,6 +148,96 @@ export default function StorePage() {
         </div>
       </section>
 
+      {/* Trust Bar */}
+      <div className="border-y border-brand-200 py-4" style={{background: "#ede9f8"}}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-sm text-brand-700">
+            {["🌿 Wild-Harvested Ingredients", "📦 PAXI Courier Delivery", "💬 AI-Powered Product Advice", "✅ Traditional Healer Formulated", "🔒 Secure Checkout"].map((item) => (
+              <span key={item} className="whitespace-nowrap">{item}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Products Section */}
+      <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Search & Filter */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-elegant-title text-brand-900 mb-6">Our Products</h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400" />
+              <input
+                type="text"
+                placeholder="Search products, conditions, ingredients..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white border border-brand-300 text-brand-900 placeholder-brand-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
+              />
+            </div>
+            
+            {/* Category Buttons */}
+            <div className="flex gap-2 flex-wrap">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    selectedCategory === cat
+                      ? "bg-purple-500 text-white shadow-lg shadow-purple-500/30 border-purple-500"
+                      : "bg-white border border-purple-200 text-purple-700 hover:border-purple-400 hover:text-purple-900 hover:bg-purple-50 shadow-sm"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-20 text-brand-500">
+            <div className="animate-spin w-12 h-12 border-4 border-brand-300 border-t-brand-600 rounded-full mx-auto mb-4"></div>
+            <p className="text-lg">Loading products...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-20 text-red-500">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4" />
+            <p className="text-lg font-semibold">Error loading products</p>
+            <p className="text-sm mt-2">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Product Grid */}
+        {!loading && !error && filteredProducts.length === 0 ? (
+          <div className="text-center py-20 text-brand-500">
+            <Leaf className="w-12 h-12 mx-auto mb-4 opacity-40" />
+            <p className="text-lg">No products found. Try a different search.</p>
+          </div>
+        ) : !loading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((product: Product, index: number) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                index={index}
+                onOpen={() => setSelectedProduct(product)}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* Online Consultation Card */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-gradient-to-r from-purple-600 to-brand-600 rounded-3xl p-8 md:p-12 shadow-2xl text-white relative overflow-hidden">
@@ -251,96 +341,6 @@ export default function StorePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Trust Bar */}
-      <div className="border-y border-brand-200 py-4" style={{background: "#ede9f8"}}>
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-sm text-brand-700">
-            {["🌿 Wild-Harvested Ingredients", "📦 PAXI Courier Delivery", "💬 AI-Powered Product Advice", "✅ Traditional Healer Formulated", "🔒 Secure Checkout"].map((item) => (
-              <span key={item} className="whitespace-nowrap">{item}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Products Section */}
-      <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Search & Filter */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-elegant-title text-brand-900 mb-6">Our Products</h2>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400" />
-              <input
-                type="text"
-                placeholder="Search products, conditions, ingredients..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-brand-300 text-brand-900 placeholder-brand-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
-              />
-            </div>
-            
-            {/* Category Buttons */}
-            <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                    selectedCategory === cat
-                      ? "bg-purple-500 text-white shadow-lg shadow-purple-500/30 border-purple-500"
-                      : "bg-white border border-purple-200 text-purple-700 hover:border-purple-400 hover:text-purple-900 hover:bg-purple-50 shadow-sm"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-20 text-brand-500">
-            <div className="animate-spin w-12 h-12 border-4 border-brand-300 border-t-brand-600 rounded-full mx-auto mb-4"></div>
-            <p className="text-lg">Loading products...</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="text-center py-20 text-red-500">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4" />
-            <p className="text-lg font-semibold">Error loading products</p>
-            <p className="text-sm mt-2">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
-
-        {/* Product Grid */}
-        {!loading && !error && filteredProducts.length === 0 ? (
-          <div className="text-center py-20 text-brand-500">
-            <Leaf className="w-12 h-12 mx-auto mb-4 opacity-40" />
-            <p className="text-lg">No products found. Try a different search.</p>
-          </div>
-        ) : !loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product: Product, index: number) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                index={index}
-                onOpen={() => setSelectedProduct(product)}
-              />
-            ))}
-          </div>
-        )}
       </section>
 
       {/* Testimonials */}
