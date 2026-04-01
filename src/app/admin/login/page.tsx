@@ -3,35 +3,21 @@
 
 
 import { useState } from "react";
-
-
+import Image from "next/image";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 export const dynamic = 'force-dynamic';
 
-import { signIn } from "next-auth/react";
-
-import { useRouter } from "next/navigation";
-
-import { Leaf, Lock, Mail, Eye, EyeOff } from "lucide-react";
-
-import { motion } from "framer-motion";
-
-import toast from "react-hot-toast";
-
-import Button from "@/components/ui/Button";
-
-
-
 export default function AdminLogin() {
-
   const router = useRouter();
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
 
@@ -101,29 +87,17 @@ export default function AdminLogin() {
       >
 
         {/* Logo & Title */}
-
         <div className="text-center mb-8">
-
           <motion.div
-
             initial={{ scale: 0 }}
-
             animate={{ scale: 1 }}
-
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-
-            className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-xl"
-
+            className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-xl p-2"
           >
-
-            <Leaf className="w-10 h-10 text-brand-600" />
-
+            <Image src="/logo.png" alt="Intandokazi Herbal" fill className="object-contain" />
           </motion.div>
-
-          <h1 className="text-3xl font-bold text-white mb-2">Nthandokazi Herbal</h1>
-
+          <h1 className="text-3xl font-bold text-white mb-2">Intandokazi Herbal</h1>
           <p className="text-brand-300">Admin Portal</p>
-
         </div>
 
 
@@ -259,31 +233,13 @@ export default function AdminLogin() {
             </Button>
 
           </form>
-
-
-
-          {/* Demo Credentials */}
-
-          <div className="mt-6 p-4 bg-brand-50 border border-brand-200 rounded-xl">
-
-            <p className="text-xs text-brand-600 font-semibold mb-2">Demo Credentials:</p>
-
-            <p className="text-xs text-brand-700">Email: admin@nthandokazi.co.za</p>
-
-            <p className="text-xs text-brand-700">Password: admin123</p>
-
-          </div>
-
         </motion.div>
 
 
 
         {/* Footer */}
-
         <p className="text-center text-brand-300 text-sm mt-6">
-
-          © {new Date().getFullYear()} Nthandokazi Herbal. All rights reserved.
-
+          © {new Date().getFullYear()} Intandokazi Herbal Products. All rights reserved.
         </p>
 
       </motion.div>
