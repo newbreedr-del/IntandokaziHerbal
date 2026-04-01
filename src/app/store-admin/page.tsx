@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Upload, Save, Package, ImageIcon, CheckCircle, AlertCircle, Pencil, X } from "lucide-react";
-import { STORE_PRODUCTS, StoreProduct } from "@/lib/storeProducts";
+import { fetchStoreProducts, StoreProduct } from "@/lib/storeProducts";
 
 interface ProductEdit {
   id: string;
@@ -34,7 +34,23 @@ export default function StoreAdminPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [products, setProducts] = useState<StoreProduct[]>([]);
+  const [loading, setLoading] = useState(true);
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const fetchedProducts = await fetchStoreProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
   const getProduct = (base: StoreProduct): StoreProduct & ProductEdit => ({
     ...base,
@@ -110,8 +126,14 @@ export default function StoreAdminPage() {
         )}
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {STORE_PRODUCTS.map((base) => {
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
+            <p className="mt-4 text-gray-500">Loading products...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {products.map((base) => {
             const p = getProduct(base);
             const isEditing = editing === p.id;
             const isSaved = saved === p.id;
@@ -260,7 +282,8 @@ export default function StoreAdminPage() {
               </div>
             );
           })}
-        </div>
+          </div>
+        )}
 
         {/* Instructions */}
         <div className="mt-10 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
