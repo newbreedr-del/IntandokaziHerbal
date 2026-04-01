@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook } from "lucide-react";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook, CheckCircle } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
 import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
@@ -145,6 +145,111 @@ export default function StorePage() {
         </div>
         <div className="relative flex justify-center mt-12">
           <ChevronDown className="w-6 h-6 text-brand-500 animate-bounce" />
+        </div>
+      </section>
+
+      {/* Online Consultation Card */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-gradient-to-r from-purple-600 to-brand-600 rounded-3xl p-8 md:p-12 shadow-2xl text-white relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full -mr-32 -mt-32"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/20 rounded-full -ml-24 -mb-24"></div>
+          </div>
+          
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 px-4 py-2 rounded-full mb-6">
+                <Leaf className="w-5 h-5" />
+                <span className="text-sm font-medium">Traditional Healing Wisdom</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                Book an Online Consultation
+              </h2>
+              
+              <p className="text-lg text-white/90 mb-6 leading-relaxed">
+                Get personalized herbal remedies and traditional healing advice from experienced practitioners. 
+                Consultations available via WhatsApp, Phone, or Video Call.
+              </p>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm">Phone & WhatsApp Consultations</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                    <MessageCircle className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm">Video Call Sessions Available</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                    <Star className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm">Personalized Treatment Plans</span>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Nthandokazi,%20I'd%20like%20to%20book%20a%20consultation`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-brand-600 hover:bg-gray-100 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Book via WhatsApp
+                </a>
+                <a
+                  href={`tel:${SITE_CONFIG.phone}`}
+                  className="inline-flex items-center gap-2 bg-brand-700 hover:bg-brand-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-white/20"
+                >
+                  <Phone className="w-5 h-5" />
+                  Call Now
+                </a>
+              </div>
+            </div>
+            
+            <div className="hidden md:block">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
+                <h3 className="text-xl font-semibold mb-4">Consultation Includes:</h3>
+                <ul className="space-y-3 text-white/90">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Personalized health assessment</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Traditional herbal remedy recommendations</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Dosage and usage instructions</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Lifestyle and dietary advice</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Follow-up support</span>
+                  </li>
+                </ul>
+                
+                <div className="mt-6 p-4 bg-white/10 rounded-lg border border-white/20">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold mb-1">R250</div>
+                    <div className="text-sm text-white/80">Per Consultation</div>
+                    <div className="text-xs text-white/60 mt-1">~30 minutes session</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
