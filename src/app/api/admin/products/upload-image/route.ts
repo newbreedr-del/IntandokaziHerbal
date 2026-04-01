@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { createServiceClient } from '@/utils/supabase/service';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -18,8 +17,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    // Use service client for storage operations (bypasses RLS)
-    const supabase = createServiceClient();
+    const supabase = await createClient();
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -118,8 +116,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    // Use service client for storage operations (bypasses RLS)
-    const supabase = createServiceClient();
+    const supabase = await createClient();
 
     const searchParams = request.nextUrl.searchParams;
     const filename = searchParams.get('filename');
