@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle } from "lucide-react";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
 import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
@@ -121,7 +121,7 @@ export default function StorePage() {
               Shop All Products
             </button>
             <a
-              href="https://wa.me/27000000000"
+              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               className="border border-brand-600/60 hover:border-brand-400 text-brand-300 hover:text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 hover:bg-brand-900/40"
@@ -268,7 +268,7 @@ export default function StorePage() {
       {/* Footer */}
       <footer className="bg-brand-900 border-t border-brand-800 py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="relative w-8 h-8 flex-shrink-0">
@@ -276,19 +276,112 @@ export default function StorePage() {
                 </div>
                 <span className="text-white font-elegant-title">Nthandokazi Herbal</span>
               </div>
-              <p className="text-brand-400 text-sm leading-relaxed">
-                Authentic African herbal remedies formulated by a traditional healer with decades of experience. Healing the natural way.
+              <p className="text-brand-400 text-sm leading-relaxed mb-4">
+                Welcome to Intandokazi Herbal Products 🌿
               </p>
+              <p className="text-brand-400 text-sm leading-relaxed mb-4">
+                Please send a detailed message outlining how we can assist you, and our team will get back to you within 24 hours.
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-brand-300 text-sm">📍 Branches:</span>
+                <span className="text-brand-400 text-sm">{SITE_CONFIG.branches.join(' | ')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-brand-300 text-sm">🕘 Operating Hours:</span>
+                <span className="text-brand-400 text-sm">{SITE_CONFIG.operatingHours}</span>
+              </div>
+              {SITE_CONFIG.business.accredited && (
+                <div className="mt-3 inline-flex items-center gap-1 bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full">
+                  <span className="text-amber-400 text-xs font-medium">✓ Accredited Company</span>
+                </div>
+              )}
             </div>
+            
             <div>
               <h4 className="text-white font-semibold mb-4">Contact Us</h4>
-              <div className="space-y-2 text-sm text-brand-400">
-                <div className="flex items-center gap-2"><Phone className="w-4 h-4" /><span>WhatsApp: +27 000 000 0000</span></div>
-                <div className="flex items-center gap-2"><Mail className="w-4 h-4" /><span>info@nthandokazi.co.za</span></div>
-                <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /><span>South Africa — Nationwide Delivery</span></div>
+              <div className="space-y-3 text-sm text-brand-400">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  <span>{SITE_CONFIG.phoneFormatted}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  <span>WhatsApp: {SITE_CONFIG.whatsappFormatted}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  <span>{SITE_CONFIG.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>Nationwide Delivery</span>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-brand-800/50 rounded-lg border border-brand-700/50">
+                <p className="text-brand-300 text-xs leading-relaxed">
+                  <strong>Urgent Inquiries:</strong> Please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 
+                  Kindly avoid calling for faster response - messages are attended to in order received.
+                </p>
               </div>
             </div>
+            
             <div>
+              <h4 className="text-white font-semibold mb-4">Order Enquiries</h4>
+              <div className="text-sm text-brand-400 space-y-2">
+                <p>Please follow up {SITE_CONFIG.shipping.followUpDays} days after receiving your order confirmation.</p>
+                <div className="space-y-1 mt-3">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3 h-3" />
+                    <span>info@intandokaziherbal.co.za</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3 h-3" />
+                    <span>sales@intandokaziherbal.co.za</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3 h-3" />
+                    <span>disputes@intandokaziherbal.co.za</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3 h-3" />
+                    <span>accounts@intandokaziherbal.co.za</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3 h-3" />
+                    <span>admin@intandokaziherbal.co.za</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Follow Us</h4>
+              <div className="flex gap-3 mb-4">
+                <a
+                  href={SITE_CONFIG.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-brand-800 hover:bg-brand-700 rounded-lg flex items-center justify-center transition-colors"
+                >
+                  <Facebook className="w-5 h-5 text-brand-300" />
+                </a>
+                <a
+                  href={SITE_CONFIG.social.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-brand-800 hover:bg-brand-700 rounded-lg flex items-center justify-center transition-colors"
+                >
+                  <MessageCircle className="w-5 h-5 text-brand-300" />
+                </a>
+                <a
+                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-green-600 hover:bg-green-500 rounded-lg flex items-center justify-center transition-colors"
+                >
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </a>
+              </div>
               <h4 className="text-white font-semibold mb-4">Delivery</h4>
               <div className="text-sm text-brand-400 space-y-1">
                 <p>We ship via <strong className="text-brand-300">PAXI Courier</strong> nationwide.</p>
@@ -298,8 +391,12 @@ export default function StorePage() {
               </div>
             </div>
           </div>
-          <div className="border-t border-brand-900/50 pt-6 text-center text-brand-600 text-xs">
-            <p>© {new Date().getFullYear()} Nthandokazi Herbal. All rights reserved. | These products are not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional for medical advice.</p>
+          <div className="border-t border-brand-900/50 pt-6 text-center">
+            <p className="text-brand-600 text-xs mb-2">© {new Date().getFullYear()} Nthandokazi Herbal. All rights reserved.</p>
+            <p className="text-brand-600 text-xs">These products are not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional for medical advice.</p>
+            <div className="mt-3">
+              <a href="/terms" className="text-brand-400 hover:text-brand-300 text-xs underline">Terms & Conditions</a>
+            </div>
           </div>
         </div>
       </footer>

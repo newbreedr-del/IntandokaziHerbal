@@ -10,7 +10,23 @@ export const SITE_CONFIG = {
   phone: '0625842441',
   phoneFormatted: '062 584 2441',
   whatsappNumber: '27625842441', // International format without +
-  email: 'info@ntankokazi.co.za',
+  whatsappFormatted: '+27 62 584 2441',
+  email: 'info@intandokaziherbal.co.za',
+  
+  // Additional Emails
+  emails: {
+    info: 'info@intandokaziherbal.co.za',
+    sales: 'sales@intandokaziherbal.co.za',
+    disputes: 'disputes@intandokaziherbal.co.za',
+    accounts: 'accounts@intandokaziherbal.co.za',
+    admin: 'admin@intandokaziherbal.co.za',
+  },
+  
+  // Branch Locations
+  branches: ['Durban', 'Cape Town', 'PMB', 'Johannesburg (Marble Towers)'],
+  
+  // Operating Hours
+  operatingHours: '09:00 – 17:00',
   
   // Social Media
   social: {
@@ -25,6 +41,7 @@ export const SITE_CONFIG = {
     owner: 'Nthandokazi Mokoatle',
     registrationNumber: '', // Add if registered
     vatNumber: '', // Add if VAT registered
+    accredited: true, // Company is accredited
   },
   
   // Banking Details (for EFT)
@@ -43,12 +60,14 @@ export const SITE_CONFIG = {
     defaultFee: 110,
     freeShippingThreshold: 500, // Free shipping over R500
     estimatedDays: '2-5 business days',
+    followUpDays: 5, // Follow up 5 days after order confirmation
   },
   
   // Support
   support: {
-    hours: 'Monday - Friday: 9:00 AM - 5:00 PM',
-    responseTime: '2 hours during business hours',
+    hours: 'Monday - Friday: 09:00 - 17:00',
+    responseTime: '24 hours',
+    urgentNote: 'For urgent inquiries, please call 062 584 2441 (no WhatsApp calls). Kindly avoid calling for faster response messages are attended to in order received.',
   },
 };
 
