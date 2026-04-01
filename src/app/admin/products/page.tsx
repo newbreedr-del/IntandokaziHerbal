@@ -465,11 +465,13 @@ function ProductFormModal({
 
   const CATEGORIES = [
     "Internal Health",
-    "Traditional Healing", 
-    "Skin & Body",
-    "Wellness & Spiritual",
-    "Beauty",
-    "Protection",
+    "External Health",
+    "Mental Wellness",
+    "Traditional Remedies",
+    "Vitamins & Supplements",
+    "Natural Beauty",
+    "Immune Support",
+    "Digestive Health",
   ];
 
   const UNITS = ["500ml", "1L", "250ml", "100g", "250g", "500g"];
