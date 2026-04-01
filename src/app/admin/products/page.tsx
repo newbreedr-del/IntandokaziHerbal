@@ -633,6 +633,12 @@ function ProductFormModal({
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <p className="text-xs text-gray-500 mt-1">The name of your product as customers will see it</p>
+              {/* Hidden slug field to ensure it's submitted */}
+              <input
+                type="hidden"
+                name="slug"
+                value={formData.slug}
+              />
             </div>
 
             <div>

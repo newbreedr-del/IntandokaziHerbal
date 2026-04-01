@@ -85,21 +85,37 @@ export async function GET(request: NextRequest) {
 // POST - Create new product
 export async function POST(request: NextRequest) {
   try {
+    console.log('=== ADMIN PRODUCTS POST DEBUG ===');
+    console.log('Request URL:', request.url);
+    console.log('Request method:', request.method);
+    
     // Check NextAuth session
     const session = await getServerSession(authOptions);
+    console.log('Session check:', session ? 'Session found' : 'No session');
+    
     if (!session || !session.user) {
+      console.log('Unauthorized - No session or user');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('User email:', session.user.email);
+    
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
+    console.log('User permissions:', permissions);
+    
     if (!permissions?.can_manage_products) {
+      console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    const supabase = await createClient();
+    // Use service client to bypass RLS for admin operations
+    const supabase = createServiceClient();
+    console.log('Service client created');
 
     const body = await request.json();
+    console.log('Request body:', body);
+    
     const {
       name,
       slug,
@@ -134,8 +150,11 @@ export async function POST(request: NextRequest) {
       is_on_sale,
     } = body;
 
+    console.log('Extracted fields:', { name, slug, description, category, price, unit });
+
     // Validate required fields
     if (!name || !slug || !description || !category || !price || !unit) {
+      console.log('Missing required fields:', { name: !!name, slug: !!slug, description: !!description, category: !!category, price: !!price, unit: !!unit });
       return NextResponse.json(
         { error: 'Missing required fields: name, slug, description, category, price, unit' },
         { status: 400 }
@@ -146,9 +165,10 @@ export async function POST(request: NextRequest) {
     const image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/Intandokazi Products/${slug}.jpg`;
 
     // Insert product
+    console.log('Inserting new product...');
     const { data: insertedProducts, error } = await supabase
       .from('products')
-      .insert({
+      .insert([{
         name,
         slug,
         sku,
@@ -161,12 +181,12 @@ export async function POST(request: NextRequest) {
         compare_at_price,
         cost_price,
         unit,
-        stock_quantity: stock_quantity || 0,
-        low_stock_threshold: low_stock_threshold || 5,
+        stock_quantity,
+        low_stock_threshold,
         weight_kg,
         dimensions_cm,
         image_url,
-        emoji: emoji || '🌿',
+        emoji,
         gradient_css,
         badge,
         benefits,
@@ -177,14 +197,16 @@ export async function POST(request: NextRequest) {
         meta_title,
         meta_description,
         meta_keywords,
-        is_active: is_active !== undefined ? is_active : true,
-        is_featured: is_featured || false,
-        is_new: is_new || false,
-        is_on_sale: is_on_sale || false,
-        created_by: session.user.email,
-        updated_by: session.user.email,
-      })
+        is_active,
+        is_featured,
+        is_new,
+        is_on_sale,
+        view_count: 0,
+        purchase_count: 0,
+      }])
       .select();
+
+    console.log('Insert result:', { insertedProducts: insertedProducts?.length || 0, error });
 
     if (error) {
       console.error('Database error:', error);
@@ -192,10 +214,13 @@ export async function POST(request: NextRequest) {
     }
 
     if (!insertedProducts || insertedProducts.length === 0) {
+      console.error('No products returned from insert');
       return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
     }
 
     const product = insertedProducts[0];
+    console.log('Product created successfully:', product.name);
+    console.log('=== END ADMIN PRODUCTS POST DEBUG ===');
 
     // Log activity
     await supabase.from('activity_log').insert({
