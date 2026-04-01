@@ -4,9 +4,10 @@ import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   LayoutDashboard, Package, ShoppingCart, FileText, 
-  Truck, LogOut, Leaf, Menu, X 
+  Truck, LogOut, Menu, X 
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -79,8 +80,8 @@ export default function AdminLayout({
           {/* Logo */}
           <div className="p-6 border-b border-brand-600">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <Leaf className="w-6 h-6 text-brand-700" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                <Image src="/logo.png" alt="Nthandokazi Herbal" width={40} height={40} className="object-contain" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Nthandokazi</h1>
