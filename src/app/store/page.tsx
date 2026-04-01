@@ -14,14 +14,13 @@ export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [showFeaturedOnly, setShowFeaturedOnly] = useState(true);
   const { totalItems, setIsOpen } = useCart();
   const { products, loading, error } = useProducts();
-
-  // Filter products based on category and featured status
+  
+  // Filter products based on category and search - show only featured by default
   const filteredProducts = products.filter(product => {
     const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
-    const featuredMatch = !showFeaturedOnly || product.is_featured;
+    const featuredMatch = product.is_featured; // Always show only featured products
     const searchMatch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -176,29 +175,22 @@ export default function StorePage() {
                 className="w-full bg-white border border-brand-300 text-brand-900 placeholder-brand-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
               />
             </div>
-            <div className="flex gap-2">
-              {/* Category Dropdown */}
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-white border border-brand-300 text-brand-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              
-              {/* Featured Toggle */}
-              <button
-                onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
-                className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                  showFeaturedOnly
-                    ? "bg-amber-500 text-white shadow-lg shadow-amber-500/30"
-                    : "bg-white border border-brand-300 text-brand-700 hover:border-brand-500 hover:text-brand-900 shadow-sm"
-                }`}
-              >
-                {showFeaturedOnly ? "⭐ Featured Only" : "🌟 All Products"}
-              </button>
+            
+            {/* Category Buttons */}
+            <div className="flex gap-2 flex-wrap">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    selectedCategory === cat
+                      ? "bg-purple-500 text-white shadow-lg shadow-purple-500/30 border-purple-500"
+                      : "bg-white border border-purple-200 text-purple-700 hover:border-purple-400 hover:text-purple-900 hover:bg-purple-50 shadow-sm"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
         </div>

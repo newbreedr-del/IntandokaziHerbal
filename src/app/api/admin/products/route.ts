@@ -165,10 +165,9 @@ export async function POST(request: NextRequest) {
     const image_url = `https://oaeirdgffwodkbcstdfh.supabase.co/storage/v1/object/public/Intandokazi Products/${slug}.jpg`;
 
     // Insert product
-    console.log('Inserting new product...');
     const { data: insertedProducts, error } = await supabase
       .from('products')
-      .insert([{
+      .insert({
         name,
         slug,
         sku,
@@ -181,12 +180,12 @@ export async function POST(request: NextRequest) {
         compare_at_price,
         cost_price,
         unit,
-        stock_quantity,
-        low_stock_threshold,
+        stock_quantity: stock_quantity || 0,
+        low_stock_threshold: low_stock_threshold || 5,
         weight_kg,
         dimensions_cm,
         image_url,
-        emoji,
+        emoji: emoji || '🌿',
         gradient_css,
         badge,
         benefits,
@@ -197,16 +196,14 @@ export async function POST(request: NextRequest) {
         meta_title,
         meta_description,
         meta_keywords,
-        is_active,
-        is_featured,
-        is_new,
-        is_on_sale,
-        view_count: 0,
-        purchase_count: 0,
-      }])
+        is_active: is_active !== undefined ? is_active : true,
+        is_featured: is_featured || false,
+        is_new: is_new || false,
+        is_on_sale: is_on_sale || false,
+        created_by: session.user.email,
+        updated_by: session.user.email,
+      })
       .select();
-
-    console.log('Insert result:', { insertedProducts: insertedProducts?.length || 0, error });
 
     if (error) {
       console.error('Database error:', error);
@@ -214,13 +211,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!insertedProducts || insertedProducts.length === 0) {
-      console.error('No products returned from insert');
       return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
     }
 
     const product = insertedProducts[0];
-    console.log('Product created successfully:', product.name);
-    console.log('=== END ADMIN PRODUCTS POST DEBUG ===');
 
     // Log activity
     await supabase.from('activity_log').insert({
@@ -388,46 +382,18 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
     }
 
-    // Get product for audit log and image cleanup
+    // Get product for audit log
     const { data: product } = await supabase
       .from('products')
       .select('*')
       .eq('id', id)
       .maybeSingle();
 
-    if (!product) {
-      console.log('Product not found:', id);
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
-    }
-
-    console.log('Found product to delete:', product.name, 'Slug:', product.slug);
-
-    // Delete product image from storage if it exists
-    if (product.slug) {
-      try {
-        const imagePath = `Intandokazi Products/${product.slug}.jpg`;
-        console.log('Deleting image from storage:', imagePath);
-        
-        const { error: storageError } = await supabase.storage
-          .from('Intandokazi Products')
-          .remove([imagePath]);
-          
-        if (storageError) {
-          console.log('Warning: Failed to delete image from storage:', storageError);
-          // Don't fail the deletion if image removal fails
-        } else {
-          console.log('Successfully deleted image from storage');
-        }
-      } catch (storageError) {
-        console.log('Warning: Error deleting image from storage:', storageError);
-      }
-    }
-
-    // Hard delete - actually remove the product from database
-    console.log('Hard deleting product from database:', id);
+    // Soft delete - set is_active to false instead of actual deletion
+    console.log('Soft deleting product:', id);
     const { error } = await supabase
       .from('products')
-      .delete()
+      .update({ is_active: false }) // Remove updated_by to avoid UUID error
       .eq('id', id);
 
     if (error) {
@@ -435,7 +401,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    console.log('Product hard deleted successfully');
+    console.log('Product soft deleted successfully');
     console.log('=== END ADMIN PRODUCTS DELETE DEBUG ===');
 
     // Log activity
