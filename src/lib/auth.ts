@@ -1,36 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-// Admin users from environment variables
-const ADMIN_USERS = [
-  {
-    id: '1',
-    email: 'admin@nthandokazi.co.za',
-    name: 'Admin User',
-    role: 'super_admin',
-    permissions: {
-      can_manage_products: true,
-      can_manage_orders: true,
-      can_manage_customers: true,
-      can_view_financials: true,
-      can_manage_settings: true,
-    }
-  },
-  {
-    id: '2',
-    email: 'mandubusabelo@gmail.com',
-    name: 'Mandu Sabelo',
-    role: 'admin',
-    permissions: {
-      can_manage_products: true,
-      can_manage_orders: true,
-      can_manage_customers: true,
-      can_view_financials: true,
-      can_manage_settings: true,
-    }
-  }
-];
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -44,27 +14,63 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Find user in admin list
-        const user = ADMIN_USERS.find(u => u.email === credentials.email);
-        
-        if (!user) {
-          console.error('Admin user not found:', credentials.email);
+        try {
+          // For now, use the hardcoded admin users as fallback
+          // In production, this should query the database
+          const ADMIN_USERS = [
+            {
+              id: '1',
+              email: 'admin@nthandokazi.co.za',
+              name: 'Admin User',
+              role: 'super_admin',
+              permissions: {
+                can_manage_products: true,
+                can_manage_orders: true,
+                can_manage_customers: true,
+                can_view_financials: true,
+                can_manage_settings: true,
+              }
+            },
+            {
+              id: '2',
+              email: 'mandubusabelo@gmail.com',
+              name: 'Mandu Sabelo',
+              role: 'admin',
+              permissions: {
+                can_manage_products: true,
+                can_manage_orders: true,
+                can_manage_customers: true,
+                can_view_financials: true,
+                can_manage_settings: true,
+              }
+            }
+          ];
+
+          // Find user in admin list
+          const user = ADMIN_USERS.find(u => u.email === credentials.email);
+          
+          if (!user) {
+            console.error('Admin user not found:', credentials.email);
+            return null;
+          }
+
+          // Verify password
+          const defaultPassword = 'admin123'; // Default password for all admin users
+          if (credentials.password !== defaultPassword) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            permissions: user.permissions
+          };
+        } catch (error) {
+          console.error('Authentication error:', error);
           return null;
         }
-
-        // Verify password
-        const defaultPassword = 'admin123'; // Default password for all admin users
-        if (credentials.password !== defaultPassword) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          permissions: user.permissions
-        };
       }
     })
   ],
