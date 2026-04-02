@@ -52,21 +52,36 @@ export default function BookingCalendar() {
 
   useEffect(() => {
     if (selectedDate) {
-      fetchAvailableSlots(selectedDate);
+      generateDefaultSlots(selectedDate);
     }
   }, [selectedDate]);
 
-  const fetchAvailableSlots = async (date: string) => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/bookings/availability?startDate=${date}&endDate=${date}`);
-      const data = await response.json();
-      setAvailableSlots(data.slots || []);
-    } catch (error) {
-      console.error("Error fetching slots:", error);
-    } finally {
-      setLoading(false);
-    }
+  const generateDefaultSlots = (date: string) => {
+    // Generate default time slots for the selected date
+    // 9 AM to 5 PM, hourly slots
+    const slots: AvailableSlot[] = [];
+    const times = [
+      { start: "09:00", end: "10:00" },
+      { start: "10:00", end: "11:00" },
+      { start: "11:00", end: "12:00" },
+      { start: "12:00", end: "13:00" },
+      { start: "13:00", end: "14:00" },
+      { start: "14:00", end: "15:00" },
+      { start: "15:00", end: "16:00" },
+      { start: "16:00", end: "17:00" },
+    ];
+
+    times.forEach((time, index) => {
+      slots.push({
+        id: `${date}-${index}`,
+        date: date,
+        start_time: time.start,
+        end_time: time.end,
+        is_available: true
+      });
+    });
+
+    setAvailableSlots(slots);
   };
 
   const handleDateSelect = (date: string) => {

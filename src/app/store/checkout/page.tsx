@@ -12,13 +12,18 @@ import Button from "@/components/ui/Button";
 import { SITE_CONFIG, SA_PROVINCES } from "@/lib/constants";
 
 interface BillingAddress {
-  firstName: string; lastName: string; email: string; phone: string;
-  streetAddress: string; suburb: string; city: string; province: string;
-  postalCode: string; country: string; deliveryNotes: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  pepStoreCode: string;
+  pepStoreName: string;
+  deliveryNotes: string;
 }
 
 const PAYMENT_METHODS = [
   { id: "payfast", label: "PayFast (Card, EFT, Instant EFT)", icon: <CreditCard className="w-4 h-4" />, recommended: true },
+  { id: "capitec", label: "Capitec Pay", icon: <Smartphone className="w-4 h-4" /> },
   { id: "eft", label: "Manual EFT / Bank Transfer", icon: <CreditCard className="w-4 h-4" /> },
 ];
 
@@ -48,12 +53,16 @@ export default function CheckoutPage() {
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [billing, setBilling] = useState<BillingAddress>({
-    firstName: "", lastName: "", email: "", phone: "",
-    streetAddress: "", suburb: "", city: "", province: "Gauteng",
-    postalCode: "", country: "South Africa", deliveryNotes: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    pepStoreCode: "",
+    pepStoreName: "",
+    deliveryNotes: "",
   });
 
-  const deliveryFee = totalPrice >= 500 ? 0 : 85;
+  const deliveryFee = 85; // Fixed PAXI delivery fee to PEP store
   const total = totalPrice + deliveryFee;
   const orderRef = `NTK-${Date.now().toString().slice(-6)}`;
 
@@ -66,11 +75,12 @@ export default function CheckoutPage() {
     const e: Record<string, string> = {};
     if (!billing.firstName.trim()) e.firstName = "Required";
     if (!billing.lastName.trim()) e.lastName = "Required";
-    if (!billing.email.trim() || !/\S+@\S+\.\S+/.test(billing.email)) e.email = "Valid email required";
+    // Email is optional
+    if (billing.email.trim() && !/\S+@\S+\.\S+/.test(billing.email)) e.email = "Valid email required";
     if (!billing.phone.trim()) e.phone = "Required";
-    if (!billing.streetAddress.trim()) e.streetAddress = "Required";
-    if (!billing.city.trim()) e.city = "Required";
-    if (!billing.postalCode.trim()) e.postalCode = "Required";
+    if (!billing.pepStoreCode.trim() && !billing.pepStoreName.trim()) {
+      e.pepStoreCode = "PEP store code or name required";
+    }
     if (createAccount) {
       if (password.length < 8) e.password = "Minimum 8 characters";
       if (password !== confirmPw) e.confirmPw = "Passwords do not match";
@@ -164,27 +174,37 @@ export default function CheckoutPage() {
             {step === "details" && (
               <div className="space-y-6">
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                  <h2 className="text-brand-900 font-bold text-lg mb-1">Billing & Delivery Address</h2>
-                  <p className="text-brand-500 text-xs mb-5">Used for your PAXI courier delivery — please ensure accuracy.</p>
+                  <h2 className="text-brand-900 font-bold text-lg mb-1">Contact & Delivery Details</h2>
+                  <p className="text-brand-500 text-xs mb-5">We deliver to your nearest PEP store via PAXI courier — R85 delivery fee applies.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field label="First Name *" error={errors.firstName}><input type="text" value={billing.firstName} onChange={(e) => upd("firstName", e.target.value)} className={inputCls(errors.firstName)} placeholder="Thandi" /></Field>
-                    <Field label="Last Name *" error={errors.lastName}><input type="text" value={billing.lastName} onChange={(e) => upd("lastName", e.target.value)} className={inputCls(errors.lastName)} placeholder="Mokoena" /></Field>
-                    <Field label="Email Address *" error={errors.email}><input type="email" value={billing.email} onChange={(e) => upd("email", e.target.value)} className={inputCls(errors.email)} placeholder="thandi@email.co.za" /></Field>
-                    <Field label="Phone / WhatsApp *" error={errors.phone}><input type="tel" value={billing.phone} onChange={(e) => upd("phone", e.target.value)} className={inputCls(errors.phone)} placeholder="072 345 6789" /></Field>
-                    <div className="sm:col-span-2">
-                      <Field label="Street Address *" error={errors.streetAddress}><input type="text" value={billing.streetAddress} onChange={(e) => upd("streetAddress", e.target.value)} className={inputCls(errors.streetAddress)} placeholder="12 Jacaranda Street" /></Field>
-                    </div>
-                    <Field label="Suburb"><input type="text" value={billing.suburb} onChange={(e) => upd("suburb", e.target.value)} className={inputCls()} placeholder="Hatfield" /></Field>
-                    <Field label="City / Town *" error={errors.city}><input type="text" value={billing.city} onChange={(e) => upd("city", e.target.value)} className={inputCls(errors.city)} placeholder="Pretoria" /></Field>
-                    <Field label="Province *">
-                      <select value={billing.province} onChange={(e) => setBilling({...billing, province: e.target.value})} className="input">
-                        <option value="">Select Province</option>
-                        {SA_PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
-                      </select>
+                    <Field label="First Name *" error={errors.firstName}>
+                      <input type="text" value={billing.firstName} onChange={(e) => upd("firstName", e.target.value)} className={inputCls(errors.firstName)} placeholder="Thandi" />
                     </Field>
-                    <Field label="Postal Code *" error={errors.postalCode}><input type="text" value={billing.postalCode} onChange={(e) => upd("postalCode", e.target.value)} className={inputCls(errors.postalCode)} placeholder="0083" /></Field>
+                    <Field label="Surname *" error={errors.lastName}>
+                      <input type="text" value={billing.lastName} onChange={(e) => upd("lastName", e.target.value)} className={inputCls(errors.lastName)} placeholder="Mokoena" />
+                    </Field>
+                    <Field label="Email Address (optional)" error={errors.email}>
+                      <input type="email" value={billing.email} onChange={(e) => upd("email", e.target.value)} className={inputCls(errors.email)} placeholder="thandi@email.co.za" />
+                    </Field>
+                    <Field label="Phone / WhatsApp *" error={errors.phone}>
+                      <input type="tel" value={billing.phone} onChange={(e) => upd("phone", e.target.value)} className={inputCls(errors.phone)} placeholder="072 345 6789" />
+                    </Field>
                     <div className="sm:col-span-2">
-                      <Field label="Delivery Notes (optional)"><textarea value={billing.deliveryNotes} onChange={(e) => upd("deliveryNotes", e.target.value)} rows={2} className={`${inputCls()} resize-none`} placeholder="Gate code, building name, special instructions..." /></Field>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                        <p className="text-xs text-blue-800 font-medium mb-1">📦 PAXI to PEP Store Delivery</p>
+                        <p className="text-xs text-blue-600">Your order will be delivered to your nearest PEP store. Provide either the PEP store code OR the mall/area name below.</p>
+                      </div>
+                    </div>
+                    <Field label="PEP Store Code" error={errors.pepStoreCode}>
+                      <input type="text" value={billing.pepStoreCode} onChange={(e) => upd("pepStoreCode", e.target.value)} className={inputCls(errors.pepStoreCode)} placeholder="e.g., PEP1234" />
+                    </Field>
+                    <Field label="OR Mall/Area Name" error={errors.pepStoreName}>
+                      <input type="text" value={billing.pepStoreName} onChange={(e) => upd("pepStoreName", e.target.value)} className={inputCls(errors.pepStoreName)} placeholder="e.g., Menlyn Mall, Hatfield" />
+                    </Field>
+                    <div className="sm:col-span-2">
+                      <Field label="Delivery Notes (optional)">
+                        <textarea value={billing.deliveryNotes} onChange={(e) => upd("deliveryNotes", e.target.value)} rows={2} className={`${inputCls()} resize-none`} placeholder="Any special instructions..." />
+                      </Field>
                     </div>
                   </div>
                 </div>
@@ -291,16 +311,15 @@ export default function CheckoutPage() {
                   </div>
                   <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between text-brand-600"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                    <div className="flex justify-between text-brand-600"><span>Delivery (PAXI)</span><span>{deliveryFee === 0 ? <span className="text-emerald-600">FREE</span> : `R${deliveryFee}`}</span></div>
+                    <div className="flex justify-between text-brand-600"><span>Delivery (PAXI to PEP)</span><span>R{deliveryFee}</span></div>
                     <div className="flex justify-between text-brand-900 font-bold text-base pt-2 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
                   </div>
                 </div>
                 <div className="bg-white border border-gray-200 rounded-2xl p-5 text-sm shadow-sm">
-                  <h3 className="text-brand-900 font-semibold mb-3">Delivery Address</h3>
+                  <h3 className="text-brand-900 font-semibold mb-3">Delivery Details</h3>
                   <p className="text-brand-800">{billing.firstName} {billing.lastName}</p>
-                  <p className="text-brand-600">{billing.streetAddress}{billing.suburb ? `, ${billing.suburb}` : ""}</p>
-                  <p className="text-brand-600">{billing.city}, {billing.province}, {billing.postalCode}</p>
-                  <p className="text-brand-600">{billing.phone} · {billing.email}</p>
+                  <p className="text-brand-600">📦 PEP Store: {billing.pepStoreCode || billing.pepStoreName}</p>
+                  <p className="text-brand-600">{billing.phone}{billing.email ? ` · ${billing.email}` : ""}</p>
                   {billing.deliveryNotes && <p className="text-brand-400 text-xs mt-1">Note: {billing.deliveryNotes}</p>}
                 </div>
                 <div className="bg-white border border-gray-200 rounded-2xl p-5 text-sm shadow-sm">
@@ -343,12 +362,12 @@ export default function CheckoutPage() {
               </div>
               <div className="border-t border-gray-200 pt-3 space-y-1.5 text-xs">
                 <div className="flex justify-between text-brand-500"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                <div className="flex justify-between text-brand-500"><span>Delivery</span><span>{deliveryFee === 0 ? <span className="text-emerald-600">FREE</span> : `R${deliveryFee}`}</span></div>
+                <div className="flex justify-between text-brand-500"><span>Delivery (PAXI)</span><span>R{deliveryFee}</span></div>
                 <div className="flex justify-between text-brand-900 font-bold text-sm pt-1.5 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
               </div>
               <div className="mt-4 flex items-center gap-2 text-xs text-brand-400">
                 <Package className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>Delivered via PAXI Courier · 2–5 business days</span>
+                <span>Delivered to PEP store via PAXI · 2–5 business days</span>
               </div>
             </div>
           </div>
