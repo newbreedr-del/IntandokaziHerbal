@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   LayoutDashboard, Package, ShoppingCart, FileText, 
-  Truck, LogOut, Menu, X 
+  Truck, Calendar, LogOut, Menu, X 
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -54,6 +54,7 @@ export default function AdminLayout({
     { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/admin/products", icon: Package, label: "Products" },
     { href: "/admin/orders", icon: ShoppingCart, label: "Orders" },
+    { href: "/admin/bookings", icon: Calendar, label: "Bookings" },
     { href: "/admin/invoices", icon: FileText, label: "Invoices" },
     { href: "/admin/tracking", icon: Truck, label: "Tracking" },
   ];
