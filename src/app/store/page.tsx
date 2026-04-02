@@ -8,12 +8,14 @@ import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
 import ProductModal from "@/components/store/ProductModal";
 import CartDrawer from "@/components/store/CartDrawer";
+import BookingCalendar from "@/components/BookingCalendar";
 import { SITE_CONFIG, PRODUCT_CATEGORIES } from "@/lib/constants";
 
 export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
   const { totalItems, setIsOpen } = useCart();
   const { products, loading, error } = useProducts();
   
@@ -310,21 +312,21 @@ export default function StorePage() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => setShowBookingModal(true)}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 hover:bg-gray-100 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  <Calendar className="w-5 h-5" />
+                  Book Online Now
+                </button>
                 <a
                   href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Nthandokazi,%20I'd%20like%20to%20book%20a%20consultation`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-white text-brand-600 hover:bg-gray-100 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center justify-center gap-2 bg-brand-700 hover:bg-brand-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-white/20"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  Book via WhatsApp
-                </a>
-                <a
-                  href={`tel:${SITE_CONFIG.phone}`}
-                  className="inline-flex items-center gap-2 bg-brand-700 hover:bg-brand-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-white/20"
-                >
-                  <Phone className="w-5 h-5" />
-                  Call Now
+                  WhatsApp
                 </a>
               </div>
             </div>
@@ -357,9 +359,9 @@ export default function StorePage() {
                 
                 <div className="mt-6 p-4 bg-white/10 rounded-lg border border-white/20">
                   <div className="text-center">
-                    <div className="text-2xl font-bold mb-1">R250</div>
+                    <div className="text-2xl font-bold mb-1">R1,500</div>
                     <div className="text-sm text-white/80">Per Consultation</div>
-                    <div className="text-xs text-white/60 mt-1">~30 minutes session</div>
+                    <div className="text-xs text-white/60 mt-1">~60 minutes session</div>
                   </div>
                 </div>
               </div>
@@ -535,6 +537,39 @@ export default function StorePage() {
       {selectedProduct && (
         <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
       )}
+      
+      {/* Booking Modal */}
+      {showBookingModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            {/* Background overlay */}
+            <div 
+              className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+              onClick={() => setShowBookingModal(false)}
+            ></div>
+
+            {/* Modal panel */}
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Book Your Consultation</h2>
+                  <button
+                    onClick={() => setShowBookingModal(false)}
+                    className="text-gray-400 hover:text-gray-500"
+                  >
+                    <span className="sr-only">Close</span>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <BookingCalendar />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <CartDrawer />
     </div>
   );
