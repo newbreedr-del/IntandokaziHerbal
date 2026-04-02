@@ -17,15 +17,33 @@ export default function StorePage() {
   const { totalItems, setIsOpen } = useCart();
   const { products, loading, error } = useProducts();
   
-  // Filter products based on category and search - show only featured by default
+  // Filter products based on category and search
   const filteredProducts = products.filter(product => {
-    const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
-    const featuredMatch = product.is_featured; // Always show only featured products
+    // Handle "Popular" tab - show only featured products
+    if (selectedCategory === "Popular") {
+      const searchMatch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return product.is_featured && searchMatch;
+    }
+    
+    // Handle "All" tab - show all products
+    if (selectedCategory === "All") {
+      const searchMatch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return searchMatch;
+    }
+    
+    // Handle specific category tabs
+    const categoryMatch = product.category === selectedCategory;
     const searchMatch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return categoryMatch && featuredMatch && searchMatch;
+    return categoryMatch && searchMatch;
   });
 
   // Get all categories - use predefined categories plus any from products
@@ -42,9 +60,16 @@ export default function StorePage() {
   
   // Get unique categories from products and combine with predefined ones
   const productCategories = Array.from(new Set(products.map(p => p.category)));
-  const categories = ["All", ...allCategories.filter(cat => 
+  const categories = ["All", "Popular", ...allCategories.filter(cat => 
     allCategories.includes(cat) || productCategories.includes(cat)
-  )].sort();
+  )].sort((a, b) => {
+    // Keep "All" and "Popular" at the beginning
+    if (a === "All") return -1;
+    if (b === "All") return 1;
+    if (a === "Popular") return -1;
+    if (b === "Popular") return 1;
+    return a.localeCompare(b);
+  });
 
   return (
     <div className="min-h-screen bg-white">
