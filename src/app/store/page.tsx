@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook, CheckCircle } from "lucide-react";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook, CheckCircle, Calendar } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
 import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
