@@ -62,7 +62,7 @@ export default function CheckoutPage() {
     deliveryNotes: "",
   });
 
-  const deliveryFee = 85; // Fixed PAXI delivery fee to PEP store
+  const deliveryFee = 110; // Fixed PAXI delivery fee to PEP store
   const total = totalPrice + deliveryFee;
   const orderRef = `NTK-${Date.now().toString().slice(-6)}`;
 
@@ -78,9 +78,8 @@ export default function CheckoutPage() {
     // Email is optional
     if (billing.email.trim() && !/\S+@\S+\.\S+/.test(billing.email)) e.email = "Valid email required";
     if (!billing.phone.trim()) e.phone = "Required";
-    if (!billing.pepStoreCode.trim() && !billing.pepStoreName.trim()) {
-      e.pepStoreCode = "PEP store code or name required";
-    }
+    if (!billing.pepStoreCode.trim()) e.pepStoreCode = "Required";
+    if (!billing.pepStoreName.trim()) e.pepStoreName = "Required";
     if (createAccount) {
       if (password.length < 8) e.password = "Minimum 8 characters";
       if (password !== confirmPw) e.confirmPw = "Passwords do not match";
@@ -175,7 +174,7 @@ export default function CheckoutPage() {
               <div className="space-y-6">
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
                   <h2 className="text-brand-900 font-bold text-lg mb-1">Contact & Delivery Details</h2>
-                  <p className="text-brand-500 text-xs mb-5">We deliver to your nearest PEP store via PAXI courier — R85 delivery fee applies.</p>
+                  <p className="text-brand-500 text-xs mb-5">We deliver to your nearest PEP store via PAXI courier — R110 delivery fee applies.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Field label="First Name *" error={errors.firstName}>
                       <input type="text" value={billing.firstName} onChange={(e) => upd("firstName", e.target.value)} className={inputCls(errors.firstName)} placeholder="Thandi" />
@@ -192,13 +191,13 @@ export default function CheckoutPage() {
                     <div className="sm:col-span-2">
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                         <p className="text-xs text-blue-800 font-medium mb-1">📦 PAXI to PEP Store Delivery</p>
-                        <p className="text-xs text-blue-600">Your order will be delivered to your nearest PEP store. Provide either the PEP store code OR the mall/area name below.</p>
+                        <p className="text-xs text-blue-600">Your order will be delivered to your nearest PEP store. Please provide both the PEP store code AND the mall/area name below.</p>
                       </div>
                     </div>
-                    <Field label="PEP Store Code" error={errors.pepStoreCode}>
+                    <Field label="PEP Store Code *" error={errors.pepStoreCode}>
                       <input type="text" value={billing.pepStoreCode} onChange={(e) => upd("pepStoreCode", e.target.value)} className={inputCls(errors.pepStoreCode)} placeholder="e.g., PEP1234" />
                     </Field>
-                    <Field label="OR Mall/Area Name" error={errors.pepStoreName}>
+                    <Field label="Mall/Area Name *" error={errors.pepStoreName}>
                       <input type="text" value={billing.pepStoreName} onChange={(e) => upd("pepStoreName", e.target.value)} className={inputCls(errors.pepStoreName)} placeholder="e.g., Menlyn Mall, Hatfield" />
                     </Field>
                     <div className="sm:col-span-2">
@@ -318,7 +317,7 @@ export default function CheckoutPage() {
                 <div className="bg-white border border-gray-200 rounded-2xl p-5 text-sm shadow-sm">
                   <h3 className="text-brand-900 font-semibold mb-3">Delivery Details</h3>
                   <p className="text-brand-800">{billing.firstName} {billing.lastName}</p>
-                  <p className="text-brand-600">📦 PEP Store: {billing.pepStoreCode || billing.pepStoreName}</p>
+                  <p className="text-brand-600">📦 PEP Store: {billing.pepStoreCode} - {billing.pepStoreName}</p>
                   <p className="text-brand-600">{billing.phone}{billing.email ? ` · ${billing.email}` : ""}</p>
                   {billing.deliveryNotes && <p className="text-brand-400 text-xs mt-1">Note: {billing.deliveryNotes}</p>}
                 </div>
