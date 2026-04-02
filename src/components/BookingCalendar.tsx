@@ -104,9 +104,37 @@ export default function BookingCalendar() {
     setLoading(true);
 
     try {
-      // Generate a simple booking reference for now
+      // Create booking in database first
       const bookingRef = `BK-${Date.now().toString().slice(-8)}`;
-      setBookingId(bookingRef);
+      
+      const bookingData = {
+        slotId: selectedSlot?.id,
+        clientName: formData.clientName,
+        clientEmail: formData.clientEmail || formData.clientPhone,
+        clientPhone: formData.clientPhone,
+        clientNotes: formData.clientNotes,
+        bookingDate: selectedDate,
+        startTime: selectedSlot?.start_time,
+        endTime: selectedSlot?.end_time,
+        consultationType: formData.consultationType,
+        amount: 1500.00,
+        paymentReference: bookingRef
+      };
+
+      // Create booking and payment records
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create booking');
+      }
+
+      const data = await response.json();
+      setBookingId(data.booking.id);
       
       // Prepare payment data for PayFast
       const paymentData = {
@@ -116,14 +144,14 @@ export default function BookingCalendar() {
           merchant_key: process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY || '46f0cd694581a',
           amount: '1500.00',
           item_name: 'Online Consultation - 60 minutes',
-          item_description: `Consultation booking for ${selectedDate} at ${selectedSlot?.start_time}`,
+          item_description: `Consultation booking for ${selectedDate} at ${selectedSlot?.start_time} - ${formData.clientName}`,
           name_first: formData.clientName.split(' ')[0] || formData.clientName,
           name_last: formData.clientName.split(' ').slice(1).join(' ') || '',
           email_address: formData.clientEmail || formData.clientPhone,
           cell_number: formData.clientPhone,
           m_payment_id: bookingRef,
-          return_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/success`,
-          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/cancel`,
+          return_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/success?ref=${bookingRef}`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/cancel?ref=${bookingRef}`,
           notify_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/api/bookings/payment/notify`,
         }
       };
@@ -132,7 +160,7 @@ export default function BookingCalendar() {
       setStep(3);
     } catch (error) {
       console.error("Error creating booking:", error);
-      alert("Error creating booking. Please try again.");
+      alert(error instanceof Error ? error.message : "Error creating booking. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const paymentReference = searchParams.get('paymentReference');
 
     let query = supabase
       .from('consultation_bookings')
@@ -30,6 +31,14 @@ export async function GET(request: NextRequest) {
 
     if (endDate) {
       query = query.lte('booking_date', endDate);
+    }
+
+    if (paymentReference) {
+      // Join with booking_payments to find by payment reference
+      query = supabase
+        .from('consultation_bookings')
+        .select('*, booking_payments(*)')
+        .eq('booking_payments.payment_reference', paymentReference);
     }
 
     const { data: bookings, error } = await query;
