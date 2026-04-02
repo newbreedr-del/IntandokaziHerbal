@@ -96,21 +96,13 @@ export default function CartDrawer() {
           {/* Footer */}
           {items.length > 0 && (
             <div className="p-5 border-t border-gray-200 space-y-3">
-              {totalPrice >= 500 && (
-                <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs px-3 py-2 rounded-xl">
-                  <span>🎉</span>
-                  <span>You qualify for <strong>free delivery!</strong></span>
-                </div>
-              )}
-              {totalPrice < 500 && (
-                <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-600 text-xs px-3 py-2 rounded-xl">
-                  <span>📦</span>
-                  <span>Add <strong className="text-brand-800">R{(500 - totalPrice).toFixed(2)}</strong> more for free delivery</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-xs px-3 py-2 rounded-xl">
+                <span>📦</span>
+                <span>R110 delivery fee to your nearest PEP store via PAXI</span>
+              </div>
               <div className="flex items-center justify-between">
-                <span className="text-brand-600 text-sm">Subtotal</span>
-                <span className="text-brand-900 font-bold text-lg">R{totalPrice.toFixed(2)}</span>
+                <span className="text-brand-600 text-sm">Total</span>
+                <span className="text-brand-900 font-bold text-xl">R{totalPrice.toFixed(2)}</span>
               </div>
               <button
                 onClick={handleCheckout}

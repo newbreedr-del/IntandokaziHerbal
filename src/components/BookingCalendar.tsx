@@ -104,44 +104,32 @@ export default function BookingCalendar() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slotId: selectedSlot?.id,
-          clientName: formData.clientName,
-          clientEmail: formData.clientEmail,
-          clientPhone: formData.clientPhone,
-          clientNotes: formData.clientNotes,
-          bookingDate: selectedDate,
-          startTime: selectedSlot?.start_time,
-          endTime: selectedSlot?.end_time,
-          consultationType: formData.consultationType,
-          amount: 1500.00
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setBookingId(data.booking.id);
-        
-        // Initialize payment
-        const paymentResponse = await fetch("/api/bookings/payment", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bookingId: data.booking.id,
-            paymentMethod: "payfast"
-          })
-        });
-
-        const paymentData = await paymentResponse.json();
-        setPaymentData(paymentData);
-        setStep(3);
-      } else {
-        alert("Failed to create booking. Please try again.");
-      }
+      // Generate a simple booking reference for now
+      const bookingRef = `BK-${Date.now().toString().slice(-8)}`;
+      setBookingId(bookingRef);
+      
+      // Prepare payment data for PayFast
+      const paymentData = {
+        paymentUrl: process.env.NEXT_PUBLIC_PAYFAST_URL || 'https://sandbox.payfast.co.za/eng/process',
+        paymentData: {
+          merchant_id: process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID || '10000100',
+          merchant_key: process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY || '46f0cd694581a',
+          amount: '1500.00',
+          item_name: 'Online Consultation - 60 minutes',
+          item_description: `Consultation booking for ${selectedDate} at ${selectedSlot?.start_time}`,
+          name_first: formData.clientName.split(' ')[0] || formData.clientName,
+          name_last: formData.clientName.split(' ').slice(1).join(' ') || '',
+          email_address: formData.clientEmail || formData.clientPhone,
+          cell_number: formData.clientPhone,
+          m_payment_id: bookingRef,
+          return_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/success`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/booking/cancel`,
+          notify_url: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/api/bookings/payment/notify`,
+        }
+      };
+      
+      setPaymentData(paymentData);
+      setStep(3);
     } catch (error) {
       console.error("Error creating booking:", error);
       alert("Error creating booking. Please try again.");
