@@ -92,6 +92,41 @@ export default function CheckoutPage() {
     setSubmitting(true);
     
     try {
+      // Create order in database first
+      const orderData = {
+        orderReference: orderRef,
+        customerName: `${billing.firstName} ${billing.lastName}`,
+        customerEmail: billing.email || billing.phone,
+        customerPhone: billing.phone,
+        pepStoreCode: billing.pepStoreCode,
+        pepStoreName: billing.pepStoreName,
+        deliveryNotes: billing.deliveryNotes,
+        items: items.map(item => ({
+          productId: item.product.id,
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.price
+        })),
+        subtotal: totalPrice,
+        deliveryFee: deliveryFee,
+        total: total,
+        paymentMethod: paymentMethod
+      };
+
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!orderResponse.ok) {
+        const error = await orderResponse.json();
+        throw new Error(error.error || 'Failed to create order');
+      }
+
+      const { order } = await orderResponse.json();
+      console.log('Order created:', order);
+
       if (paymentMethod === 'payfast') {
         // Create PayFast payment and redirect
         await createPayment({
