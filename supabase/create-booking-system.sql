@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS available_slots (
   is_available BOOLEAN DEFAULT true,
   max_bookings INTEGER DEFAULT 1,
   current_bookings INTEGER DEFAULT 0,
-  created_by UUID REFERENCES admin_users(id),
+  created_by UUID,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(date, start_time)
