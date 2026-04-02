@@ -76,7 +76,7 @@ export class InvoiceGenerator {
     doc.setFontSize(24);
     doc.setTextColor(...primaryColor);
     doc.setFont('helvetica', 'bold');
-    doc.text('Nthandokazi Herbal', 20, yPos);
+    doc.text('Intandokazi Herbal', 20, yPos);
     
     doc.setFontSize(10);
     doc.setTextColor(...textColor);
@@ -277,7 +277,7 @@ export class InvoiceGenerator {
     doc.setTextColor(150, 150, 150);
     doc.setFont('helvetica', 'italic');
     doc.text('Thank you for your business! 🌿', 105, pageHeight - 15, { align: 'center' });
-    doc.text('Healing the natural way - Nthandokazi Herbal', 105, pageHeight - 10, { align: 'center' });
+    doc.text('Healing the natural way - Intandokazi Herbal', 105, pageHeight - 10, { align: 'center' });
     
     // Generate QR Code for invoice
     try {

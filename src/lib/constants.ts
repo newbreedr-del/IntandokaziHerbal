@@ -38,7 +38,7 @@ export const SITE_CONFIG = {
   
   // Business Details
   business: {
-    owner: 'Nthandokazi Mokoatle',
+    owner: 'Intandokazi Mokoatle',
     registrationNumber: '', // Add if registered
     vatNumber: '', // Add if VAT registered
     accredited: true, // Company is accredited

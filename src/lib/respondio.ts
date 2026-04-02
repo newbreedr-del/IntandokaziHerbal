@@ -191,7 +191,7 @@ class RespondIOClient {
       .map(item => `• ${item.quantity}x ${item.name} - R${(item.price * item.quantity).toFixed(2)}`)
       .join('\n');
 
-    const message = `🌿 *Order Confirmation - Nthandokazi Herbal*
+    const message = `🌿 *Order Confirmation - Intandokazi Herbal*
 
 Hi ${orderData.customerName}! 
 
@@ -241,7 +241,7 @@ Please complete your payment to process your order.
 Need assistance? Reply to this message!
 
 Thank you 🌿
-Nthandokazi Herbal`;
+Intandokazi Herbal`;
 
     return this.sendMessage({
       to: data.customerPhone,

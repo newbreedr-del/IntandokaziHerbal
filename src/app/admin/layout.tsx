@@ -85,7 +85,7 @@ export default function AdminLayout({
                 <Image src="/logo.png" alt="Nthandokazi Herbal" width={40} height={40} className="object-contain" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">Nthandokazi</h1>
+                <h1 className="text-xl font-bold">Intandokazi</h1>
                 <p className="text-xs text-brand-200">Admin Panel</p>
               </div>
             </div>
@@ -133,7 +133,7 @@ export default function AdminLayout({
 
           {/* Footer */}
           <div className="p-4 text-xs text-brand-300 text-center border-t border-brand-600">
-            © 2026 Nthandokazi Herbal
+            © 2026 Intandokazi Herbal
           </div>
         </div>
       </aside>

@@ -84,7 +84,7 @@ export default function StorePage() {
                 <Image src="/logo.png" alt="Nthandokazi Herbal Logo" fill className="object-contain" />
               </div>
               <div>
-                <span className="text-white font-elegant-title text-lg leading-none block">Nthandokazi Herbal</span>
+                <span className="text-white font-elegant-title text-lg leading-none block">Intandokazi Herbal</span>
                 <span className="text-brand-300 text-xs">Traditional & Organic Medicines</span>
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function StorePage() {
               rel="noopener noreferrer"
               className="border border-brand-600/60 hover:border-brand-400 text-brand-300 hover:text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 hover:bg-brand-900/40"
             >
-              Ask Nthandokazi
+              Ask Intandokazi
             </a>
           </div>
           <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
@@ -320,7 +320,7 @@ export default function StorePage() {
                   Book Online Now
                 </button>
                 <a
-                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Nthandokazi,%20I'd%20like%20to%20book%20a%20consultation`}
+                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Intandokazi,%20I'd%20like%20to%20book%20a%20consultation`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-brand-700 hover:bg-brand-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-white/20"

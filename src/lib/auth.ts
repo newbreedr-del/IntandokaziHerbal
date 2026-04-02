@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
             {
               id: '2',
               email: 'nthandokazi@intandokaziherbal.co.za',
-              name: 'Nthandokazi Mokoatle',
+              name: 'Intandokazi Mokoatle',
               role: 'admin',
               password: 'Nthandokazi@2024',
               permissions: {

@@ -92,13 +92,13 @@ export default function Sidebar() {
 
         <div className="relative h-10 w-10 flex-shrink-0">
 
-          <Image src="/images/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
+          <Image src="/images/logo.png" alt="Intandokazi Herbal" fill className="object-contain" />
 
         </div>
 
         <div>
 
-          <h1 className="text-lg font-bold text-white tracking-tight">Nthandokazi</h1>
+          <h1 className="text-lg font-bold text-white tracking-tight">Intandokazi</h1>
 
           <p className="text-xs text-brand-200 font-medium -mt-0.5">Herbal</p>
 
@@ -168,7 +168,7 @@ export default function Sidebar() {
 
       <div className="border-t border-brand-700/30 px-6 py-4">
 
-        <p className="text-xs text-brand-300">&copy; {new Date().getFullYear()} Nthandokazi Herbal</p>
+        <p className="text-xs text-brand-300">&copy; {new Date().getFullYear()} Intandokazi Herbal</p>
 
         <p className="text-xs text-brand-400 mt-0.5">Business Management</p>
 

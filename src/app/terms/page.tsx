@@ -47,7 +47,7 @@ export default function TermsPage() {
                     <strong className="text-brand-900">Company Name:</strong> Intandokazi Herbal Products
                   </div>
                   <div>
-                    <strong className="text-brand-900">Owner:</strong> Nthandokazi Mokoatle
+                    <strong className="text-brand-900">Owner:</strong> Intandokazi Mokoatle
                   </div>
                   <div>
                     <strong className="text-brand-900">Status:</strong> <span className="text-green-600">✓ Accredited Company</span>

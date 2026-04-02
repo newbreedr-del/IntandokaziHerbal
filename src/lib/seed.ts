@@ -49,12 +49,12 @@ export function seedIfNeeded(): void {
   ];
 
   const autoMessages: AutoMessage[] = [
-    { id: "am1", type: "payment_reminder", trigger: "3 days before due date", template: "Hi {name}, this is a friendly reminder that your payment of R{amount} for order #{orderId} is due on {dueDate}. Please let us know if you have any questions! 🌿 — Nthandokazi Herbal", isActive: true, lastSent: d(1), sentCount: 12 },
-    { id: "am2", type: "thank_you", trigger: "After payment received", template: "Thank you {name}! 💚 We've received your payment of R{amount}. We appreciate your support of Nthandokazi Herbal. Your skin will thank you! 🌿", isActive: true, lastSent: d(2), sentCount: 28 },
-    { id: "am3", type: "follow_up", trigger: "14 days after last purchase", template: "Hi {name}, it's been a while! We miss you at Nthandokazi Herbal. 🌸 Check out our latest products and enjoy 10% off your next order with code WELCOME10.", isActive: true, lastSent: d(5), sentCount: 8 },
-    { id: "am4", type: "promotion", trigger: "Monthly newsletter", template: "🌿 Nthandokazi Herbal Monthly Special! Hi {name}, this month we're featuring our {product} at a special price. Order now and get free delivery on orders over R500!", isActive: true, lastSent: d(15), sentCount: 45 },
+    { id: "am1", type: "payment_reminder", trigger: "3 days before due date", template: "Hi {name}, this is a friendly reminder that your payment of R{amount} for order #{orderId} is due on {dueDate}. Please let us know if you have any questions! 🌿 — Intandokazi Herbal", isActive: true, lastSent: d(1), sentCount: 12 },
+    { id: "am2", type: "thank_you", trigger: "After payment received", template: "Thank you {name}! 💚 We've received your payment of R{amount}. We appreciate your support of Intandokazi Herbal. Your skin will thank you! 🌿", isActive: true, lastSent: d(2), sentCount: 28 },
+    { id: "am3", type: "follow_up", trigger: "14 days after last purchase", template: "Hi {name}, it's been a while! We miss you at Intandokazi Herbal. 🌸 Check out our latest products and enjoy 10% off your next order with code WELCOME10.", isActive: true, lastSent: d(5), sentCount: 8 },
+    { id: "am4", type: "promotion", trigger: "Monthly newsletter", template: "🌿 Intandokazi Herbal Monthly Special! Hi {name}, this month we're featuring our {product} at a special price. Order now and get free delivery on orders over R500!", isActive: true, lastSent: d(15), sentCount: 45 },
     { id: "am5", type: "low_stock_alert", trigger: "When product stock below minimum", template: "⚠️ Stock Alert: {product} is running low ({stock} remaining). Consider reordering soon to avoid stockouts.", isActive: true, lastSent: d(1), sentCount: 6 },
-    { id: "am6", type: "birthday", trigger: "On client birthday", template: "Happy Birthday {name}! 🎂🌿 As a gift from Nthandokazi Herbal, enjoy 20% off your next purchase. Use code BDAY{year}. Have a beautiful day!", isActive: false, lastSent: null, sentCount: 0 },
+    { id: "am6", type: "birthday", trigger: "On client birthday", template: "Happy Birthday {name}! 🎂🌿 As a gift from Intandokazi Herbal, enjoy 20% off your next purchase. Use code BDAY{year}. Have a beautiful day!", isActive: false, lastSent: null, sentCount: 0 },
   ];
 
   const messageLogs: MessageLog[] = [
