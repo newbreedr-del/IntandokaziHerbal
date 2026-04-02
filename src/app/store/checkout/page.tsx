@@ -108,9 +108,31 @@ export default function CheckoutPage() {
           }))
         });
         // PayFast will redirect to payment page - cart will be cleared after successful payment
-        // Don't clear cart here in case user cancels or payment fails
+      } else if (paymentMethod === 'capitec') {
+        // Create PayGate payment for Capitec Pay
+        const response = await fetch('/api/payments/paygate/initiate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reference: orderRef,
+            amount: total,
+            email: billing.email || billing.phone,
+            customerName: `${billing.firstName} ${billing.lastName}`,
+            description: `Order ${orderRef} - Intandokazi Herbal`,
+            payMethod: 'PC', // PC = Capitec Pay
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.redirectUrl) {
+          // Redirect to PayGate payment page
+          window.location.href = data.redirectUrl;
+        } else {
+          throw new Error(data.error || 'Failed to initiate payment');
+        }
       } else {
-        // For other payment methods, proceed to confirmation
+        // For other payment methods (EFT), proceed to confirmation
         await new Promise((r) => setTimeout(r, 1800));
         clearCart();
         router.push(`/store/order-confirmation?ref=${orderRef}&email=${encodeURIComponent(billing.email)}&name=${encodeURIComponent(billing.firstName)}&phone=${encodeURIComponent(billing.phone)}&method=${paymentMethod}`);
@@ -119,7 +141,6 @@ export default function CheckoutPage() {
       console.error('Order placement error:', error);
       toast.error('Failed to process order. Please try again.');
       setSubmitting(false);
-      // Don't clear cart on error - user should be able to retry
     }
   };
 
