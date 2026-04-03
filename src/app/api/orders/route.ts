@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendOrderNotification, sendAdminAlert } from '@/lib/notifications';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -80,6 +81,34 @@ export async function POST(request: NextRequest) {
     if (itemsError) {
       console.error('Error creating order items:', itemsError);
       // Continue anyway - order is created
+    }
+
+    // Send Respond.io notifications
+    try {
+      await sendOrderNotification({
+        type: 'order_created',
+        customerName: customerName,
+        customerPhone: customerPhone,
+        customerEmail: customerEmail,
+        orderReference: orderReference,
+        total: total,
+        items: items.map((item: any) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      });
+
+      await sendAdminAlert({
+        type: 'new_order',
+        reference: orderReference,
+        customerName: customerName,
+        amount: total,
+        details: `${items.length} item(s)\nDelivery: ${pepStoreName}`
+      });
+    } catch (error) {
+      console.error('Failed to send Respond.io notifications:', error);
+      // Continue anyway - notifications are non-critical
     }
 
     return NextResponse.json({

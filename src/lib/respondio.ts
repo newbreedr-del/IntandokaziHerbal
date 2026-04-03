@@ -260,13 +260,13 @@ let respondIOInstance: RespondIOClient | null = null;
 export function getRespondIOClient(): RespondIOClient {
   if (!respondIOInstance) {
     const config: RespondIOConfig = {
-      apiKey: process.env.RESPONDIO_API_KEY || '',
+      apiKey: process.env.RESPONDIO_API_TOKEN || '',
       channelId: process.env.RESPONDIO_CHANNEL_ID || '',
-      baseUrl: process.env.RESPONDIO_BASE_URL || 'https://api.respond.io'
+      baseUrl: process.env.RESPONDIO_API_URL || 'https://api.respond.io'
     };
 
-    if (!config.apiKey || !config.channelId) {
-      console.warn('Respond.io credentials not configured. Set RESPONDIO_API_KEY and RESPONDIO_CHANNEL_ID environment variables.');
+    if (!config.apiKey) {
+      console.warn('Respond.io API token not configured. Set RESPONDIO_API_TOKEN environment variable.');
     }
 
     respondIOInstance = new RespondIOClient(config);

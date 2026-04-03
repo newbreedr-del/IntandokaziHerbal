@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendBookingNotification, sendAdminAlert } from '@/lib/notifications';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -158,6 +159,37 @@ export async function POST(request: NextRequest) {
 
     // Send admin notification
     await sendAdminNotification(booking);
+
+    // Send Respond.io notifications
+    try {
+      await sendBookingNotification({
+        type: 'booking_created',
+        customerName: clientName,
+        customerPhone: clientPhone,
+        customerEmail: clientEmail,
+        bookingDate: new Date(bookingDate).toLocaleDateString('en-ZA', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }),
+        bookingTime: `${startTime} - ${endTime}`,
+        consultationType: consultationType,
+        bookingReference: paymentReference,
+        amount: amount
+      });
+
+      await sendAdminAlert({
+        type: 'new_booking',
+        reference: paymentReference,
+        customerName: clientName,
+        amount: amount,
+        details: `Date: ${bookingDate}\nTime: ${startTime}\nType: ${consultationType}`
+      });
+    } catch (error) {
+      console.error('Failed to send Respond.io notifications:', error);
+      // Continue anyway - notifications are non-critical
+    }
 
     return NextResponse.json({
       booking,

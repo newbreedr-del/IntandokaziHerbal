@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
+import { sendOrderNotification, sendAdminAlert } from '@/lib/notifications';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -139,7 +140,39 @@ async function sendOrderNotifications(order: any) {
         read: false
       });
 
-    // TODO: Send email/WhatsApp notifications
+    // Fetch order items for notification
+    const { data: orderItems } = await supabase
+      .from('order_items')
+      .select('*')
+      .eq('order_id', order.id);
+
+    // Send Respond.io notifications
+    try {
+      await sendOrderNotification({
+        type: 'order_paid',
+        customerName: order.customer_name,
+        customerPhone: order.customer_phone,
+        customerEmail: order.customer_email,
+        orderReference: order.order_reference,
+        total: order.total,
+        items: (orderItems || []).map((item: any) => ({
+          name: item.product_name,
+          quantity: item.quantity,
+          price: item.unit_price
+        }))
+      });
+
+      await sendAdminAlert({
+        type: 'payment_received',
+        reference: order.order_reference,
+        customerName: order.customer_name,
+        amount: order.total,
+        details: `Order payment confirmed\nItems: ${orderItems?.length || 0}\nDelivery: ${order.pep_store_name}`
+      });
+    } catch (error) {
+      console.error('Failed to send Respond.io notifications:', error);
+    }
+
     console.log('Order notifications created for:', order.order_reference);
   } catch (error) {
     console.error('Error sending order notifications:', error);

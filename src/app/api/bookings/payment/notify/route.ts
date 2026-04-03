@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
+import { sendBookingNotification, sendAdminAlert } from '@/lib/notifications';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -159,6 +160,36 @@ async function sendPaymentNotifications(bookingId: string) {
         message: `Payment of R${booking.amount} received from ${booking.client_name} for ${booking.booking_date} at ${booking.start_time}.`,
         status: 'pending'
       });
+
+    // Send Respond.io notifications
+    try {
+      await sendBookingNotification({
+        type: 'booking_confirmed',
+        customerName: booking.client_name,
+        customerPhone: booking.client_phone,
+        customerEmail: booking.client_email,
+        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-ZA', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }),
+        bookingTime: `${booking.start_time} - ${booking.end_time}`,
+        consultationType: booking.consultation_type,
+        bookingReference: booking.payment_reference || '',
+        amount: booking.amount
+      });
+
+      await sendAdminAlert({
+        type: 'payment_received',
+        reference: booking.payment_reference || '',
+        customerName: booking.client_name,
+        amount: booking.amount,
+        details: `Booking confirmed for ${booking.booking_date} at ${booking.start_time}`
+      });
+    } catch (error) {
+      console.error('Failed to send Respond.io notifications:', error);
+    }
 
     console.log('Payment notifications created for booking:', bookingId);
   } catch (error) {
