@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendBookingNotification, sendAdminAlert } from '@/lib/notifications';
+import { getCalendarClient } from '@/lib/calendar';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -159,6 +160,35 @@ export async function POST(request: NextRequest) {
 
     // Send admin notification
     await sendAdminNotification(booking);
+
+    // Create Google Calendar event
+    try {
+      const calendar = getCalendarClient();
+      const calendarEventId = await calendar.createBookingEvent({
+        clientName,
+        clientEmail,
+        clientPhone,
+        bookingDate,
+        startTime,
+        endTime,
+        consultationType,
+        bookingReference: paymentReference,
+        notes: clientNotes
+      });
+
+      if (calendarEventId) {
+        // Store calendar event ID in booking
+        await supabase
+          .from('consultation_bookings')
+          .update({ calendar_event_id: calendarEventId })
+          .eq('id', booking.id);
+        
+        console.log('Calendar event created:', calendarEventId);
+      }
+    } catch (error) {
+      console.error('Failed to create calendar event:', error);
+      // Continue anyway - calendar is non-critical
+    }
 
     // Send Respond.io notifications
     try {
