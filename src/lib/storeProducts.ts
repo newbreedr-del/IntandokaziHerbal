@@ -57,4 +57,4 @@ export async function fetchStoreProducts(): Promise<StoreProduct[]> {
 export const STORE_PRODUCTS: StoreProduct[] = [];
 
 // Categories will be populated dynamically when products are loaded
-export const CATEGORIES = ["All", "Internal Health", "Traditional Healing", "Skin & Body", "Wellness & Spiritual"];
+export const CATEGORIES = ["All", "Teas", "Skincare", "Tonics", "Oils"];

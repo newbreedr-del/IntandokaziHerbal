@@ -161,7 +161,7 @@ async function sendPaymentNotifications(bookingId: string) {
         status: 'pending'
       });
 
-    // Send Respond.io notifications
+    // Send notifications
     try {
       await sendBookingNotification({
         type: 'booking_confirmed',
@@ -188,7 +188,7 @@ async function sendPaymentNotifications(bookingId: string) {
         details: `Booking confirmed for ${booking.booking_date} at ${booking.start_time}`
       });
     } catch (error) {
-      console.error('Failed to send Respond.io notifications:', error);
+      console.error('Failed to send notifications:', error);
     }
 
     console.log('Payment notifications created for booking:', bookingId);

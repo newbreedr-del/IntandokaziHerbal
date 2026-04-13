@@ -146,7 +146,7 @@ async function sendOrderNotifications(order: any) {
       .select('*')
       .eq('order_id', order.id);
 
-    // Send Respond.io notifications
+    // Send notifications
     try {
       await sendOrderNotification({
         type: 'order_paid',
@@ -170,7 +170,7 @@ async function sendOrderNotifications(order: any) {
         details: `Order payment confirmed\nItems: ${orderItems?.length || 0}\nDelivery: ${order.pep_store_name}`
       });
     } catch (error) {
-      console.error('Failed to send Respond.io notifications:', error);
+      console.error('Failed to send notifications:', error);
     }
 
     console.log('Order notifications created for:', order.order_reference);

@@ -43,7 +43,7 @@ export default function AgentBookingPage() {
       const endHour = String(parseInt(hours) + 1).padStart(2, '0');
       const endTime = `${endHour}:00`;
 
-      const response = await fetch('/api/respondio/bookings', {
+      const response = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

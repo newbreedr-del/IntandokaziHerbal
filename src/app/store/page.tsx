@@ -54,7 +54,6 @@ export default function StorePage() {
     "External Health", 
     "Mental Wellness",
     "Traditional Remedies",
-    "Vitamins & Supplements",
     "Natural Beauty",
     "Immune Support",
     "Digestive Health"

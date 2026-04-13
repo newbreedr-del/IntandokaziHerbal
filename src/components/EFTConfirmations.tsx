@@ -28,10 +28,25 @@ export default function EFTConfirmations() {
 
   const fetchPendingConfirmations = async () => {
     try {
-      const response = await fetch('/api/payments/eft/confirm');
+      const response = await fetch('/api/eft-confirmations?status=pending');
       if (response.ok) {
         const data = await response.json();
-        setConfirmations(data.pending || []);
+        // Map to component format
+        const mapped = (data.confirmations || []).map((conf: any) => ({
+          orderRef: conf.order_reference || 'N/A',
+          customerName: conf.customer_name,
+          customerEmail: conf.customer_email,
+          customerPhone: conf.customer_phone,
+          paymentMethod: 'eft',
+          proofSent: !!conf.proof_of_payment_url,
+          confirmed: conf.status === 'verified',
+          confirmedAt: conf.verified_at,
+          createdAt: conf.created_at,
+          id: conf.id,
+          amount: conf.amount,
+          paymentReference: conf.payment_reference
+        }));
+        setConfirmations(mapped);
       }
     } catch (error) {
       console.error('Failed to fetch EFT confirmations:', error);
@@ -42,12 +57,21 @@ export default function EFTConfirmations() {
 
   const updateConfirmation = async (orderRef: string, confirmed: boolean) => {
     try {
-      const response = await fetch('/api/payments/eft/confirm', {
-        method: 'PATCH',
+      // Find the confirmation to get its ID
+      const confirmation = confirmations.find(c => c.orderRef === orderRef);
+      if (!confirmation) return;
+
+      const response = await fetch('/api/eft-confirmations', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ orderRef, confirmed }),
+        body: JSON.stringify({ 
+          confirmationId: (confirmation as any).id,
+          status: confirmed ? 'verified' : 'rejected',
+          verifiedBy: 'admin',
+          orderReference: orderRef
+        }),
       });
 
       if (response.ok) {

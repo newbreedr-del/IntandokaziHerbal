@@ -120,39 +120,6 @@ INSERT INTO products (
   '{"length": 8, "width": 8, "height": 12}'
 ),
 
--- Herbal Supplements
-(
-  'Energy Boost Capsules',
-  'energy-boost-capsules',
-  'Natural energy boost without the crash. These capsules contain guarana, green tea extract, and B vitamins for sustained energy throughout the day. Perfect for busy professionals and students.',
-  'Natural energy enhancement supplement',
-  99.99,
-  45,
-  'Supplements',
-  true,
-  false,
-  '⚡',
-  'linear-gradient(135deg, #FFD700, #FFA500)',
-  'energy, focus, capsules, natural',
-  0.15,
-  '{"length": 10, "width": 6, "height": 4}'
-),
-(
-  'Joint Support Formula',
-  'joint-support-formula',
-  'Advanced joint support supplement with glucosamine, chondroitin, and turmeric. Helps reduce joint pain and improve mobility. Ideal for active individuals and those with joint discomfort.',
-  'Comprehensive joint health support',
-  159.99,
-  30,
-  'Supplements',
-  true,
-  false,
-  '🦴',
-  'linear-gradient(135deg, #4682B4, #87CEEB)',
-  'joints, mobility, anti-inflammatory, turmeric',
-  0.2,
-  '{"length": 10, "width": 6, "height": 4}'
-),
 
 -- Herbal Oils
 (

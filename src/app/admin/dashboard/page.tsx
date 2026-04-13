@@ -57,41 +57,47 @@ export default function AdminDashboard() {
   }, [session?.status, router]);
 
   useEffect(() => {
-    // Load mock data - replace with actual API calls
-    const mockOrders: Order[] = [
-      {
-        id: "1",
-        orderRef: "NTH-2024-001",
-        customerName: "Thandi Mokoena",
-        customerEmail: "thandi@email.com",
-        total: 450,
-        status: "processing",
-        paymentStatus: "paid",
-        courier: "paxi",
-        trackingNumber: "PX123456789",
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "2",
-        orderRef: "NTH-2024-002",
-        customerName: "John Smith",
-        customerEmail: "john@email.com",
-        total: 320,
-        status: "shipped",
-        paymentStatus: "paid",
-        courier: "pargo",
-        trackingNumber: "PG987654321",
-        createdAt: new Date(Date.now() - 86400000).toISOString()
-      }
-    ];
+    // Fetch real orders from API
+    const fetchOrders = async () => {
+      try {
+        console.log('Fetching orders from API...');
+        const response = await fetch('/api/orders');
+        const data = await response.json();
+        
+        console.log('API Response:', data);
+        
+        if (data.orders) {
+          // Map Supabase orders to dashboard format
+          const mappedOrders: Order[] = data.orders.map((order: any) => ({
+            id: order.id,
+            orderRef: order.order_reference,
+            customerName: order.customer_name,
+            customerEmail: order.customer_email || order.customer_phone,
+            total: parseFloat(order.total),
+            status: order.order_status,
+            paymentStatus: order.payment_status === 'COMPLETE' ? 'paid' : order.payment_status,
+            courier: order.pep_store_code ? 'paxi' : 'none',
+            trackingNumber: order.tracking_number,
+            createdAt: order.created_at
+          }));
 
-    setOrders(mockOrders);
-    setStats({
-      totalOrders: mockOrders.length,
-      totalRevenue: mockOrders.reduce((sum, o) => sum + o.total, 0),
-      pendingOrders: mockOrders.filter(o => o.status === 'pending').length,
-      shippedToday: mockOrders.filter(o => o.status === 'shipped' && new Date(o.createdAt).toDateString() === new Date().toDateString()).length
-    });
+          console.log('Mapped orders:', mappedOrders);
+          setOrders(mappedOrders);
+          setStats({
+            totalOrders: mappedOrders.length,
+            totalRevenue: mappedOrders.reduce((sum, o) => sum + o.total, 0),
+            pendingOrders: mappedOrders.filter(o => o.status === 'pending').length,
+            shippedToday: mappedOrders.filter(o => o.status === 'shipped' && new Date(o.createdAt).toDateString() === new Date().toDateString()).length
+          });
+          console.log('Orders state updated. Total orders:', mappedOrders.length);
+        }
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+        toast.error('Failed to load orders');
+      }
+    };
+
+    fetchOrders();
   }, []);
 
   // Defensive check for undefined session
@@ -206,15 +212,18 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Button onClick={() => router.push("/admin/invoices")} icon={<FileText className="w-4 h-4" />}>
-            Manage Invoices
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Button onClick={() => router.push("/admin/customers")} icon={<Users className="w-4 h-4" />}>
+            Customer Management
           </Button>
-          <Button onClick={() => router.push("/admin/tracking")} variant="secondary" icon={<Truck className="w-4 h-4" />}>
-            Track Shipments
+          <Button onClick={() => router.push("/admin/dispatch")} variant="secondary" icon={<Truck className="w-4 h-4" />}>
+            Dispatch Dashboard
           </Button>
-          <Button onClick={() => router.push("/")} variant="outline" icon={<Users className="w-4 h-4" />}>
-            View Store
+          <Button onClick={() => router.push("/admin/warehouse")} variant="secondary" icon={<Package className="w-4 h-4" />}>
+            Warehouse
+          </Button>
+          <Button onClick={() => router.push("/admin/analytics")} variant="secondary" icon={<TrendingUp className="w-4 h-4" />}>
+            Sales Analytics
           </Button>
         </div>
 

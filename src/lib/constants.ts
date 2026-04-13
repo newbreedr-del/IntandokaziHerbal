@@ -132,7 +132,6 @@ export const PRODUCT_CATEGORIES = [
   'Teas',
   'Tonics',
   'Skincare',
-  'Supplements',
   'Oils',
   'Balms',
   'Other',

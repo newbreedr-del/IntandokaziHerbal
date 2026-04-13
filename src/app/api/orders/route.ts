@@ -50,8 +50,7 @@ export async function POST(request: NextRequest) {
         total: total,
         payment_method: paymentMethod,
         payment_status: 'pending',
-        order_status: 'pending',
-        items: items
+        order_status: 'pending'
       })
       .select()
       .single();
@@ -67,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Create order items
     const orderItems = items.map((item: any) => ({
       order_id: order.id,
-      product_id: item.productId,
+      product_id: item.productId || item.id,
       product_name: item.name,
       quantity: item.quantity,
       unit_price: item.price,
@@ -83,7 +82,7 @@ export async function POST(request: NextRequest) {
       // Continue anyway - order is created
     }
 
-    // Send Respond.io notifications
+    // Send notifications
     try {
       await sendOrderNotification({
         type: 'order_created',
@@ -107,7 +106,7 @@ export async function POST(request: NextRequest) {
         details: `${items.length} item(s)\nDelivery: ${pepStoreName}`
       });
     } catch (error) {
-      console.error('Failed to send Respond.io notifications:', error);
+      console.error('Failed to send notifications:', error);
       // Continue anyway - notifications are non-critical
     }
 
@@ -128,6 +127,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const orderId = searchParams.get('id');
     const orderReference = searchParams.get('orderReference');
     const status = searchParams.get('status');
 
@@ -135,6 +135,10 @@ export async function GET(request: NextRequest) {
       .from('orders')
       .select('*, order_items(*)')
       .order('created_at', { ascending: false });
+
+    if (orderId) {
+      query = query.eq('id', orderId);
+    }
 
     if (orderReference) {
       query = query.eq('order_reference', orderReference);

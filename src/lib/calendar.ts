@@ -85,12 +85,7 @@ Manage booking: ${process.env.NEXT_PUBLIC_BASE_URL}/admin/bookings
           dateTime: endDateTime,
           timeZone: 'Africa/Johannesburg',
         },
-        attendees: [
-          {
-            email: booking.clientEmail,
-            displayName: booking.clientName,
-          },
-        ],
+        // Note: Attendees removed to avoid permission issues
       };
 
       // Add video conference for video consultations

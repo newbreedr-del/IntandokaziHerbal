@@ -87,10 +87,40 @@ export default function BookingCalendar() {
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
     setSelectedSlot(null);
+    setStep(1);
+    
+    // Auto-scroll to time slots on mobile
+    setTimeout(() => {
+      const timeSlotsSection = document.getElementById('time-slots-section');
+      if (timeSlotsSection && window.innerWidth < 768) {
+        timeSlotsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   const handleSlotSelect = (slot: AvailableSlot) => {
     setSelectedSlot(slot);
+    setStep(2);
+    
+    // Auto-scroll to details form on mobile
+    setTimeout(() => {
+      const detailsSection = document.getElementById('details-section');
+      if (detailsSection && window.innerWidth < 768) {
+        detailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const handleConsultationTypeChange = (type: string) => {
+    setFormData({ ...formData, consultationType: type });
+    
+    // Auto-scroll to next field on mobile
+    setTimeout(() => {
+      const nameField = document.getElementById('client-name-field');
+      if (nameField && window.innerWidth < 768) {
+        nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   const handleContinueToDetails = () => {
@@ -104,21 +134,20 @@ export default function BookingCalendar() {
     setLoading(true);
 
     try {
-      // Create booking in database first
+      // Create booking reference
       const bookingRef = `BK-${Date.now().toString().slice(-8)}`;
       
       const bookingData = {
-        slotId: selectedSlot?.id,
+        bookingReference: bookingRef,
         clientName: formData.clientName,
-        clientEmail: formData.clientEmail || formData.clientPhone,
+        clientEmail: formData.clientEmail || `${formData.clientPhone}@placeholder.com`,
         clientPhone: formData.clientPhone,
-        clientNotes: formData.clientNotes,
+        notes: formData.clientNotes,
         bookingDate: selectedDate,
         startTime: selectedSlot?.start_time,
         endTime: selectedSlot?.end_time,
         consultationType: formData.consultationType,
-        amount: 1500.00,
-        paymentReference: bookingRef
+        amount: 1500.00
       };
 
       // Create booking and payment records
@@ -129,8 +158,8 @@ export default function BookingCalendar() {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create booking');
+        const errorData = await response.json().catch(() => ({ error: 'Failed to create booking' }));
+        throw new Error(errorData.error || 'Failed to create booking');
       }
 
       const data = await response.json();
@@ -253,7 +282,7 @@ export default function BookingCalendar() {
 
           {/* Time Slot Selection */}
           {selectedDate && (
-            <div>
+            <div id="time-slots-section" className="scroll-mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-3">Select Time Slot</label>
               {loading ? (
                 <div className="flex items-center justify-center py-12">
@@ -309,7 +338,7 @@ export default function BookingCalendar() {
 
       {/* Step 2: Client Details */}
       {step === 2 && (
-        <div className="space-y-6">
+        <div id="details-section" className="space-y-6 scroll-mt-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Your Details</h2>
             <p className="text-gray-600">Please provide your contact information</p>
@@ -317,16 +346,16 @@ export default function BookingCalendar() {
 
           {/* Selected Date/Time Summary */}
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <div className="flex items-center gap-4 text-purple-900">
-              <Calendar className="w-5 h-5" />
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-purple-900 text-sm sm:text-base">
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="font-semibold">{formatDate(selectedDate)}</span>
-              <Clock className="w-5 h-5" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="font-semibold">{selectedSlot?.start_time} - {selectedSlot?.end_time}</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmitDetails} className="space-y-4">
-            <div>
+            <div id="client-name-field">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <User className="w-4 h-4 inline mr-2" />
                 Full Name *
@@ -335,7 +364,7 @@ export default function BookingCalendar() {
                 type="text"
                 value={formData.clientName}
                 onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
                 required
               />
             </div>
@@ -349,7 +378,7 @@ export default function BookingCalendar() {
                 type="email"
                 value={formData.clientEmail}
                 onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
                 required
               />
             </div>
@@ -363,7 +392,7 @@ export default function BookingCalendar() {
                 type="tel"
                 value={formData.clientPhone}
                 onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
                 placeholder="e.g., 0768435876"
                 required
               />
@@ -375,8 +404,8 @@ export default function BookingCalendar() {
               </label>
               <select
                 value={formData.consultationType}
-                onChange={(e) => setFormData({ ...formData, consultationType: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                onChange={(e) => handleConsultationTypeChange(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
                 required
               >
                 <option value="video">Video Call</option>

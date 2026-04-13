@@ -13,9 +13,8 @@ export async function GET() {
       payfast: {
         configured: !!(process.env.PAYFAST_MERCHANT_ID && process.env.PAYFAST_MERCHANT_KEY)
       },
-      respondio: {
-        configured: !!(process.env.RESPONDIO_API_KEY && process.env.RESPONDIO_CHANNEL_ID),
-        widgetConfigured: !!process.env.NEXT_PUBLIC_RESPONDIO_WORKSPACE_ID
+      supabase: {
+        configured: !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
       }
     },
     version: '1.0.0'

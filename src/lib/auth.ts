@@ -60,6 +60,20 @@ export const authOptions: NextAuthOptions = {
                 can_view_financials: true,
                 can_manage_settings: true,
               }
+            },
+            {
+              id: '4',
+              email: 'mandubusabelo@gmail.com',
+              name: 'Sabelo Mandubu',
+              role: 'super_admin',
+              password: 'admin123',
+              permissions: {
+                can_manage_products: true,
+                can_manage_orders: true,
+                can_manage_customers: true,
+                can_view_financials: true,
+                can_manage_settings: true,
+              }
             }
           ];
 

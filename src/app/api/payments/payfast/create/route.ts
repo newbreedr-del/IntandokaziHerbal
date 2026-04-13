@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     const paymentData = payfast.createPayment({
       return_url: validated.returnUrl || `${baseUrl}/store/order-confirmation`,
       cancel_url: validated.cancelUrl || `${baseUrl}/store/checkout`,
-      notify_url: `${baseUrl}/api/payments/payfast/webhook`,
+      notify_url: `${baseUrl}/api/payments/payfast/notify`,
       name_first: firstName,
       name_last: lastName,
       email_address: validated.customerEmail,

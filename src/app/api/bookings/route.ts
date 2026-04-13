@@ -190,7 +190,7 @@ export async function POST(request: NextRequest) {
       // Continue anyway - calendar is non-critical
     }
 
-    // Send Respond.io notifications
+    // Send notifications
     try {
       await sendBookingNotification({
         type: 'booking_created',
@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
         details: `Date: ${bookingDate}\nTime: ${startTime}\nType: ${consultationType}`
       });
     } catch (error) {
-      console.error('Failed to send Respond.io notifications:', error);
+      console.error('Failed to send notifications:', error);
       // Continue anyway - notifications are non-critical
     }
 

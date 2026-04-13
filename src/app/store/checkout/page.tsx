@@ -38,7 +38,7 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 }
 
 const inputCls = (err?: string) =>
-  `w-full bg-white border ${err ? "border-red-400" : "border-gray-300"} text-brand-900 placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all`;
+  `w-full bg-white border ${err ? "border-red-400" : "border-gray-300"} text-brand-900 placeholder-gray-400 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all touch-target`;
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
@@ -52,6 +52,16 @@ export default function CheckoutPage() {
   const [createAccount, setCreateAccount] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
+
+  // Auto-scroll to top when step changes (mobile UX)
+  const handleStepChange = (newStep: "details" | "payment" | "review") => {
+    setStep(newStep);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+  };
   const [billing, setBilling] = useState<BillingAddress>({
     firstName: "",
     lastName: "",
@@ -300,14 +310,14 @@ export default function CheckoutPage() {
             {/* STEP 2 */}
             {step === "payment" && (
               <div className="space-y-6">
-                <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 shadow-sm">
                   <h2 className="text-brand-900 font-bold text-lg mb-5">Payment Method</h2>
                   <div className="space-y-3">
                     {PAYMENT_METHODS.map((m) => (
                       <motion.button 
                         key={m.id} 
                         onClick={() => setPaymentMethod(m.id)} 
-                        className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left relative ${paymentMethod === m.id ? "border-brand-500 bg-brand-50 text-brand-900" : "border-gray-200 bg-white text-brand-700 hover:border-brand-300"}`}
+                        className={`w-full flex items-center gap-3 p-4 sm:p-4 rounded-xl border transition-all text-left relative touch-target min-h-[60px] ${paymentMethod === m.id ? "border-brand-500 bg-brand-50 text-brand-900" : "border-gray-200 bg-white text-brand-700 hover:border-brand-300"}`}
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
                       >
@@ -316,11 +326,11 @@ export default function CheckoutPage() {
                             Recommended
                           </span>
                         )}
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === m.id ? "border-brand-500" : "border-gray-300"}`}>
-                          {paymentMethod === m.id && <motion.div layoutId="payment-selected" className="w-2.5 h-2.5 rounded-full bg-brand-500" />}
+                        <div className={`w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === m.id ? "border-brand-500" : "border-gray-300"}`}>
+                          {paymentMethod === m.id && <motion.div layoutId="payment-selected" className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-full bg-brand-500" />}
                         </div>
-                        {m.icon}
-                        <span className="font-medium text-sm">{m.label}</span>
+                        <div className="flex-shrink-0">{m.icon}</div>
+                        <span className="font-medium text-sm sm:text-sm leading-tight">{m.label}</span>
                       </motion.button>
                     ))}
                   </div>
@@ -349,13 +359,13 @@ export default function CheckoutPage() {
 
             {/* STEP 3 */}
             {step === "review" && (
-              <div className="space-y-6">
-                <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 shadow-sm">
                   <h2 className="text-brand-900 font-bold text-lg mb-4">Review Your Order</h2>
                   <div className="space-y-3 mb-5">
                     {items.map((item) => (
                       <div key={item.product.id} className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: item.product.gradient_css }}>{item.product.emoji}</div>
+                        <div className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: item.product.gradient_css }}>{item.product.emoji}</div>
                         <div className="flex-1 min-w-0">
                           <p className="text-brand-900 text-sm font-medium truncate">{item.product.name}</p>
                           <p className="text-brand-500 text-xs">Qty: {item.quantity} × R{item.product.price}</p>
@@ -366,31 +376,31 @@ export default function CheckoutPage() {
                   </div>
                   <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between text-brand-600"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                    <div className="flex justify-between text-brand-600"><span>Delivery (PAXI to PEP)</span><span>R{deliveryFee}</span></div>
+                    <div className="flex justify-between text-brand-600"><span className="text-xs sm:text-sm">Delivery (PAXI to PEP)</span><span>R{deliveryFee}</span></div>
                     <div className="flex justify-between text-brand-900 font-bold text-base pt-2 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
                   </div>
                 </div>
-                <div className="bg-white border border-gray-200 rounded-2xl p-5 text-sm shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 text-sm shadow-sm">
                   <h3 className="text-brand-900 font-semibold mb-3">Delivery Details</h3>
                   <p className="text-brand-800">{billing.firstName} {billing.lastName}</p>
-                  <p className="text-brand-600">📦 PEP Store: {billing.pepStoreCode} - {billing.pepStoreName}</p>
-                  <p className="text-brand-600">{billing.phone}{billing.email ? ` · ${billing.email}` : ""}</p>
+                  <p className="text-brand-600 text-xs sm:text-sm">📦 PEP Store: {billing.pepStoreCode} - {billing.pepStoreName}</p>
+                  <p className="text-brand-600 text-xs sm:text-sm">{billing.phone}{billing.email ? ` · ${billing.email}` : ""}</p>
                   {billing.deliveryNotes && <p className="text-brand-400 text-xs mt-1">Note: {billing.deliveryNotes}</p>}
                 </div>
-                <div className="bg-white border border-gray-200 rounded-2xl p-5 text-sm shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 text-sm shadow-sm">
                   <h3 className="text-brand-900 font-semibold mb-1">Payment</h3>
                   <p className="text-brand-600">{PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.label}</p>
                   <p className="text-brand-400 text-xs mt-1">Reference: {orderRef}</p>
                 </div>
-                <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 text-xs text-emerald-700">
+                <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-3 sm:p-4 text-xs text-emerald-700">
                   ✅ A confirmation email and WhatsApp message will be sent to <strong>{billing.email}</strong> and <strong>{billing.phone}</strong> after placing your order.
                 </div>
-                <div className="flex gap-3">
-                  <Button onClick={() => setStep("payment")} variant="secondary" className="flex-1 py-3.5">← Back</Button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button onClick={() => handleStepChange("payment")} variant="secondary" className="w-full sm:flex-1 py-3.5 touch-target">← Back</Button>
                   <Button 
                     onClick={handlePlaceOrder} 
                     loading={submitting || paymentLoading}
-                    className="flex-[2] py-3.5"
+                    className="w-full sm:flex-[2] py-3.5 touch-target"
                   >
                     Place Order 🌿
                   </Button>
