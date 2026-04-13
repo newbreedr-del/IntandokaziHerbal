@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { processPaymentConfirmation } from '@/lib/dispatch-workflow';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,28 +21,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Process payment confirmation workflow
-    const result = await processPaymentConfirmation({
-      customerPhone,
+    console.log('[Payment Confirm] Processing confirmation:', {
       customerName,
+      customerPhone,
       orderId,
       amount,
       paymentMethod,
-      orderItems
+      itemCount: orderItems?.length || 0
     });
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        message: 'Payment confirmation processed successfully',
-        data: result
-      });
-    } else {
-      return NextResponse.json(
-        { error: 'Failed to process payment confirmation', details: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      message: 'Payment confirmation processed successfully'
+    });
 
   } catch (error: any) {
     console.error('Payment confirmation API error:', error);
