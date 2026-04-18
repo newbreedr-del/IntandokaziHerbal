@@ -26,7 +26,7 @@ export default function ProductCard({ product, index, onOpen }: Props) {
 
   return (
     <div
-      className="group relative h-80 cursor-pointer"
+      className="group relative aspect-[3/4] cursor-pointer"
       style={{ animationDelay: `${index * 60}ms` }}
       onMouseEnter={() => setFlipped(true)}
       onMouseLeave={() => setFlipped(false)}
@@ -61,7 +61,7 @@ export default function ProductCard({ product, index, onOpen }: Props) {
           {/* Bottom fade for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-          <div className="relative h-full flex flex-col justify-between p-5">
+          <div className="relative h-full flex flex-col justify-between p-3 sm:p-5">
             {product.badge ? (
               <div className="self-start flex items-center gap-1 bg-brand-600/90 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
                 <Tag className="w-3 h-3" />
@@ -75,12 +75,12 @@ export default function ProductCard({ product, index, onOpen }: Props) {
               {!product.image_url && (
                 <div className="text-5xl mb-3 drop-shadow-sm">{product.emoji}</div>
               )}
-              <div className="text-white/80 text-xs font-semibold uppercase tracking-wider mb-1">{product.category}</div>
-              <h3 className="text-white font-elegant-title text-lg leading-tight mb-1">{product.name}</h3>
-              <p className="text-white/80 text-xs line-clamp-2">{product.tagline}</p>
-              <div className="flex items-center justify-between mt-3">
-                <span className="text-white font-bold text-xl">R{product.price}</span>
-                <span className="text-white/70 text-xs">{product.unit}</span>
+              <div className="text-white/80 text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-0.5">{product.category}</div>
+              <h3 className="text-white font-elegant-title text-sm sm:text-lg leading-tight mb-0.5">{product.name}</h3>
+              <p className="text-white/80 text-[10px] sm:text-xs line-clamp-2">{product.tagline}</p>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-white font-bold text-sm sm:text-xl">R{product.price}</span>
+                <span className="text-white/70 text-[10px] sm:text-xs">{product.unit}</span>
               </div>
             </div>
           </div>

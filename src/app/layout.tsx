@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { Inter, Playfair_Display } from "next/font/google";
+import { Poppins, Playfair_Display } from "next/font/google";
 
 import "./globals.css";
 
@@ -14,7 +14,7 @@ import Providers from "@/components/Providers";
 
 
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-poppins" });
 
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     <html lang="en">
 
-      <body className={`${inter.className} ${playfair.variable}`}>
+      <body className={`${poppins.variable} ${playfair.variable} font-poppins`}>
 
         <Providers>
 
