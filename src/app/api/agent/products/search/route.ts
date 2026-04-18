@@ -23,12 +23,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '10');
 
-    if (!query && !category) {
-      return NextResponse.json(
-        { success: false, error: 'Search query (q) or category is required' },
-        { status: 400 }
-      );
-    }
+    // If no query or category, return all active products (useful for agents to see available products)
 
     let dbQuery = supabase
       .from('products')
