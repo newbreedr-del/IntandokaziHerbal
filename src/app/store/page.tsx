@@ -204,7 +204,9 @@ export default function StorePage() {
                 Book Consultation
               </button>
               <a
-                href="/book/whatsapp-agent"
+                href="https://wa.me/27604964105?text=Hi%20Intandokazi%2C%20I%20need%20help%20choosing%20the%20right%20product"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex-1 text-center border border-white/40 text-white hover:bg-white/10 px-5 py-3 rounded-xl font-semibold transition-colors"
               >
                 Ask on WhatsApp
