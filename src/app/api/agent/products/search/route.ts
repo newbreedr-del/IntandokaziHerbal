@@ -1,56 +1,63 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/utils/supabase/service'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+function verifyAgentSecret(request: NextRequest): boolean {
+  const secret = request.headers.get('x-agent-secret');
+  return secret === process.env.AGENT_API_SECRET;
+}
+
+// GET /api/agent/products/search?q=umuthi
 export async function GET(request: NextRequest) {
-  // Validate agent secret
-  const secret = request.headers.get('x-agent-secret')
-  if (secret !== process.env.AGENT_API_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  const q = request.nextUrl.searchParams.get('q')?.trim()
-  if (!q) {
-    return NextResponse.json({ error: 'Missing query param: q' }, { status: 400 })
+  if (!verifyAgentSecret(request)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const supabase = createServiceClient()
-    const lowStockThreshold = parseInt(process.env.LOW_STOCK_THRESHOLD || '5')
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://intandokaziherbal.co.za'
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('q') || '';
+    const category = searchParams.get('category');
+    const limit = parseInt(searchParams.get('limit') || '10');
 
-    // Search across name, short_description, category, tags
-    const { data: products, error } = await supabase
-      .from('products')
-      .select('id, name, slug, short_description, price, stock_quantity, low_stock_threshold, is_active, image_url, category, tags')
-      .eq('is_active', true)
-      .or(`name.ilike.%${q}%,short_description.ilike.%${q}%,category.ilike.%${q}%`)
-      .order('stock_quantity', { ascending: false })
-      .limit(5)
-
-    if (error) {
-      console.error('[Agent Products Search] DB error:', error)
-      return NextResponse.json({ error: 'Failed to search products' }, { status: 500 })
+    if (!query && !category) {
+      return NextResponse.json(
+        { success: false, error: 'Search query (q) or category is required' },
+        { status: 400 }
+      );
     }
 
-    const results = (products || []).map(p => ({
-      id: p.id,
-      name: p.name,
-      price: p.price,
-      currency: 'ZAR',
-      inStock: p.stock_quantity > 0,
-      stockCount: p.stock_quantity,
-      lowStock: p.stock_quantity > 0 && p.stock_quantity <= (p.low_stock_threshold || lowStockThreshold),
-      description: p.short_description || '',
-      category: p.category,
-      productUrl: `${siteUrl}/products/${p.slug}`
-    }))
+    let dbQuery = supabase
+      .from('products')
+      .select('id, name, slug, description, short_description, category, price, unit, stock_quantity, is_active, image_url, emoji')
+      .eq('is_active', true)
+      .limit(limit);
 
-    console.log(`[Agent Products Search] "${q}" → ${results.length} results`)
+    if (query) {
+      dbQuery = dbQuery.or(`name.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%,tags.cs.{${query}}`);
+    }
 
-    return NextResponse.json({ results })
+    if (category) {
+      dbQuery = dbQuery.eq('category', category);
+    }
 
+    const { data: products, error } = await dbQuery;
+
+    if (error) {
+      console.error('[Agent Product Search] Error:', error);
+      return NextResponse.json({ success: false, error: 'Failed to search products' }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      products: products || [],
+      count: products?.length || 0
+    });
   } catch (error: any) {
-    console.error('[Agent Products Search] Error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('[Agent Product Search] Error:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

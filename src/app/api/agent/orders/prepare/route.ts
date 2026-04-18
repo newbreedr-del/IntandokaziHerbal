@@ -1,139 +1,147 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/utils/supabase/service'
-import crypto from 'crypto'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-function generateSignature(data: Record<string, string>, passphrase?: string): string {
-  const str = Object.entries(data)
-    .filter(([_, v]) => v !== '' && v != null)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([k, v]) => `${k}=${encodeURIComponent(String(v)).replace(/%20/g, '+')}`)
-    .join('&')
-  const final = passphrase
-    ? str + '&passphrase=' + encodeURIComponent(passphrase)
-    : str
-  return crypto.createHash('md5').update(final).digest('hex')
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+function verifyAgentSecret(request: NextRequest): boolean {
+  const secret = request.headers.get('x-agent-secret');
+  return secret === process.env.AGENT_API_SECRET;
 }
 
-function randomOrderRef(): string {
-  return 'ORD-' + crypto.randomUUID().slice(0, 8).toUpperCase()
-}
-
+// POST /api/agent/orders/prepare - Create an order from agent conversation
 export async function POST(request: NextRequest) {
-  try {
-    // Verify agent API secret
-    const apiSecret = request.headers.get('x-agent-secret')
-    if (apiSecret !== process.env.AGENT_API_SECRET) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-    }
+  if (!verifyAgentSecret(request)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
 
-    const body = await request.json()
+  try {
+    const body = await request.json();
     const {
-      contactName,
-      contactPhone,
-      contactEmail,
-      deliveryAddress,
       items,
-      totalAmount,
-      conversationId,
-      contactId,
-      channel,
-      agentId
-    } = body
+      total_amount,
+      customer_name,
+      customer_phone,
+      customer_email,
+      delivery_method,
+      delivery_location,
+      pep_store_code,
+      notes
+    } = body;
 
     // Validate required fields
-    if (!contactName || !contactPhone || !items || !totalAmount || !deliveryAddress) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Missing required fields: contactName, contactPhone, items, totalAmount, deliveryAddress' 
-      }, { status: 400 })
+    if (!items || items.length === 0 || !customer_name || !customer_phone) {
+      return NextResponse.json(
+        { success: false, error: 'Missing required fields: items, customer_name, customer_phone' },
+        { status: 400 }
+      );
     }
 
-    // Generate unique order reference
-    const orderRef = randomOrderRef()
-    
-    // Calculate expiry time
-    const expiryMinutes = 30 // TODO: Get from agent settings
-    const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000)
+    // Generate order reference
+    const orderRef = `ORD-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-    // Save order to database with status "awaiting_payment"
-    const supabase = createServiceClient()
+    // Calculate totals
+    let subtotal = 0;
+    const orderItems = items.map((item: any) => {
+      const lineTotal = (item.price || 0) * (item.quantity || 1);
+      subtotal += lineTotal;
+      return {
+        product_id: item.product_id,
+        product_name: item.name,
+        quantity: item.quantity || 1,
+        unit_price: item.price || 0,
+        total: lineTotal
+      };
+    });
+
+    const deliveryFee = delivery_method === 'courier' ? 99 : 0;
+    const finalTotal = total_amount || (subtotal + deliveryFee);
+
+    // Create order
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert({
-        order_ref: orderRef,
-        conversation_id: conversationId,
-        contact_id: contactId,
-        agent_id: agentId,
-        contact_name: contactName,
-        contact_email: contactEmail || `${contactPhone}@placeholder.com`, // PayFast requires email
-        contact_phone: contactPhone,
-        delivery_address: deliveryAddress,
-        items: items,
-        total_amount: totalAmount,
-        currency: 'ZAR',
-        status: 'awaiting_payment',
-        expires_at: expiresAt.toISOString()
+        order_reference: orderRef,
+        customer_name,
+        customer_email: customer_email || customer_phone,
+        customer_phone,
+        pep_store_code: pep_store_code || null,
+        pep_store_name: delivery_location || null,
+        delivery_notes: notes || `Agent order — ${delivery_method || 'pep'} delivery to ${delivery_location || 'TBD'}`,
+        subtotal,
+        delivery_fee: deliveryFee,
+        total: finalTotal,
+        payment_method: 'pending',
+        payment_status: 'pending',
+        order_status: 'pending'
       })
       .select()
-      .single()
+      .single();
 
     if (orderError) {
-      console.error('[Agent Orders] Failed to create order:', orderError)
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Failed to create order: ' + orderError.message 
-      }, { status: 500 })
+      console.error('[Agent Order Prepare] Error creating order:', orderError);
+      return NextResponse.json({ success: false, error: 'Failed to create order' }, { status: 500 });
     }
 
-    console.log(`[Agent Orders] Created order ${orderRef} for ${contactName}`)
+    // Create order items
+    const itemRows = orderItems.map((item: any) => ({
+      order_id: order.id,
+      ...item
+    }));
 
-    // Build PayFast payment data
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://intandokaziherbal.co.za'
-    const isSandbox = process.env.PAYFAST_ENVIRONMENT === 'sandbox'
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .insert(itemRows);
 
-    const pfData: Record<string, string> = {
-      merchant_id:  process.env.PAYFAST_MERCHANT_ID || '',
-      merchant_key: process.env.PAYFAST_MERCHANT_KEY || '',
-      return_url:   `${siteUrl}/order/success?orderId=${orderRef}`,
-      cancel_url:   `${siteUrl}/order/cancelled?orderId=${orderRef}`,
-      notify_url:   `${siteUrl}/api/payfast/notify`,
-      name_first:   contactName.split(' ')[0],
-      name_last:    contactName.split(' ').slice(1).join(' ') || '-',
-      email_address: contactEmail || `${contactPhone.replace(/\D/g, '')}@placeholder.com`,
-      cell_number:  contactPhone.replace(/\D/g, ''),
-      m_payment_id: orderRef,
-      amount:       totalAmount.toFixed(2),
-      item_name:    `Order ${orderRef}`,
-      item_description: items.map((i: any) => `${i.qty}x ${i.productName}`).join(', ').substring(0, 255),
-      custom_str1:  conversationId || '',
-      custom_str2:  contactId || '',
-      custom_str3:  channel || 'whatsapp'
+    if (itemsError) {
+      console.error('[Agent Order Prepare] Error creating items:', itemsError);
     }
 
-    pfData.signature = generateSignature(pfData, process.env.PAYFAST_PASSPHRASE)
-
-    const baseUrl = isSandbox
+    // Build PayFast payment URL
+    const merchantId = process.env.PAYFAST_MERCHANT_ID;
+    const merchantKey = process.env.PAYFAST_MERCHANT_KEY;
+    const payfastUrl = process.env.PAYFAST_SANDBOX === 'true'
       ? 'https://sandbox.payfast.co.za/eng/process'
-      : 'https://www.payfast.co.za/eng/process'
-    const paymentUrl = baseUrl + '?' + new URLSearchParams(pfData).toString()
+      : 'https://www.payfast.co.za/eng/process';
 
-    console.log(`[Agent Orders] Payment URL generated for ${orderRef}`)
-    console.log(`[Agent Orders] Expires at: ${expiresAt.toISOString()}`)
+    let paymentUrl = null;
+    if (merchantId && merchantKey) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://intandokaziherbal.co.za';
+      const params = new URLSearchParams({
+        merchant_id: merchantId,
+        merchant_key: merchantKey,
+        return_url: `${siteUrl}/store/order-success?ref=${orderRef}`,
+        cancel_url: `${siteUrl}/store/order-cancelled?ref=${orderRef}`,
+        notify_url: `${siteUrl}/api/payfast/notify`,
+        name_first: customer_name.split(' ')[0] || customer_name,
+        name_last: customer_name.split(' ').slice(1).join(' ') || '',
+        email_address: customer_email || `${customer_phone}@agent.local`,
+        cell_number: customer_phone.replace(/^27/, '0'),
+        m_payment_id: orderRef,
+        amount: finalTotal.toFixed(2),
+        item_name: `Intandokazi Order ${orderRef}`,
+        item_description: items.map((i: any) => `${i.quantity || 1}x ${i.name}`).join(', ').substring(0, 255)
+      });
+
+      paymentUrl = `${payfastUrl}?${params.toString()}`;
+    }
+
+    console.log(`[Agent Order Prepare] Order ${orderRef} created — total R${finalTotal}`);
 
     return NextResponse.json({
       success: true,
-      orderId: orderRef,
-      paymentUrl: paymentUrl,
-      totalAmount: totalAmount,
-      expiresAt: expiresAt.toISOString(),
-      order: order
-    })
-
+      order: {
+        id: order.id,
+        order_ref: orderRef,
+        total: finalTotal,
+        status: 'pending'
+      },
+      payment_url: paymentUrl
+    }, { status: 201 });
   } catch (error: any) {
-    console.error('[Agent Orders] Error preparing order:', error)
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message 
-    }, { status: 500 })
+    console.error('[Agent Order Prepare] Error:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
