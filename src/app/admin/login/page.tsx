@@ -89,20 +89,19 @@ export default function AdminLogin() {
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-xl p-2"
           >
             <Image 
-              src="/logo.png" 
+              src="/icon.png" 
               alt="Intandokazi Herbal" 
               width={64}
               height={64}
               className="object-contain"
             />
           </motion.div>
-          <h1 className="text-3xl font-bold text-white mb-2">Intandokazi Herbal</h1>
           <p className="text-brand-300">Admin Portal</p>
         </div>
 

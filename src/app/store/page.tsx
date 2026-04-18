@@ -80,7 +80,7 @@ export default function StorePage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <div className="relative w-10 h-10 flex-shrink-0">
-                <Image src="/logo.png" alt="Nthandokazi Herbal Logo" fill className="object-contain" />
+                <Image src="/icon.png" alt="Intandokazi Herbal Logo" fill className="object-contain" />
               </div>
               <div>
                 <span className="text-white font-elegant-title text-lg leading-none block">Intandokazi Herbal</span>
@@ -403,9 +403,9 @@ export default function StorePage() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image src="/logo.png" alt="Nthandokazi Herbal" fill className="object-contain" />
+                  <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
                 </div>
-                <span className="text-white font-elegant-title">Nthandokazi Herbal</span>
+                <span className="text-white font-elegant-title">Intandokazi Herbal</span>
               </div>
               <p className="text-brand-400 text-sm leading-relaxed mb-4">
                 Welcome to Intandokazi Herbal Products 🌿

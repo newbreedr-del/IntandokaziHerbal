@@ -13,11 +13,8 @@ export default function TermsPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <Link href="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="relative w-10 h-10">
-              <Image src="/logo.png" alt="Intandokazi Herbal" fill className="object-contain" />
-            </div>
-            <span className="text-brand-900 font-elegant-title text-xl">Intandokazi Herbal</span>
+          <Link href="/" className="inline-flex items-center mb-6">
+            <Image src="/icon.png" alt="Intandokazi Herbal" width={48} height={48} className="object-contain h-12 w-12" />
           </Link>
           <h1 className="text-3xl font-bold text-brand-900 mb-4">Terms & Conditions</h1>
           <p className="text-brand-600">Last updated: {new Date().toLocaleDateString()}</p>

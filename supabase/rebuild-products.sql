@@ -39,6 +39,29 @@ CREATE TABLE IF NOT EXISTS products (
 
 SELECT '✅ Products table ready!' as status;
 
+-- Add any columns that may be missing if table already existed
+ALTER TABLE products ADD COLUMN IF NOT EXISTS slug TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS sku TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS tagline TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS short_description TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS long_description TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS unit TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS stock_quantity INTEGER DEFAULT 0;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS low_stock_threshold INTEGER DEFAULT 5;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS emoji TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS gradient_css TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS badge TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS benefits TEXT[];
+ALTER TABLE products ADD COLUMN IF NOT EXISTS ingredients TEXT[];
+ALTER TABLE products ADD COLUMN IF NOT EXISTS usage_instructions TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT false;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS is_new BOOLEAN DEFAULT false;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS sales_count INTEGER DEFAULT 0;
+
+SELECT '✅ All columns ensured!' as status;
+
 -- STEP 2: Clear old/placeholder products and insert all 18 real products
 -- ============================================================================
 

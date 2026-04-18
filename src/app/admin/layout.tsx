@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   LayoutDashboard, Package, ShoppingCart, FileText, 
-  Truck, Calendar, LogOut, Menu, X 
+  Truck, Calendar, CalendarDays, LogOut, Menu, X 
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -55,6 +55,7 @@ export default function AdminLayout({
     { href: "/admin/products", icon: Package, label: "Products" },
     { href: "/admin/orders", icon: ShoppingCart, label: "Orders" },
     { href: "/admin/bookings", icon: Calendar, label: "Bookings" },
+    { href: "/admin/availability", icon: CalendarDays, label: "Availability" },
     { href: "/admin/invoices", icon: FileText, label: "Invoices" },
     { href: "/admin/tracking", icon: Truck, label: "Tracking" },
   ];
@@ -81,8 +82,8 @@ export default function AdminLayout({
           {/* Logo */}
           <div className="p-6 border-b border-brand-600">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
-                <Image src="/logo.png" alt="Nthandokazi Herbal" width={40} height={40} className="object-contain" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                <Image src="/icon.png" alt="Intandokazi Herbal" width={40} height={40} className="object-contain" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Intandokazi</h1>

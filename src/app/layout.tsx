@@ -26,6 +26,12 @@ export const metadata: Metadata = {
 
   description: "Complete business management for Nthandokazi Herbal",
 
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+
 };
 
 

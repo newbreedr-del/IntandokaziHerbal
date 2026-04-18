@@ -36,53 +36,35 @@ export default function BookingCalendar() {
     consultationType: "video"
   });
 
-  // Generate next 30 days
   const [availableDates, setAvailableDates] = useState<string[]>([]);
+  const [allSlots, setAllSlots] = useState<AvailableSlot[]>([]);
 
   useEffect(() => {
-    const dates: string[] = [];
     const today = new Date();
-    for (let i = 1; i <= 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      dates.push(date.toISOString().split('T')[0]);
-    }
-    setAvailableDates(dates);
+    const startDate = today.toISOString().split('T')[0];
+    const future = new Date(today);
+    future.setDate(today.getDate() + 60);
+    const endDate = future.toISOString().split('T')[0];
+
+    setLoading(true);
+    fetch(`/api/bookings/availability?startDate=${startDate}&endDate=${endDate}`)
+      .then((r) => r.json())
+      .then((data) => {
+        const slots: AvailableSlot[] = data.slots || [];
+        setAllSlots(slots);
+        const uniqueDates = [...new Set(slots.map((s: AvailableSlot) => s.date))].sort() as string[];
+        setAvailableDates(uniqueDates);
+      })
+      .catch((err) => console.error('Failed to fetch availability:', err))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     if (selectedDate) {
-      generateDefaultSlots(selectedDate);
+      const dateSlots = allSlots.filter((s) => s.date === selectedDate && s.is_available);
+      setAvailableSlots(dateSlots);
     }
-  }, [selectedDate]);
-
-  const generateDefaultSlots = (date: string) => {
-    // Generate default time slots for the selected date
-    // 9 AM to 5 PM, hourly slots
-    const slots: AvailableSlot[] = [];
-    const times = [
-      { start: "09:00", end: "10:00" },
-      { start: "10:00", end: "11:00" },
-      { start: "11:00", end: "12:00" },
-      { start: "12:00", end: "13:00" },
-      { start: "13:00", end: "14:00" },
-      { start: "14:00", end: "15:00" },
-      { start: "15:00", end: "16:00" },
-      { start: "16:00", end: "17:00" },
-    ];
-
-    times.forEach((time, index) => {
-      slots.push({
-        id: `${date}-${index}`,
-        date: date,
-        start_time: time.start,
-        end_time: time.end,
-        is_available: true
-      });
-    });
-
-    setAvailableSlots(slots);
-  };
+  }, [selectedDate, allSlots]);
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
@@ -263,21 +245,33 @@ export default function BookingCalendar() {
           {/* Date Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">Select Date</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {availableDates.map((date) => (
-                <button
-                  key={date}
-                  onClick={() => handleDateSelect(date)}
-                  className={`p-4 rounded-lg border-2 text-center transition-all ${
-                    selectedDate === date
-                      ? 'border-purple-600 bg-purple-50 text-purple-900'
-                      : 'border-gray-200 hover:border-purple-300 text-gray-700'
-                  }`}
-                >
-                  <div className="font-semibold">{formatDate(date)}</div>
-                </button>
-              ))}
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+              </div>
+            ) : availableDates.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 rounded-lg">
+                <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 font-medium">No available dates at the moment</p>
+                <p className="text-sm text-gray-500 mt-2">Please check back soon for new openings</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {availableDates.map((date) => (
+                  <button
+                    key={date}
+                    onClick={() => handleDateSelect(date)}
+                    className={`p-4 rounded-lg border-2 text-center transition-all ${
+                      selectedDate === date
+                        ? 'border-purple-600 bg-purple-50 text-purple-900'
+                        : 'border-gray-200 hover:border-purple-300 text-gray-700'
+                    }`}
+                  >
+                    <div className="font-semibold">{formatDate(date)}</div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Time Slot Selection */}

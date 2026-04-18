@@ -92,7 +92,7 @@ export default function Sidebar() {
 
         <div className="relative h-10 w-10 flex-shrink-0">
 
-          <Image src="/images/logo.png" alt="Intandokazi Herbal" fill className="object-contain" />
+          <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
 
         </div>
 
