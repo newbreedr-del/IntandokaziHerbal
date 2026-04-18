@@ -1426,7 +1426,7 @@ function ProductFormModal({
 
                 value={formData.price}
 
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
 
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
 
@@ -1456,7 +1456,7 @@ function ProductFormModal({
 
                 value={formData.stock_quantity}
 
-                onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) || 0 })}
 
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
 
