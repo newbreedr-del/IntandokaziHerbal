@@ -72,10 +72,6 @@ export default function StorePage() {
     return a.localeCompare(b);
   });
 
-  const goToProducts = () => {
-    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -97,13 +93,6 @@ export default function StorePage() {
                 <span>WhatsApp Us</span>
               </a>
               <button
-                onClick={() => setShowBookingModal(true)}
-                className="hidden sm:flex items-center gap-2 border border-brand-500/60 hover:border-brand-300 text-brand-200 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:bg-brand-800/60"
-              >
-                <Calendar className="w-4 h-4" />
-                Book Consultation
-              </button>
-              <button
                 onClick={() => setIsOpen(true)}
                 className="relative flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 shadow-lg shadow-brand-900/40"
               >
@@ -121,7 +110,7 @@ export default function StorePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden py-14 sm:py-20 px-4">
+      <section className="relative overflow-hidden py-20 px-4">
         {/* Real hero background image */}
         <div className="absolute inset-0">
           <Image
@@ -136,112 +125,52 @@ export default function StorePage() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(45,27,107,0.6), rgba(26,47,110,0.6))" }} />
         {/* Extra dark gradient at bottom for text contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-transparent to-brand-900/40" />
-        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 bg-brand-900/60 border border-brand-700/50 text-brand-300 text-xs sm:text-sm px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
-              <Leaf className="w-3.5 h-3.5" />
-              <span>100% Natural · Traditional African Healing · Organic</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-elegant-title text-white mb-6 leading-tight">
-              Feel Better Faster.
-              <span className="block bg-gradient-to-r from-brand-300 via-purple-300 to-brand-400 bg-clip-text text-transparent">
-                Book or Shop in Seconds.
-              </span>
-            </h1>
-            <p className="text-base sm:text-lg text-brand-200/80 max-w-2xl lg:max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Start with a consultation for personalized guidance, or shop trusted herbal products immediately. We made both paths clear, quick, and mobile-friendly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-              <button
-                onClick={() => setShowBookingModal(true)}
-                className="inline-flex items-center justify-center gap-2 bg-white text-brand-700 hover:bg-brand-50 px-7 py-3.5 rounded-full font-semibold text-base transition-all duration-300 shadow-xl shadow-brand-900/50"
-              >
-                <Calendar className="w-5 h-5" />
-                Make a Booking
-              </button>
-              <button
-                onClick={goToProducts}
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 text-white px-7 py-3.5 rounded-full font-semibold text-base transition-all duration-300 shadow-xl shadow-brand-900/50"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Shop Products
-              </button>
-            </div>
-            <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center lg:text-left">
-              {[
-                { value: "10+", label: "Herbal Products" },
-                { value: "890+", label: "Happy Clients" },
-                { value: "100%", label: "Natural Ingredients" },
-                { value: "2–5 Days", label: "SA Delivery" },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-2xl font-bold text-white">{stat.value}</div>
-                  <div className="text-brand-300 text-xs sm:text-sm">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-brand-900/60 border border-brand-700/50 text-brand-300 text-sm px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+            <Leaf className="w-3.5 h-3.5" />
+            <span>100% Natural · Traditional African Healing · Organic</span>
           </div>
-
-          <div className="bg-white/10 border border-white/20 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/20 border border-white/20 rounded-full px-3 py-1 text-xs text-white/90 mb-4">
-              <Calendar className="w-3.5 h-3.5" />
-              Priority Access
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">Consultation Booking</h3>
-            <p className="text-brand-100/90 text-sm sm:text-base mb-6">
-              Tell us your symptoms and get personalized remedy recommendations from Intandokazi.
-            </p>
-            <div className="space-y-3 mb-6 text-sm text-white/90">
-              <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-300" />Online, phone, or WhatsApp</div>
-              <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-300" />Available slots managed by admin</div>
-              <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-300" />60 min personalized session</div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => setShowBookingModal(true)}
-                className="flex-1 bg-white text-brand-700 hover:bg-brand-50 px-5 py-3 rounded-xl font-semibold transition-colors"
-              >
-                Book Consultation
-              </button>
-              <a
-                href="/book/whatsapp-agent"
-                className="flex-1 text-center border border-white/40 text-white hover:bg-white/10 px-5 py-3 rounded-xl font-semibold transition-colors"
-              >
-                Ask on WhatsApp
-              </a>
-            </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-elegant-title text-white mb-6 leading-tight">
+            Healing Rooted in{" "}
+            <span className="bg-gradient-to-r from-brand-300 via-purple-300 to-brand-400 bg-clip-text text-transparent">
+              African Tradition
+            </span>
+          </h1>
+          <p className="text-lg text-brand-200/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Handcrafted herbal remedies, traditional medicines and organic wellness products — trusted by thousands across South Africa.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+              className="bg-gradient-to-r from-brand-600 to-navy-600 hover:from-brand-500 hover:to-navy-500 text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 shadow-xl shadow-brand-900/50 hover:shadow-brand-700/40 hover:-translate-y-0.5"
+            >
+              Shop All Products
+            </button>
+            <a
+              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-brand-600/60 hover:border-brand-400 text-brand-300 hover:text-white px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 hover:bg-brand-900/40"
+            >
+              Ask Intandokazi
+            </a>
+          </div>
+          <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
+            {[
+              { value: "10+", label: "Herbal Products" },
+              { value: "890+", label: "Happy Clients Daily" },
+              { value: "100%", label: "Natural Ingredients" },
+              { value: "PAXI", label: "Fast Delivery" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="text-brand-400 text-sm">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
         <div className="relative flex justify-center mt-12">
           <ChevronDown className="w-6 h-6 text-brand-500 animate-bounce" />
-        </div>
-      </section>
-
-      {/* Quick Access */}
-      <section className="px-4 -mt-8 relative z-10">
-        <div className="max-w-5xl mx-auto bg-white border border-brand-100 shadow-xl rounded-2xl p-3 sm:p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              onClick={() => setShowBookingModal(true)}
-              className="flex items-center justify-between gap-3 bg-brand-50 hover:bg-brand-100 border border-brand-200 rounded-xl px-4 py-3 text-left transition-colors"
-            >
-              <span className="inline-flex items-center gap-2 text-brand-900 font-semibold">
-                <Calendar className="w-4 h-4" />
-                Make a Booking
-              </span>
-              <span className="text-xs text-brand-700">Consultation</span>
-            </button>
-            <button
-              onClick={goToProducts}
-              className="flex items-center justify-between gap-3 bg-navy-50 hover:bg-navy-100 border border-navy-200 rounded-xl px-4 py-3 text-left transition-colors"
-            >
-              <span className="inline-flex items-center gap-2 text-navy-900 font-semibold">
-                <ShoppingCart className="w-4 h-4" />
-                Shop Products
-              </span>
-              <span className="text-xs text-navy-700">Browse now</span>
-            </button>
-          </div>
         </div>
       </section>
 
