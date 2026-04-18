@@ -200,8 +200,6 @@ export async function POST(request: NextRequest) {
         is_featured: is_featured || false,
         is_new: is_new || false,
         is_on_sale: is_on_sale || false,
-        created_by: session.user.email,
-        updated_by: session.user.email,
       })
       .select();
 
