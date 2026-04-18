@@ -52,7 +52,7 @@ export default function BookingCalendar() {
       .then((data) => {
         const slots: AvailableSlot[] = data.slots || [];
         setAllSlots(slots);
-        const uniqueDates = [...new Set(slots.map((s: AvailableSlot) => s.date))].sort() as string[];
+        const uniqueDates = Array.from(new Set(slots.map((s: AvailableSlot) => s.date))).sort() as string[];
         setAvailableDates(uniqueDates);
       })
       .catch((err) => console.error('Failed to fetch availability:', err))

@@ -518,7 +518,7 @@ export default function AdminAvailabilityPage() {
             Configured Dates This Month
           </h3>
           <div className="space-y-2">
-            {[...new Set(allSlots.map((s) => s.date))].sort().map((date) => {
+            {Array.from(new Set(allSlots.map((s) => s.date))).sort().map((date) => {
               const slots = slotsForDate(date);
               return (
                 <div
