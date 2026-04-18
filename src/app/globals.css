@@ -72,6 +72,15 @@
   background: #9ca3af;
 }
 
+/* Hide scrollbar for horizontal mobile scrollers */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Mobile-First Optimizations */
 @layer utilities {
   /* Smooth scrolling for all anchor links and programmatic scrolls */
