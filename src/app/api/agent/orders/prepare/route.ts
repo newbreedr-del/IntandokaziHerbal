@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getPayFastClient } from '@/lib/payfast';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -99,22 +100,19 @@ export async function POST(request: NextRequest) {
       console.error('[Agent Order Prepare] Error creating items:', itemsError);
     }
 
-    // Build PayFast payment URL
-    const merchantId = process.env.PAYFAST_MERCHANT_ID;
-    const merchantKey = process.env.PAYFAST_MERCHANT_KEY;
-    const payfastUrl = process.env.PAYFAST_SANDBOX === 'true'
-      ? 'https://sandbox.payfast.co.za/eng/process'
-      : 'https://www.payfast.co.za/eng/process';
-
+    // Build PayFast payment URL (with signature)
     let paymentUrl = null;
-    if (merchantId && merchantKey) {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://intandokaziherbal.co.za';
-      const params = new URLSearchParams({
-        merchant_id: merchantId,
-        merchant_key: merchantKey,
+    if (process.env.PAYFAST_MERCHANT_ID && process.env.PAYFAST_MERCHANT_KEY) {
+      const payfast = getPayFastClient();
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        process.env.NEXT_PUBLIC_BASE_URL ||
+        'https://intandokaziherbal.co.za';
+
+      const paymentData = payfast.createPayment({
         return_url: `${siteUrl}/store/order-success?ref=${orderRef}`,
         cancel_url: `${siteUrl}/store/order-cancelled?ref=${orderRef}`,
-        notify_url: `${siteUrl}/api/payfast/notify`,
+        notify_url: `${siteUrl}/api/payments/payfast/notify`,
         name_first: customer_name.split(' ')[0] || customer_name,
         name_last: customer_name.split(' ').slice(1).join(' ') || '',
         email_address: customer_email || `${customer_phone}@agent.local`,
@@ -125,7 +123,14 @@ export async function POST(request: NextRequest) {
         item_description: items.map((i: any) => `${i.quantity || 1}x ${i.name}`).join(', ').substring(0, 255)
       });
 
-      paymentUrl = `${payfastUrl}?${params.toString()}`;
+      const params = new URLSearchParams();
+      Object.entries(paymentData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && String(value) !== '') {
+          params.append(key, String(value));
+        }
+      });
+
+      paymentUrl = `${payfast.getPaymentUrl()}?${params.toString()}`;
     }
 
     console.log(`[Agent Order Prepare] Order ${orderRef} created — total R${finalTotal}`);
