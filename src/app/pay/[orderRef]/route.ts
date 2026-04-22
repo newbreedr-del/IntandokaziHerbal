@@ -12,16 +12,36 @@ export async function GET(
   { params }: { params: { orderRef: string } }
 ) {
   try {
-    const orderRef = params.orderRef
+    const rawOrderRef = decodeURIComponent(String(params.orderRef || ''))
+    const orderRef = rawOrderRef.trim().replace(/[^A-Za-z0-9-]/g, '')
 
-    const { data: order, error: orderError } = await supabase
+    const primaryLookup = await supabase
       .from('orders')
       .select('id, order_reference, customer_name, customer_email, customer_phone, total')
       .eq('order_reference', orderRef)
       .single()
 
-    if (orderError || !order) {
+    let order = primaryLookup.data
+    let orderError = primaryLookup.error
+
+    if (!order && orderRef && orderRef !== orderRef.toUpperCase()) {
+      const uppercaseLookup = await supabase
+        .from('orders')
+        .select('id, order_reference, customer_name, customer_email, customer_phone, total')
+        .eq('order_reference', orderRef.toUpperCase())
+        .single()
+
+      order = uppercaseLookup.data
+      orderError = uppercaseLookup.error
+    }
+
+    if (!order && orderError && String((orderError as any).code || '') === 'PGRST116') {
       return NextResponse.json({ success: false, error: 'Order not found' }, { status: 404 })
+    }
+
+    if (!order) {
+      console.error('[Pay Redirect] Order lookup failed:', orderError)
+      return NextResponse.json({ success: false, error: 'Failed to load order' }, { status: 500 })
     }
 
     const { data: items } = await supabase
