@@ -102,6 +102,7 @@ export async function POST(request: NextRequest) {
 
     // Build PayFast payment URL (with signature)
     let paymentUrl = null;
+    let shortPaymentUrl = null;
     if (process.env.PAYFAST_MERCHANT_ID && process.env.PAYFAST_MERCHANT_KEY) {
       const payfast = getPayFastClient();
       const siteUrl =
@@ -131,6 +132,7 @@ export async function POST(request: NextRequest) {
       });
 
       paymentUrl = `${payfast.getPaymentUrl()}?${params.toString()}`;
+      shortPaymentUrl = `${siteUrl}/pay/${orderRef}`;
     }
 
     console.log(`[Agent Order Prepare] Order ${orderRef} created — total R${finalTotal}`);
@@ -143,7 +145,8 @@ export async function POST(request: NextRequest) {
         total: finalTotal,
         status: 'pending'
       },
-      payment_url: paymentUrl
+      payment_url: shortPaymentUrl || paymentUrl,
+      payment_url_long: paymentUrl
     }, { status: 201 });
   } catch (error: any) {
     console.error('[Agent Order Prepare] Error:', error);
