@@ -90,7 +90,7 @@ export async function GET(
       notify_url:  `${siteUrl}/api/payments/payfast/notify`,
       name_first:  order.customer_name?.split(' ')[0] || order.customer_name || 'Customer',
       name_last:   order.customer_name?.split(' ').slice(1).join(' ') || '',
-      email_address: order.customer_email || process.env.AGENT_ORDER_FALLBACK_EMAIL || 'orders@intandokaziherbal.co.za',
+      ...(order.customer_email ? { email_address: order.customer_email } : {}),
       cell_number: (order.customer_phone || '').replace(/^27/, '0').replace(/\D/g, ''),
       m_payment_id: orderRef,
       amount: Number(order.total).toFixed(2),
