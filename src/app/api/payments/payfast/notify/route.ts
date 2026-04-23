@@ -138,20 +138,22 @@ async function sendOrderNotifications(order: any) {
     console.log('Sending notifications for order:', order.order_reference);
 
     // Create notification record for admin
-    await supabase
-      .from('notifications')
-      .insert({
-        type: 'order_paid',
-        title: 'New Order Payment Received',
-        message: `Payment of R${order.total} received for order ${order.order_reference} from ${order.customer_name}`,
-        data: {
-          orderId: order.id,
-          orderReference: order.order_reference,
-          amount: order.total,
-          customerName: order.customer_name
-        },
-        read: false
-      }).catch(() => {});
+    try {
+      await supabase
+        .from('notifications')
+        .insert({
+          type: 'order_paid',
+          title: 'New Order Payment Received',
+          message: `Payment of R${order.total} received for order ${order.order_reference} from ${order.customer_name}`,
+          data: {
+            orderId: order.id,
+            orderReference: order.order_reference,
+            amount: order.total,
+            customerName: order.customer_name
+          },
+          read: false
+        })
+    } catch (_) {}
 
     // Fetch order items for notification
     const { data: orderItems } = await supabase
