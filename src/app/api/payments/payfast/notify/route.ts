@@ -6,7 +6,7 @@ import { sendOrderNotification, sendAdminAlert } from '@/lib/notifications';
 async function sendWhatsApp(to: string, text: string) {
   const apiUrl = process.env.EVOLUTION_API_URL
   const apiKey = process.env.EVOLUTION_API_KEY
-  const instance = process.env.EVOLUTION_INSTANCE
+  const instance = process.env.EVOLUTION_INSTANCE || process.env.EVOLUTION_INSTANCE_NAME
   if (!apiUrl || !apiKey || !instance) return
   const phone = to.replace(/\D/g, '')
   await fetch(`${apiUrl}/message/sendText/${instance}`, {
