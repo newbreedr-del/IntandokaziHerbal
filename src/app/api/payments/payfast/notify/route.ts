@@ -165,39 +165,37 @@ async function sendOrderNotifications(order: any) {
       .map((i: any) => `${i.quantity}x ${i.product_name}`)
       .join(', ') || 'Order items'
 
-    // ── WhatsApp: confirmation to customer ───────────────────────────────────
-    if (order.customer_phone) {
-      const customerMsg =
-        `✅ *Payment Confirmed!*\n\n` +
-        `Hi ${order.customer_name?.split(' ')[0] || 'there'}! Your payment of *R${Number(order.total).toFixed(2)}* has been received.\n\n` +
-        `📦 *Order:* ${order.order_reference}\n` +
-        `🛍️ *Items:* ${itemSummary}\n` +
-        (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
-        `\nWe'll notify you once dispatched. Thank you! 🌿`
-      await sendWhatsApp(order.customer_phone, customerMsg)
-      console.log('[ITN] Customer WhatsApp sent to', order.customer_phone)
-    }
-
-    // ── WhatsApp: dispatch alert ──────────────────────────────────────────────
-    const dispatchNumbers = (process.env.DISPATCH_NUMBERS || process.env.DISPATCH_NUMBER || '')
-      .split(',')
-      .map((n: string) => n.trim())
-      .filter(Boolean)
-
-    if (dispatchNumbers.length > 0) {
-      const dispatchMsg =
-        `🚨 *New Order — Payment Received*\n\n` +
-        `👤 *Customer:* ${order.customer_name}\n` +
-        `📱 *Phone:* ${order.customer_phone || 'N/A'}\n` +
-        `📦 *Ref:* ${order.order_reference}\n` +
-        `🛍️ *Items:* ${itemSummary}\n` +
-        (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
-        `💰 *Total:* R${Number(order.total).toFixed(2)}\n` +
-        `⏰ ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}`
-      for (const num of dispatchNumbers) {
-        await sendWhatsApp(num, dispatchMsg)
+    // ── Forward to Engage Africa payment-confirmed endpoint ───────────────────
+    // This reads dispatch numbers from the agent's notify_dispatch action config
+    const engageUrl = process.env.ENGAGE_AFRICA_URL || process.env.NEXT_PUBLIC_ENGAGE_AFRICA_URL
+    const agentSecret = process.env.AGENT_API_SECRET
+    if (engageUrl && agentSecret) {
+      try {
+        const res = await fetch(`${engageUrl}/api/v1/agent/payment-confirmed`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-agent-secret': agentSecret },
+          body: JSON.stringify({
+            event: 'payment_confirmed',
+            orderRef: order.order_reference,
+            customerPhone: order.customer_phone,
+            customerName: order.customer_name,
+            totalAmount: Number(order.total).toFixed(2),
+            itemSummary,
+            collectionPoint: order.pep_store_name || null,
+            paymentStatus: 'COMPLETE'
+          })
+        })
+        console.log('[ITN] Engage Africa payment-confirmed response:', res.status)
+      } catch (err: any) {
+        console.error('[ITN] Failed to call Engage Africa payment-confirmed:', err?.message)
+        // Fallback: send directly via Evolution API
+        if (order.customer_phone) await sendWhatsApp(order.customer_phone,
+          `✅ *Payment Confirmed!*\n\nHi ${order.customer_name?.split(' ')[0] || 'there'}! Your payment of *R${Number(order.total).toFixed(2)}* for order ${order.order_reference} has been received. Thank you! 🌿`)
       }
-      console.log('[ITN] Dispatch WhatsApp sent to', dispatchNumbers.join(', '))
+    } else {
+      console.warn('[ITN] ENGAGE_AFRICA_URL or AGENT_API_SECRET not set — sending direct WhatsApp fallback')
+      if (order.customer_phone) await sendWhatsApp(order.customer_phone,
+        `✅ *Payment Confirmed!*\n\nHi ${order.customer_name?.split(' ')[0] || 'there'}! Your payment of *R${Number(order.total).toFixed(2)}* for order ${order.order_reference} has been received. Thank you! 🌿`)
     }
 
     // Send email/log notifications
