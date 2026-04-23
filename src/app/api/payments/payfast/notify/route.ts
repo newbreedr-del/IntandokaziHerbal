@@ -3,6 +3,19 @@ import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { sendOrderNotification, sendAdminAlert } from '@/lib/notifications';
 
+async function sendWhatsApp(to: string, text: string) {
+  const apiUrl = process.env.EVOLUTION_API_URL
+  const apiKey = process.env.EVOLUTION_API_KEY
+  const instance = process.env.EVOLUTION_INSTANCE
+  if (!apiUrl || !apiKey || !instance) return
+  const phone = to.replace(/\D/g, '')
+  await fetch(`${apiUrl}/message/sendText/${instance}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': apiKey },
+    body: JSON.stringify({ number: phone, textMessage: { text } })
+  }).catch(err => console.error('[ITN] WhatsApp send failed:', err?.message))
+}
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -138,7 +151,7 @@ async function sendOrderNotifications(order: any) {
           customerName: order.customer_name
         },
         read: false
-      });
+      }).catch(() => {});
 
     // Fetch order items for notification
     const { data: orderItems } = await supabase
@@ -146,7 +159,46 @@ async function sendOrderNotifications(order: any) {
       .select('*')
       .eq('order_id', order.id);
 
-    // Send notifications
+    const itemSummary = (orderItems || [])
+      .map((i: any) => `${i.quantity}x ${i.product_name}`)
+      .join(', ') || 'Order items'
+
+    // ── WhatsApp: confirmation to customer ───────────────────────────────────
+    if (order.customer_phone) {
+      const customerMsg =
+        `✅ *Payment Confirmed!*\n\n` +
+        `Hi ${order.customer_name?.split(' ')[0] || 'there'}! Your payment of *R${Number(order.total).toFixed(2)}* has been received.\n\n` +
+        `📦 *Order:* ${order.order_reference}\n` +
+        `🛍️ *Items:* ${itemSummary}\n` +
+        (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
+        `\nWe'll notify you once dispatched. Thank you! 🌿`
+      await sendWhatsApp(order.customer_phone, customerMsg)
+      console.log('[ITN] Customer WhatsApp sent to', order.customer_phone)
+    }
+
+    // ── WhatsApp: dispatch alert ──────────────────────────────────────────────
+    const dispatchNumbers = (process.env.DISPATCH_NUMBERS || process.env.DISPATCH_NUMBER || '')
+      .split(',')
+      .map((n: string) => n.trim())
+      .filter(Boolean)
+
+    if (dispatchNumbers.length > 0) {
+      const dispatchMsg =
+        `🚨 *New Order — Payment Received*\n\n` +
+        `👤 *Customer:* ${order.customer_name}\n` +
+        `📱 *Phone:* ${order.customer_phone || 'N/A'}\n` +
+        `📦 *Ref:* ${order.order_reference}\n` +
+        `🛍️ *Items:* ${itemSummary}\n` +
+        (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
+        `💰 *Total:* R${Number(order.total).toFixed(2)}\n` +
+        `⏰ ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}`
+      for (const num of dispatchNumbers) {
+        await sendWhatsApp(num, dispatchMsg)
+      }
+      console.log('[ITN] Dispatch WhatsApp sent to', dispatchNumbers.join(', '))
+    }
+
+    // Send email/log notifications
     try {
       await sendOrderNotification({
         type: 'order_paid',
