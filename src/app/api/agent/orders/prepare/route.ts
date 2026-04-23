@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       .insert({
         order_reference: orderRef,
         customer_name,
-        customer_email: customer_email || customer_phone,
+        customer_email: customer_email || null,
         customer_phone,
         pep_store_code: pep_store_code || null,
         pep_store_name: delivery_location || null,
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
         notify_url: `${siteUrl}/api/payments/payfast/notify`,
         name_first: customer_name.split(' ')[0] || customer_name,
         name_last: customer_name.split(' ').slice(1).join(' ') || '',
-        ...(customer_email ? { email_address: customer_email } : {}),
+        ...(customer_email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer_email) ? { email_address: customer_email } : {}),
         cell_number: customer_phone.replace(/^27/, '0'),
         m_payment_id: orderRef,
         amount: finalTotal.toFixed(2),

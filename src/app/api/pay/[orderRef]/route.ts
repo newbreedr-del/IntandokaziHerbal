@@ -90,7 +90,7 @@ export async function GET(
       notify_url:  `${siteUrl}/api/payments/payfast/notify`,
       name_first:  order.customer_name?.split(' ')[0] || order.customer_name || 'Customer',
       name_last:   order.customer_name?.split(' ').slice(1).join(' ') || '',
-      ...(order.customer_email ? { email_address: order.customer_email } : {}),
+      ...(order.customer_email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(order.customer_email) ? { email_address: order.customer_email } : {}),
       cell_number: (order.customer_phone || '').replace(/^27/, '0').replace(/\D/g, ''),
       m_payment_id: orderRef,
       amount: Number(order.total).toFixed(2),
