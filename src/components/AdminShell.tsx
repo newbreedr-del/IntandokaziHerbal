@@ -8,14 +8,20 @@ import SeedProvider from "@/components/SeedProvider";
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isStore = pathname.startsWith("/store");
-  const isAdmin = pathname.startsWith("/admin");
   const isPay = pathname.startsWith("/pay");
+  const isAdmin = pathname.startsWith("/admin");
 
-  // Store, Admin and Pay routes handle their own layout — no SessionProvider
-  if (isStore || isAdmin || isPay) {
+  // Public routes — no SessionProvider, no sidebar
+  if (isStore || isPay) {
     return <>{children}</>;
   }
 
+  // Admin routes have their own layout/sidebar — wrap with SessionProvider only
+  if (isAdmin) {
+    return <SessionProvider>{children}</SessionProvider>;
+  }
+
+  // Internal dashboard routes — full shell with sidebar
   return (
     <SessionProvider>
       <SeedProvider>
