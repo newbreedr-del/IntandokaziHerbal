@@ -167,7 +167,7 @@ async function sendOrderNotifications(order: any) {
 
     // ── Forward to Engage Africa payment-confirmed endpoint ───────────────────
     // This reads dispatch numbers from the agent's notify_dispatch action config
-    const engageUrl = process.env.ENGAGE_AFRICA_URL || process.env.NEXT_PUBLIC_ENGAGE_AFRICA_URL
+    const engageUrl = process.env.ENGAGE_AFRICA_URL || process.env.NEXT_PUBLIC_ENGAGE_AFRICA_URL || 'https://rare-laughter-production-ea40.up.railway.app'
     const agentSecret = process.env.AGENT_API_SECRET
     if (engageUrl && agentSecret) {
       try {
