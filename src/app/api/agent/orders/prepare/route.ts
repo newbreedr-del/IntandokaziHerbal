@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
         notify_url: `${siteUrl}/api/payments/payfast/notify`,
         name_first: customer_name.split(' ')[0] || customer_name,
         name_last: customer_name.split(' ').slice(1).join(' ') || '',
-        email_address: customer_email || `${customer_phone}@agent.local`,
+        email_address: customer_email || process.env.AGENT_ORDER_FALLBACK_EMAIL || 'orders@intandokaziherbal.co.za',
         cell_number: customer_phone.replace(/^27/, '0'),
         m_payment_id: orderRef,
         amount: finalTotal.toFixed(2),
