@@ -157,6 +157,19 @@ export default function StorePage() {
         </div>
       </nav>
 
+      {/* Page nav links bar */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar py-2.5 text-sm">
+            <a href="/about" className="whitespace-nowrap text-gray-500 hover:text-brand-700 font-medium transition-colors">About Us</a>
+            <a href="/faq" className="whitespace-nowrap text-gray-500 hover:text-brand-700 font-medium transition-colors">FAQ</a>
+            <a href="/contact" className="whitespace-nowrap text-gray-500 hover:text-brand-700 font-medium transition-colors">Contact</a>
+            <a href="/find-store" className="whitespace-nowrap text-gray-500 hover:text-brand-700 font-medium transition-colors">Find A Store</a>
+            <a href="/terms" className="whitespace-nowrap text-gray-500 hover:text-brand-700 font-medium transition-colors">Terms</a>
+          </div>
+        </div>
+      </div>
+
       {/* Full-page mobile menu overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-gradient-to-br from-white to-gray-50 flex flex-col md:hidden">
@@ -211,6 +224,13 @@ export default function StorePage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Page links */}
+          <div className="px-6 py-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2">
+            {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
+              <a key={href} href={href} onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-500 hover:text-brand-700 font-medium transition-colors">{label}</a>
+            ))}
           </div>
 
           {/* Bottom actions */}

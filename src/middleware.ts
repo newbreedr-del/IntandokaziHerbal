@@ -1,8 +1,14 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
+const OLD_MGMT = ["/bookkeeping", "/clients", "/messages", "/payments", "/products", "/sales", "/store-admin"];
+
 export default withAuth(
   function middleware(req) {
+    const path = req.nextUrl.pathname;
+    if (OLD_MGMT.some((p) => path === p || path.startsWith(p + "/"))) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
     return NextResponse.next();
   },
   {

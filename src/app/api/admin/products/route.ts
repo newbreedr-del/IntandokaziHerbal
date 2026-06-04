@@ -24,9 +24,10 @@ export async function GET(request: NextRequest) {
     
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    console.log('User permissions:', permissions);
+    const role = (session.user as any).role;
+    console.log('User permissions:', permissions, 'role:', role);
     
-    if (!permissions?.can_manage_products) {
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
@@ -102,9 +103,10 @@ export async function POST(request: NextRequest) {
     
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    console.log('User permissions:', permissions);
+    const role = (session.user as any).role;
+    console.log('User permissions:', permissions, 'role:', role);
     
-    if (!permissions?.can_manage_products) {
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
@@ -250,9 +252,10 @@ export async function PUT(request: NextRequest) {
     
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    console.log('User permissions:', permissions);
+    const role = (session.user as any).role;
+    console.log('User permissions:', permissions, 'role:', role);
     
-    if (!permissions?.can_manage_products) {
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
@@ -360,9 +363,10 @@ export async function DELETE(request: NextRequest) {
     
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    console.log('User permissions:', permissions);
+    const role = (session.user as any).role;
+    console.log('User permissions:', permissions, 'role:', role);
     
-    if (!permissions?.can_manage_products) {
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       console.log('Insufficient permissions');
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
