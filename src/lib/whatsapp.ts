@@ -33,8 +33,7 @@ export async function sendWhatsAppText(
       headers: { 'Content-Type': 'application/json', apikey: key },
       body: JSON.stringify({
         number: phone,
-        options: { delay: 1200, presence: 'composing' },
-        textMessage: { text },
+        text,
       }),
       signal: AbortSignal.timeout(10_000),
     });
