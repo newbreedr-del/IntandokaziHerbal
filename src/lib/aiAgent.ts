@@ -60,7 +60,7 @@ interface AIConfig {
 }
 
 const DEFAULT_CONFIG: AIConfig = {
-  model: 'gemini-1.5-pro',
+  model: 'gemini-1.0-pro',
   temperature: 0.75,
   maxOutputTokens: 400,
   timeoutMs: 15_000,
