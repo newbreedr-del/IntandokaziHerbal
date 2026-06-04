@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS ai_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Insert default settings (will not overwrite existing rows)
-INSERT INTO ai_settings (key, value, updated_by) VALUES 
+-- Insert/update default settings (will overwrite existing rows)
+INSERT INTO ai_settings (key, value, updated_by) VALUES
   (
     'llm_config',
     '{
@@ -39,4 +39,4 @@ INSERT INTO ai_settings (key, value, updated_by) VALUES
     }',
     'system'
   )
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_by = EXCLUDED.updated_by, updated_at = NOW();
