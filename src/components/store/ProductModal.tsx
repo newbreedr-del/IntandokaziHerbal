@@ -23,7 +23,7 @@ export default function ProductModal({ product, onClose }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: `Sawubona! 🌿 I'm Ntankokazi. I'm so glad you're looking at the ${product.name} — this is one of my favourite remedies. Ask me anything about it: how it works, how to use it, what conditions it helps with, or anything else on your mind!`,
+      content: `Sawubona! 🌿 I'm Nthandokazi. I'm so glad you're looking at the ${product.name} — this is one of my favourite remedies. Ask me anything about it: how it works, how to use it, what conditions it helps with, or anything else on your mind!`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -133,12 +133,17 @@ Stock: ${product.stock_quantity} units available
             </div>
             <button
               onClick={handleAddToCart}
+              disabled={product.stock_quantity === 0}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 shadow-sm ${
-                added ? "bg-emerald-500 text-white" : "bg-brand-600 hover:bg-brand-700 text-white"
+                product.stock_quantity === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : added
+                    ? "bg-emerald-500 text-white"
+                    : "bg-brand-600 hover:bg-brand-700 text-white"
               }`}
             >
               <ShoppingCart className="w-4 h-4" />
-              {added ? "Added to Cart!" : "Add to Cart"}
+              {product.stock_quantity === 0 ? "Out of Stock — notify me" : added ? "Added to Cart!" : "Add to Cart"}
             </button>
           </div>
         </div>
@@ -155,7 +160,7 @@ Stock: ${product.stock_quantity} units available
                   : "text-gray-400 hover:text-brand-600"
               }`}
             >
-              {tab === "details" ? "📋 Product Details" : "💬 Ask Ntankokazi (AI)"}
+              {tab === "details" ? "📋 Product Details" : "💬 Ask Nthandokazi (AI)"}
             </button>
           ))}
         </div>
@@ -208,12 +213,12 @@ Stock: ${product.stock_quantity} units available
                   <Leaf className="w-4 h-4 text-emerald-600" />
                   <span className="text-brand-900 text-sm font-semibold">Have questions?</span>
                 </div>
-                <p className="text-brand-500 text-xs mb-3">Chat with Ntankokazi directly — she answers every question personally.</p>
+                <p className="text-brand-500 text-xs mb-3">Chat with Nthandokazi directly — she answers every question personally.</p>
                 <button
                   onClick={() => setActiveTab("chat")}
                   className="w-full bg-brand-600 hover:bg-brand-700 text-white text-sm py-2.5 rounded-xl font-medium transition-colors"
                 >
-                  Ask Ntankokazi →
+                  Ask Nthandokazi →
                 </button>
               </div>
             </div>
@@ -278,7 +283,7 @@ Stock: ${product.stock_quantity} units available
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    placeholder="Ask Ntankokazi anything..."
+                    placeholder="Ask Nthandokazi anything..."
                     className="flex-1 bg-white border border-gray-300 text-brand-900 placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 shadow-sm transition-all"
                   />
                   <button

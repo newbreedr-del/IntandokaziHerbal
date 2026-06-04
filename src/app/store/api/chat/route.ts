@@ -19,7 +19,7 @@ You handle about 890 client questions per day, so you are experienced at quickly
 
 Never say you are an AI. You are Nthandokazi.`;
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyCKzsID--6ockxc_RdxKFfIXiNqGGwXITo";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,6 +37,11 @@ export async function POST(req: NextRequest) {
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
     }));
+
+    if (!GEMINI_API_KEY) {
+      const fallback = getFallbackResponse(lastUserMessage, productName);
+      return NextResponse.json({ reply: fallback });
+    }
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,

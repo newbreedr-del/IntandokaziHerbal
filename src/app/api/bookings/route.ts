@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { sendBookingNotification, sendAdminAlert } from '@/lib/notifications';
+import { sendWhatsAppText } from '@/lib/whatsapp';
 import { getCalendarClient } from '@/lib/calendar';
+
+export const runtime = 'nodejs';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -158,8 +160,31 @@ export async function POST(request: NextRequest) {
       console.error('Error creating payment record:', paymentError);
     }
 
-    // Send admin notification
-    await sendAdminNotification(booking);
+    // Send WhatsApp notifications
+    const bookingDateFormatted = new Date(bookingDate).toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Africa/Johannesburg' });
+
+    const adminMsg =
+      `📅 *New Consultation Booking!*\n\n` +
+      `👤 *Client:* ${clientName}\n` +
+      `📱 *Phone:* ${clientPhone}\n` +
+      `📧 *Email:* ${clientEmail || 'Not provided'}\n` +
+      `🗓️ *Date:* ${bookingDateFormatted}\n` +
+      `🕐 *Time:* ${startTime} – ${endTime}\n` +
+      `📞 *Type:* ${consultationType || 'WhatsApp'}\n` +
+      `💰 *Amount:* R${amount || 1500}\n` +
+      `🔖 *Ref:* ${paymentReference}`;
+    await sendWhatsAppText('27768435876', adminMsg).catch(() => {});
+
+    const clientMsg =
+      `✅ *Booking Confirmed!*\n\n` +
+      `Sawubona ${clientName?.split(' ')[0]}! Your consultation with Nthandokazi has been booked.\n\n` +
+      `🗓️ *Date:* ${bookingDateFormatted}\n` +
+      `🕐 *Time:* ${startTime}\n` +
+      `📞 *Type:* ${consultationType || 'WhatsApp'}\n` +
+      `💰 *Fee:* R${amount || 1500}\n` +
+      `🔖 *Ref:* ${paymentReference}\n\n` +
+      `Please complete payment to confirm your slot. We look forward to speaking with you! 🌿`;
+    await sendWhatsAppText(clientPhone, clientMsg).catch(() => {});
 
     // Create Google Calendar event
     try {
@@ -190,36 +215,6 @@ export async function POST(request: NextRequest) {
       // Continue anyway - calendar is non-critical
     }
 
-    // Send notifications
-    try {
-      await sendBookingNotification({
-        type: 'booking_created',
-        customerName: clientName,
-        customerPhone: clientPhone,
-        customerEmail: clientEmail,
-        bookingDate: new Date(bookingDate).toLocaleDateString('en-ZA', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        }),
-        bookingTime: `${startTime} - ${endTime}`,
-        consultationType: consultationType,
-        bookingReference: paymentReference,
-        amount: amount
-      });
-
-      await sendAdminAlert({
-        type: 'new_booking',
-        reference: paymentReference,
-        customerName: clientName,
-        amount: amount,
-        details: `Date: ${bookingDate}\nTime: ${startTime}\nType: ${consultationType}`
-      });
-    } catch (error) {
-      console.error('Failed to send notifications:', error);
-      // Continue anyway - notifications are non-critical
-    }
 
     return NextResponse.json({
       booking,

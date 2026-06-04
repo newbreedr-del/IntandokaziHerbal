@@ -61,11 +61,11 @@ export default function AgentBookingPage() {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok && (data.paymentReference || data.booking)) {
         setSuccess(true);
-        setBookingRef(data.booking.reference);
+        setBookingRef(data.paymentReference || data.booking?.id || 'Confirmed');
       } else {
-        alert('Failed to create booking. Please try again.');
+        alert(data.error || 'Failed to create booking. Please try again.');
       }
     } catch (error) {
       console.error('Booking error:', error);

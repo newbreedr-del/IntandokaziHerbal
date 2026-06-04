@@ -15,67 +15,24 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          // TODO: In production, query Supabase admin_users table instead of hardcoded users
-          // For now, use the hardcoded admin users as fallback
-          // The users should also be created in Supabase Auth with the same emails/passwords
-          const ADMIN_USERS = [
-            {
-              id: '1',
-              email: 'admin@intandokaziherbal.co.za',
-              name: 'Admin User',
-              role: 'super_admin',
-              password: 'Intandokazi@2024',
-              permissions: {
-                can_manage_products: true,
-                can_manage_orders: true,
-                can_manage_customers: true,
-                can_view_financials: true,
-                can_manage_settings: true,
-              }
-            },
-            {
-              id: '2',
-              email: 'nthandokazi@intandokaziherbal.co.za',
-              name: 'Intandokazi Mokoatle',
-              role: 'admin',
-              password: 'Nthandokazi@2024',
-              permissions: {
-                can_manage_products: true,
-                can_manage_orders: true,
-                can_manage_customers: true,
-                can_view_financials: true,
-                can_manage_settings: true,
-              }
-            },
-            {
-              id: '3',
-              email: 'manager@intandokaziherbal.co.za',
-              name: 'Manager',
-              role: 'admin',
-              password: 'Manager@2024',
-              permissions: {
-                can_manage_products: true,
-                can_manage_orders: true,
-                can_manage_customers: true,
-                can_view_financials: true,
-                can_manage_settings: true,
-              }
-            },
-            {
-              id: '4',
-              email: 'mandubusabelo@gmail.com',
-              name: 'Sabelo Mandubu',
-              role: 'super_admin',
-              password: 'admin123',
-              permissions: {
-                can_manage_products: true,
-                can_manage_orders: true,
-                can_manage_customers: true,
-                can_view_financials: true,
-                can_manage_settings: true,
-              }
-            }
-          ];
+          // Admin users loaded from environment variables (never hardcode passwords in source)
+          // Set ADMIN_USERS_JSON in your environment as a JSON array, e.g.:
+          // [{"id":"1","email":"admin@intandokaziherbal.co.za","name":"Admin","role":"super_admin","password":"yourpassword"}]
+          const rawUsers = process.env.ADMIN_USERS_JSON;
+          if (!rawUsers) {
+            console.error('[Auth] ADMIN_USERS_JSON environment variable is not set');
+            return null;
+          }
+          let ADMIN_USERS: Array<{
+            id: string; email: string; name: string; role: string; password: string;
+            permissions?: Record<string, boolean>;
+          }>;
+          try {
+            ADMIN_USERS = JSON.parse(rawUsers);
+          } catch {
+            console.error('[Auth] ADMIN_USERS_JSON is not valid JSON');
+            return null;
+          }
 
           // Find user in admin list
           const user = ADMIN_USERS.find(u => u.email === credentials.email);

@@ -2,7 +2,7 @@
 
 export const SITE_CONFIG = {
   name: 'Intandokazi Herbal Products',
-  shortName: 'Ntankokazi Herbal',
+  shortName: 'Nthandokazi Herbal',
   description: 'Traditional African herbal remedies and natural wellness products',
   url: 'https://intandokaziherbal.co.za',
   

@@ -56,7 +56,7 @@ function ConfirmationContent() {
         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-navy-600 flex items-center justify-center shadow-lg shadow-brand-900/50">
           <Leaf className="w-5 h-5 text-white" />
         </div>
-        <span className="text-brand-900 font-elegant-title text-lg">Ntankokazi Herbal</span>
+        <span className="text-brand-900 font-elegant-title text-lg">Nthandokazi Herbal</span>
       </div>
 
       {/* Success Card */}
@@ -104,7 +104,7 @@ function ConfirmationContent() {
                 <button
                   onClick={() => {
                     recordPaymentProof('whatsapp');
-                    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Ntankokazi!%20I%20made%20an%20EFT%20payment%20for%20order%20${ref}.%20Here%20is%20my%20proof%20of%20payment.%20My%20name%20is%20${encodeURIComponent(name)}.`, '_blank');
+                    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=Hi%20Nthandokazi!%20I%20made%20an%20EFT%20payment%20for%20order%20${ref}.%20Here%20is%20my%20proof%20of%20payment.%20My%20name%20is%20${encodeURIComponent(name)}.`, '_blank');
                   }}
                   className="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-lg text-xs font-semibold transition-all"
                 >
@@ -114,7 +114,7 @@ function ConfirmationContent() {
                 <button
                   onClick={() => {
                     recordPaymentProof('email');
-                    window.location.href = `mailto:info@ntankokazi.co.za?subject=EFT%20Payment%20Proof%20-%20Order%20${ref}&body=Hi%20Ntankokazi,%0A%0AI%20made%20an%20EFT%20payment%20for%20order%20${ref}.%0A%0AMy%20details:%0AName:%20${name}%0AEmail:%20${email}%0APhone:%20${phone}%0A%0APlease%20find%20my%20proof%20of%20payment%20attached.%0A%0AThank%20you!`;
+                    window.location.href = `mailto:info@intandokaziherbal.co.za?subject=EFT%20Payment%20Proof%20-%20Order%20${ref}&body=Hi%20Nthandokazi,%0A%0AI%20made%20an%20EFT%20payment%20for%20order%20${ref}.%0A%0AMy%20details:%0AName:%20${name}%0AEmail:%20${email}%0APhone:%20${phone}%0A%0APlease%20find%20my%20proof%20of%20payment%20attached.%0A%0AThank%20you!`;
                   }}
                   className="flex-1 flex items-center justify-center gap-2 bg-amber-700 hover:bg-amber-600 text-white py-2.5 rounded-lg text-xs font-semibold transition-all"
                 >
@@ -214,13 +214,13 @@ function ConfirmationContent() {
             className="flex-1 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white py-3 rounded-xl text-sm font-semibold transition-all"
           >
             <MessageCircle className="w-4 h-4" />
-            WhatsApp Ntankokazi
+            WhatsApp Nthandokazi
           </a>
         </div>
       </div>
 
       <p className="text-brand-600 text-xs mt-8 text-center max-w-sm">
-        Questions about your order? WhatsApp us or email info@ntankokazi.co.za — we respond within 2 hours during business hours.
+        Questions about your order? WhatsApp us or email info@intandokaziherbal.co.za — we respond within 2 hours during business hours.
       </p>
     </div>
   );

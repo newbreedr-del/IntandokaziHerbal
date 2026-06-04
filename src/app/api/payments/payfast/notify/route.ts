@@ -2,19 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { sendOrderNotification, sendAdminAlert } from '@/lib/notifications';
+import { sendWhatsAppText, sendDispatchAlert } from '@/lib/whatsapp';
 
-async function sendWhatsApp(to: string, text: string) {
-  const apiUrl = process.env.EVOLUTION_API_URL
-  const apiKey = process.env.EVOLUTION_API_KEY
-  const instance = process.env.EVOLUTION_INSTANCE || process.env.EVOLUTION_INSTANCE_NAME
-  if (!apiUrl || !apiKey || !instance) return
-  const phone = to.replace(/\D/g, '')
-  await fetch(`${apiUrl}/message/sendText/${instance}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': apiKey },
-    body: JSON.stringify({ number: phone, textMessage: { text } })
-  }).catch(err => console.error('[ITN] WhatsApp send failed:', err?.message))
-}
+export const runtime = 'nodejs';
+
+const sendWhatsApp = (to: string, text: string) => sendWhatsAppText(to, text);
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -178,25 +170,18 @@ async function sendOrderNotifications(order: any) {
       console.log('[ITN] Customer WhatsApp sent to', order.customer_phone)
     }
 
-    // ── WhatsApp: dispatch alert (always send directly) ───────────────────────
-    const dispatchNumbers = (process.env.DISPATCH_NUMBERS || process.env.DISPATCH_NUMBER || '')
-      .split(/[,;\n]/).map((n: string) => n.trim()).filter(Boolean)
-    console.log('[ITN] Dispatch numbers from env:', dispatchNumbers.join(', ') || 'NONE — set DISPATCH_NUMBERS on Vercel')
-    if (dispatchNumbers.length > 0) {
-      const dispatchMsg =
-        `🚨 *New Order — Payment Confirmed*\n\n` +
-        `👤 *Customer:* ${order.customer_name}\n` +
-        `📱 *Phone:* ${order.customer_phone || 'N/A'}\n` +
-        `📦 *Ref:* ${order.order_reference}\n` +
-        `🛍️ *Items:* ${itemSummary}\n` +
-        (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
-        `💰 *Total:* R${Number(order.total).toFixed(2)}\n` +
-        `⏰ ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}`
-      for (const num of dispatchNumbers) {
-        await sendWhatsApp(num, dispatchMsg)
-      }
-      console.log('[ITN] Dispatch WhatsApp sent to', dispatchNumbers.join(', '))
-    }
+    // ── WhatsApp: dispatch alert ──────────────────────────────────────────────
+    const dispatchMsg =
+      `🚨 *New Order — Payment Confirmed*\n\n` +
+      `👤 *Customer:* ${order.customer_name}\n` +
+      `📱 *Phone:* ${order.customer_phone || 'N/A'}\n` +
+      `📦 *Ref:* ${order.order_reference}\n` +
+      `🛍️ *Items:* ${itemSummary}\n` +
+      (order.pep_store_name ? `📍 *Collection:* ${order.pep_store_name}\n` : '') +
+      `💰 *Total:* R${Number(order.total).toFixed(2)}\n` +
+      `⏰ ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}`
+    await sendDispatchAlert(dispatchMsg)
+    console.log('[ITN] Dispatch WhatsApp sent')
 
     // ── Also notify Engage Africa (non-blocking, updates conversation DB) ────
     const engageUrl = 'https://rare-laughter-production-ea40.up.railway.app'

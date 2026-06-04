@@ -72,7 +72,7 @@ export default function CheckoutPage() {
     deliveryNotes: "",
   });
 
-  const deliveryFee = 110; // Fixed PAXI delivery fee to PEP store
+  const deliveryFee = totalPrice >= 500 ? 0 : 110; // Free delivery over R500
   const total = totalPrice + deliveryFee;
   const orderRef = `NTK-${Date.now().toString().slice(-6)}`;
 
@@ -212,7 +212,7 @@ export default function CheckoutPage() {
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-navy-600 flex items-center justify-center">
               <Leaf className="w-4 h-4 text-white" />
             </div>
-            <span className="text-brand-900 font-elegant-title text-sm hidden sm:inline">Ntankokazi Herbal</span>
+            <span className="text-brand-900 font-elegant-title text-sm hidden sm:inline">Nthandokazi Herbal</span>
           </div>
           <div className="flex items-center gap-1.5 text-brand-600 text-xs"><Lock className="w-3.5 h-3.5" /><span>Secure Checkout</span></div>
         </div>
@@ -258,6 +258,11 @@ export default function CheckoutPage() {
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                         <p className="text-xs text-blue-800 font-medium mb-1">📦 PAXI to PEP Store Delivery</p>
                         <p className="text-xs text-blue-600">Your order will be delivered to your nearest PEP store. Please provide both the PEP store code AND the mall/area name below.</p>
+                      {totalPrice < 500 && (
+                        <p className="text-xs text-green-600 mt-2 font-medium">
+                          🚚 Add R{(500 - totalPrice).toFixed(2)} more for FREE delivery!
+                        </p>
+                      )}
                       </div>
                     </div>
                     <Field label="PEP Store Code *" error={errors.pepStoreCode}>
@@ -376,7 +381,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between text-brand-600"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                    <div className="flex justify-between text-brand-600"><span className="text-xs sm:text-sm">Delivery (PAXI to PEP)</span><span>R{deliveryFee}</span></div>
+                    <div className="flex justify-between text-brand-600"><span className="text-xs sm:text-sm">Delivery (PAXI to PEP)</span><span>{deliveryFee === 0 ? <span className="text-emerald-600 font-semibold">FREE</span> : `R${deliveryFee}`}</span></div>
                     <div className="flex justify-between text-brand-900 font-bold text-base pt-2 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
                   </div>
                 </div>
@@ -427,7 +432,7 @@ export default function CheckoutPage() {
               </div>
               <div className="border-t border-gray-200 pt-3 space-y-1.5 text-xs">
                 <div className="flex justify-between text-brand-500"><span>Subtotal</span><span>R{totalPrice.toFixed(2)}</span></div>
-                <div className="flex justify-between text-brand-500"><span>Delivery (PAXI)</span><span>R{deliveryFee}</span></div>
+                <div className="flex justify-between text-brand-500"><span>Delivery (PAXI)</span><span>{deliveryFee === 0 ? <span className="text-emerald-600 font-semibold">FREE</span> : `R${deliveryFee}`}</span></div>
                 <div className="flex justify-between text-brand-900 font-bold text-sm pt-1.5 border-t border-gray-200"><span>Total</span><span>R{total.toFixed(2)}</span></div>
               </div>
               <div className="mt-4 flex items-center gap-2 text-xs text-brand-400">

@@ -87,10 +87,15 @@ export default function DispatchPage() {
 
   const notifyCustomer = async (order: Order) => {
     try {
-      console.log('[Dispatch] Shipping notification for order:', order.order_reference, 'to', order.customer_phone);
-      toast.success('Shipping notification logged');
+      await fetch('/api/admin/notify-shipment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: order.id })
+      });
+      toast.success('Shipping notification sent to customer');
     } catch (error) {
       console.error('Failed to notify customer:', error);
+      toast.error('Failed to send notification');
     }
   };
 

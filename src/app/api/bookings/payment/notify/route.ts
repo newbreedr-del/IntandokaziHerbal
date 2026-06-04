@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-import { sendBookingNotification, sendAdminAlert } from '@/lib/notifications';
+import { sendWhatsAppText } from '@/lib/whatsapp';
+
+export const runtime = 'nodejs';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -161,35 +163,26 @@ async function sendPaymentNotifications(bookingId: string) {
         status: 'pending'
       });
 
-    // Send notifications
-    try {
-      await sendBookingNotification({
-        type: 'booking_confirmed',
-        customerName: booking.client_name,
-        customerPhone: booking.client_phone,
-        customerEmail: booking.client_email,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-ZA', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        }),
-        bookingTime: `${booking.start_time} - ${booking.end_time}`,
-        consultationType: booking.consultation_type,
-        bookingReference: booking.payment_reference || '',
-        amount: booking.amount
-      });
-
-      await sendAdminAlert({
-        type: 'payment_received',
-        reference: booking.payment_reference || '',
-        customerName: booking.client_name,
-        amount: booking.amount,
-        details: `Booking confirmed for ${booking.booking_date} at ${booking.start_time}`
-      });
-    } catch (error) {
-      console.error('Failed to send notifications:', error);
+    // Notify client — payment received
+    if (booking.client_phone) {
+      await sendWhatsAppText(booking.client_phone,
+        `✅ *Payment Received!*\n\n` +
+        `Hi ${booking.client_name?.split(' ')[0]}! Your payment of *R${booking.amount}* for your consultation has been received.\n\n` +
+        `🗓️ *Date:* ${booking.booking_date}\n` +
+        `🕐 *Time:* ${booking.start_time}\n` +
+        `Nthandokazi will contact you shortly to confirm the details. 🌿`
+      ).catch(() => {});
     }
+
+    // Notify Nthandokazi — payment confirmed
+    await sendWhatsAppText('27768435876',
+      `💰 *Consultation Payment Confirmed*\n\n` +
+      `👤 *Client:* ${booking.client_name}\n` +
+      `📱 *Phone:* ${booking.client_phone}\n` +
+      `🗓️ *Date:* ${booking.booking_date}\n` +
+      `🕐 *Time:* ${booking.start_time}\n` +
+      `💰 *Amount:* R${booking.amount}`
+    ).catch(() => {});
 
     console.log('Payment notifications created for booking:', bookingId);
   } catch (error) {

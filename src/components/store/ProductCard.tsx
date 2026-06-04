@@ -61,6 +61,13 @@ export default function ProductCard({ product, index, onOpen }: Props) {
           {/* Bottom fade for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
+          {/* Out of Stock badge */}
+          {product.stock_quantity === 0 && (
+            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+              Out of Stock
+            </div>
+          )}
+
           <div className="relative h-full flex flex-col justify-between p-3 sm:p-5">
             {product.badge ? (
               <div className="self-start flex items-center gap-1 bg-brand-600/90 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
@@ -82,6 +89,22 @@ export default function ProductCard({ product, index, onOpen }: Props) {
                 <span className="text-white font-bold text-sm sm:text-xl">R{product.price}</span>
                 <span className="text-white/70 text-[10px] sm:text-xs">{product.unit}</span>
               </div>
+              {product.stock_quantity === 0 ? (
+                <button
+                  disabled
+                  className="block md:hidden mt-2 w-full py-2 rounded-lg text-sm font-medium text-white/50 bg-gray-500/60 cursor-not-allowed"
+                >
+                  Out of Stock
+                </button>
+              ) : (
+                <button
+                  onClick={(e) => { e.stopPropagation(); addToCart(product); setAdded(true); setTimeout(() => setAdded(false), 1800); }}
+                  className="block md:hidden mt-2 w-full py-2 rounded-lg text-sm font-medium text-white"
+                  style={{ background: '#2d5a27' }}
+                >
+                  {added ? 'Added!' : 'Add to Cart'}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -138,14 +161,17 @@ export default function ProductCard({ product, index, onOpen }: Props) {
                 </button>
                 <button
                   onClick={handleAddToCart}
+                  disabled={product.stock_quantity === 0}
                   className={`flex-1 flex items-center justify-center gap-1.5 text-xs py-2 rounded-xl font-semibold transition-all duration-300 shadow-sm ${
-                    added
-                      ? "bg-emerald-500 text-white"
-                      : "bg-brand-600 hover:bg-brand-700 text-white"
+                    product.stock_quantity === 0
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : added
+                        ? "bg-emerald-500 text-white"
+                        : "bg-brand-600 hover:bg-brand-700 text-white"
                   }`}
                 >
                   <ShoppingCart className="w-3.5 h-3.5" />
-                  {added ? "Added!" : "Add to Cart"}
+                  {product.stock_quantity === 0 ? "Out of Stock" : added ? "Added!" : "Add to Cart"}
                 </button>
               </div>
             </div>

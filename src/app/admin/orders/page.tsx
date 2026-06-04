@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Package, Search, Filter } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -19,9 +19,15 @@ interface Order {
 export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data - replace with actual API call
-  const orders: Order[] = [];
+  useEffect(() => {
+    fetch('/api/admin/orders')
+      .then(r => r.json())
+      .then(data => { setOrders(data.orders || []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.orderRef.toLowerCase().includes(searchTerm.toLowerCase()) ||
