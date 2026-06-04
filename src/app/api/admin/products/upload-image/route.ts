@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
 
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    if (!permissions?.can_manage_products) {
+    const role = (session.user as any).role;
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
@@ -114,7 +115,8 @@ export async function DELETE(request: NextRequest) {
 
     // Check if user has product management permissions
     const permissions = (session.user as any).permissions;
-    if (!permissions?.can_manage_products) {
+    const role = (session.user as any).role;
+    if (!permissions?.can_manage_products && !['admin', 'super_admin'].includes(role)) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
