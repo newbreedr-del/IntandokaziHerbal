@@ -22,11 +22,40 @@ export const SITE_CONFIG = {
     admin: 'admin@intandokaziherbal.co.za',
   },
   
-  // Branch Locations
-  branches: ['Durban', 'Cape Town', 'PMB', 'Johannesburg (Marble Towers)'],
+  // Branch Locations with detailed addresses and hours
+  branches: [
+    {
+      name: 'Durban',
+      address: 'Nthona M Beauty Garden, 77 Helen Joseph Road, Glenwood (Near Davenport Center)',
+      hours: 'Monday to Saturday: 8:30 – 17:00 (Closed on Sundays)',
+      phone: '+27 (0) 62 584 2441',
+      phoneRaw: '27625842441'
+    },
+    {
+      name: 'PMB (Pietermaritzburg)',
+      address: '430 Longmarket Street',
+      hours: 'Monday to Saturday: 8:30 am – 5 pm (Open on Public Holidays, Closed on Sundays)',
+      phone: '+27 (0) 61 580 6526',
+      phoneRaw: '27615806526'
+    },
+    {
+      name: 'Cape Town',
+      address: 'Mandela Park Spar, Cnr Govan Mbeki Rd & Oscar Mpetha Rd',
+      hours: 'Tuesday - Friday: 09:00 – 17:30, Saturday: 09:00 – 16:00, Sunday: 09:00 – 14:00 (Closed Mondays)',
+      phone: '+27 (0) 62 216 7186',
+      phoneRaw: '27622167186'
+    },
+    {
+      name: 'JHB CBD (Johannesburg Central Business District)',
+      address: 'Marble Towers Building (Use the lifts that are by villa fragrances go to the 3rd floor)',
+      hours: 'Monday to Saturday: 9:00 – 17:00',
+      phone: '+27 (0) 68 007 6642 (Sales person at the shop)',
+      phoneRaw: '27680076642'
+    }
+  ],
   
-  // Operating Hours
-  operatingHours: '09:00 – 17:00',
+  // Operating Hours (general fallback)
+  operatingHours: 'Monday to Saturday: 8:30 – 17:00',
   
   // Social Media
   social: {

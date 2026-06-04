@@ -14,6 +14,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { sendWhatsAppText } from './whatsapp';
+import { SITE_CONFIG } from './constants';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -292,7 +293,7 @@ export async function runAgent(
   // If agent is disabled via admin controls, return a polite message
   if (!config.enabled) {
     return {
-      reply: 'Sawubona! Our assistant is temporarily unavailable. Please WhatsApp us directly at +27 62 584 2441 for help. 🌿',
+      reply: `Sawubona! Our assistant is temporarily unavailable. Please WhatsApp us directly at ${SITE_CONFIG.whatsappFormatted} for help. 🌿`,
     };
   }
 

@@ -58,40 +58,22 @@ export default function TermsPage() {
 
             {/* Branch Locations */}
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-brand-900 mb-4">📍 Branch Locations</h2>
-              <div className="bg-brand-50 rounded-lg p-4">
-                <p className="text-brand-700">
-                  We are conveniently located in the following areas:
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-brand-600">•</span>
-                    <span className="text-brand-700">Durban</span>
+              <h2 className="text-xl font-semibold text-brand-900 mb-4">📍 Branch Locations & Hours</h2>
+              <div className="space-y-4">
+                {SITE_CONFIG.branches.map((branch, index) => (
+                  <div key={index} className="bg-brand-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-brand-900 mb-2">{branch.name}</h3>
+                    <p className="text-brand-700 text-sm mb-2">{branch.address}</p>
+                    <div className="space-y-1">
+                      <p className="text-brand-600 text-sm">
+                        <span className="font-medium">Hours:</span> {branch.hours}
+                      </p>
+                      <p className="text-brand-600 text-sm">
+                        <span className="font-medium">Contact:</span> {branch.phone}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-brand-600">•</span>
-                    <span className="text-brand-700">Cape Town</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-brand-600">•</span>
-                    <span className="text-brand-700">PMB (Pietermaritzburg)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-brand-600">•</span>
-                    <span className="text-brand-700">Johannesburg (Marble Towers)</span>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Operating Hours */}
-            <section className="mb-8">
-              <h2 className="text-xl font-semibold text-brand-900 mb-4">🕘 Operating Hours</h2>
-              <div className="bg-brand-50 rounded-lg p-4">
-                <p className="text-brand-700 font-medium">09:00 – 17:00</p>
-                <p className="text-brand-600 text-sm mt-2">
-                  Monday to Friday. We are closed on weekends and public holidays.
-                </p>
+                ))}
               </div>
             </section>
 
@@ -101,11 +83,11 @@ export default function TermsPage() {
               <div className="space-y-4">
                 <div className="bg-brand-50 rounded-lg p-4">
                   <h3 className="font-semibold text-brand-900 mb-2">📞 Phone & WhatsApp</h3>
-                  <p className="text-brand-700">062 584 2441</p>
-                  <p className="text-brand-600 text-sm mt-1">WhatsApp: +27 62 584 2441</p>
+                  <p className="text-brand-700">{SITE_CONFIG.phoneFormatted}</p>
+                  <p className="text-brand-600 text-sm mt-1">WhatsApp: {SITE_CONFIG.whatsappFormatted}</p>
                   <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p className="text-amber-800 text-sm">
-                      <strong>Important:</strong> For urgent inquiries, please call 062 584 2441 (no WhatsApp calls). 
+                      <strong>Important:</strong> For urgent inquiries, please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 
                       Kindly avoid calling for faster response - messages are attended to in order received.
                     </p>
                   </div>
@@ -250,9 +232,9 @@ export default function TermsPage() {
                   If you have any questions about these Terms & Conditions, please don't hesitate to contact us:
                 </p>
                 <div className="space-y-2 text-sm">
-                  <div><strong>Email:</strong> info@intandokaziherbal.co.za</div>
-                  <div><strong>Phone:</strong> 062 584 2441</div>
-                  <div><strong>WhatsApp:</strong> +27 62 584 2441</div>
+                  <div><strong>Email:</strong> {SITE_CONFIG.email}</div>
+                  <div><strong>Phone:</strong> {SITE_CONFIG.phoneFormatted}</div>
+                  <div><strong>WhatsApp:</strong> {SITE_CONFIG.whatsappFormatted}</div>
                 </div>
               </div>
             </section>

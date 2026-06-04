@@ -77,32 +77,32 @@ export default function StorePage() {
         </div>
       </div>
 
-      {/* Main nav — white, tall */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      {/* Main nav — enhanced design */}
+      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16 gap-3">
+          <div className="flex items-center h-18 gap-4">
 
             {/* Logo */}
             <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-10 h-10 flex-shrink-0">
+              <div className="relative w-12 h-12 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-2.5 shadow-lg shadow-brand-200">
                 <Image src="/icon.png" alt="Intandokazi Herbal Logo" fill className="object-contain" />
               </div>
               <div className="hidden sm:block">
-                <span className="text-brand-900 font-elegant-title text-lg leading-none block">Intandokazi Herbal</span>
-                <span className="text-brand-500 text-xs">Traditional & Organic Medicines</span>
+                <span className="text-brand-900 font-elegant-title text-xl leading-tight block">Intandokazi Herbal</span>
+                <span className="text-brand-500 text-xs font-medium">Traditional African Herbal Remedies</span>
               </div>
             </div>
 
             {/* Category pills — desktop */}
-            <div className="hidden md:flex gap-1.5 overflow-x-auto no-scrollbar flex-1 px-3">
+            <div className="hidden lg:flex gap-2 overflow-x-auto no-scrollbar flex-1 px-4 py-2 bg-gray-50/50 rounded-2xl">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                     selectedCategory === cat
-                      ? "bg-purple-600 text-white shadow"
-                      : "bg-gray-100 text-gray-600 hover:bg-purple-50 hover:text-purple-700"
+                      ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-200 scale-105"
+                      : "bg-white/80 text-gray-700 hover:bg-white hover:text-brand-700 border border-transparent hover:border-brand-200"
                   }`}
                 >
                   {cat}
@@ -111,35 +111,35 @@ export default function StorePage() {
             </div>
 
             {/* Search */}
-            <div className="relative flex-1 md:flex-none md:w-52">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <div className="relative flex-1 lg:flex-none lg:w-64 max-w-sm">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search herbal remedies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-200 transition-all"
+                className="w-full bg-white/80 border border-gray-200 text-gray-900 placeholder-gray-500 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all shadow-sm"
               />
             </div>
 
             {/* Book button — desktop */}
             <button
               onClick={() => setShowBookingModal(true)}
-              className="hidden sm:flex items-center gap-1.5 bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow"
+              className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-lg shadow-violet-200"
             >
               <Calendar className="w-4 h-4" />
-              Book
+              <span>Book Consultation</span>
             </button>
 
             {/* Cart */}
             <button
               onClick={() => setIsOpen(true)}
-              className="relative flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow"
+              className="relative flex items-center gap-2 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-500 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-lg shadow-brand-200"
             >
               <ShoppingCart className="w-4 h-4" />
               <span className="hidden sm:inline">Cart</span>
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-amber-400 text-amber-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">
                   {totalItems}
                 </span>
               )}
@@ -148,7 +148,7 @@ export default function StorePage() {
             {/* Hamburger — mobile */}
             <button
               onClick={() => setMobileMenuOpen((v) => !v)}
-              className="md:hidden flex-shrink-0 p-2 rounded-xl text-gray-600 hover:text-brand-700 hover:bg-gray-100 transition-colors"
+              className="md:hidden flex-shrink-0 p-3 rounded-xl text-gray-600 hover:text-brand-700 hover:bg-brand-50 transition-all"
               aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -159,41 +159,41 @@ export default function StorePage() {
 
       {/* Full-page mobile menu overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white flex flex-col md:hidden">
+        <div className="fixed inset-0 z-40 bg-gradient-to-br from-white to-gray-50 flex flex-col md:hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9">
+              <div className="relative w-10 h-10 bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl p-2 shadow-lg">
                 <Image src="/icon.png" alt="Logo" fill className="object-contain" />
               </div>
               <span className="text-brand-900 font-elegant-title text-lg">Intandokazi Herbal</span>
             </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-xl text-gray-500 hover:bg-gray-100"
+              className="p-3 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
 
           {/* Search */}
-          <div className="px-5 py-4 border-b border-gray-100">
+          <div className="px-6 py-5 border-b border-gray-100 bg-white/60 backdrop-blur-sm">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search herbal remedies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
+                className="w-full bg-white/90 border border-gray-200 text-gray-900 placeholder-gray-500 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all shadow-sm"
               />
             </div>
           </div>
 
           {/* Categories */}
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Browse by Category</p>
-            <div className="space-y-2">
+          <div className="flex-1 overflow-y-auto px-6 py-5">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Browse by Category</p>
+            <div className="space-y-3">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -201,10 +201,10 @@ export default function StorePage() {
                     setSelectedCategory(cat);
                     setMobileMenuOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`w-full text-left px-5 py-4 rounded-xl text-sm font-medium transition-all transform hover:scale-105 ${
                     selectedCategory === cat
-                      ? "bg-brand-600 text-white"
-                      : "bg-gray-50 text-gray-700 hover:bg-brand-50 hover:text-brand-700"
+                      ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-200"
+                      : "bg-white/80 text-gray-700 hover:bg-white hover:text-brand-700 border border-transparent hover:border-brand-200 shadow-sm"
                   }`}
                 >
                   {cat}
@@ -417,15 +417,15 @@ export default function StorePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-900 border-t border-brand-800 py-12 px-4">
+      <footer className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-900 border-t border-brand-700 py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="relative w-8 h-8 flex-shrink-0">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="relative w-12 h-12 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-3 shadow-lg shadow-brand-200">
                   <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
                 </div>
-                <span className="text-white font-elegant-title">Intandokazi Herbal</span>
+                <span className="text-white font-elegant-title text-xl">Intandokazi Herbal</span>
               </div>
               <p className="text-brand-400 text-sm leading-relaxed mb-4">
                 Welcome to Intandokazi Herbal Products 🌿
@@ -435,7 +435,7 @@ export default function StorePage() {
               </p>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-brand-300 text-sm">📍 Branches:</span>
-                <span className="text-brand-400 text-sm">{SITE_CONFIG.branches.join(' | ')}</span>
+                <span className="text-brand-400 text-sm">{SITE_CONFIG.branches.map(b => b.name).join(' | ')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-brand-300 text-sm">🕘 Operating Hours:</span>
@@ -449,80 +449,80 @@ export default function StorePage() {
             </div>
             
             <div>
-              <h4 className="text-white font-semibold mb-4">Contact Us</h4>
-              <div className="space-y-3 text-sm text-brand-400">
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <span>{SITE_CONFIG.phoneFormatted}</span>
+              <h4 className="text-white font-semibold mb-6 text-lg">Contact Us</h4>
+              <div className="space-y-4 text-sm text-brand-400">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                  <Phone className="w-5 h-5 text-brand-300" />
+                  <span className="font-medium">{SITE_CONFIG.phoneFormatted}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp: {SITE_CONFIG.whatsappFormatted}</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                  <MessageCircle className="w-5 h-5 text-brand-300" />
+                  <span className="font-medium">WhatsApp: {SITE_CONFIG.whatsappFormatted}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  <span>{SITE_CONFIG.email}</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                  <Mail className="w-5 h-5 text-brand-300" />
+                  <span className="font-medium">{SITE_CONFIG.email}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>Nationwide Delivery</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                  <MapPin className="w-5 h-5 text-brand-300" />
+                  <span className="font-medium">Nationwide Delivery</span>
                 </div>
               </div>
-              <div className="mt-4 p-3 bg-brand-800/50 rounded-lg border border-brand-700/50">
-                <p className="text-brand-300 text-xs leading-relaxed">
-                  <strong>Urgent Inquiries:</strong> Please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 
+              <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl border border-amber-500/30 shadow-lg">
+                <p className="text-brand-200 text-sm leading-relaxed">
+                  <strong className="text-amber-400">⚡ Urgent Inquiries:</strong> Please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 
                   Kindly avoid calling for faster response - messages are attended to in order received.
                 </p>
               </div>
             </div>
             
             <div>
-              <h4 className="text-white font-semibold mb-4">Order Enquiries</h4>
-              <div className="text-sm text-brand-400 space-y-2">
-                <p>Please follow up {SITE_CONFIG.shipping.followUpDays} days after receiving your order confirmation.</p>
-                <div className="space-y-1 mt-3">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3" />
-                    <span>info@intandokaziherbal.co.za</span>
+              <h4 className="text-white font-semibold mb-6 text-lg">Order Enquiries</h4>
+              <div className="text-sm text-brand-400 space-y-3">
+                <p className="mb-4 leading-relaxed">Please follow up {SITE_CONFIG.shipping.followUpDays} days after receiving your order confirmation.</p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                    <Mail className="w-4 h-4 text-brand-300" />
+                    <span className="font-medium">{SITE_CONFIG.emails.info}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3" />
-                    <span>sales@intandokaziherbal.co.za</span>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                    <Mail className="w-4 h-4 text-brand-300" />
+                    <span className="font-medium">{SITE_CONFIG.emails.sales}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3" />
-                    <span>disputes@intandokaziherbal.co.za</span>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                    <Mail className="w-4 h-4 text-brand-300" />
+                    <span className="font-medium">{SITE_CONFIG.emails.disputes}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3" />
-                    <span>accounts@intandokaziherbal.co.za</span>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                    <Mail className="w-4 h-4 text-brand-300" />
+                    <span className="font-medium">{SITE_CONFIG.emails.accounts}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3" />
-                    <span>admin@intandokaziherbal.co.za</span>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
+                    <Mail className="w-4 h-4 text-brand-300" />
+                    <span className="font-medium">{SITE_CONFIG.emails.admin}</span>
                   </div>
                 </div>
               </div>
             </div>
             
             <div>
-              <h4 className="text-white font-semibold mb-4">Follow Us</h4>
-              <div className="flex gap-3 mb-4">
+              <h4 className="text-white font-semibold mb-6 text-lg">Follow Us</h4>
+              <div className="flex gap-4 mb-6">
                 <a
                   href={SITE_CONFIG.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-brand-800 hover:bg-brand-700 rounded-lg flex items-center justify-center transition-colors"
+                  className="w-12 h-12 bg-gradient-to-br from-brand-700 to-brand-800 hover:from-brand-600 hover:to-brand-700 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg shadow-brand-200"
                 >
-                  <Facebook className="w-5 h-5 text-brand-300" />
+                  <Facebook className="w-6 h-6 text-brand-300" />
                 </a>
                 <a
                   href={SITE_CONFIG.social.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-brand-800 hover:bg-brand-700 rounded-lg flex items-center justify-center transition-colors"
+                  className="w-12 h-12 bg-gradient-to-br from-brand-700 to-brand-800 hover:from-brand-600 hover:to-brand-700 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg shadow-brand-200"
                 >
-                  <MessageCircle className="w-5 h-5 text-brand-300" />
+                  <MessageCircle className="w-6 h-6 text-brand-300" />
                 </a>
                 <a
                   href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
