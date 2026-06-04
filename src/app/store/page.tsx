@@ -419,10 +419,10 @@ export default function StorePage() {
       {/* Footer */}
       <footer className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-900 border-t border-brand-700 py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-10 mb-12">
+            <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <div className="relative w-12 h-12 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-3 shadow-lg shadow-brand-200">
+                <div className="relative w-10 h-10 flex-shrink-0 bg-brand-600 rounded-xl p-2">
                   <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
                 </div>
                 <span className="text-white font-elegant-title text-xl">Intandokazi Herbal</span>
@@ -433,12 +433,21 @@ export default function StorePage() {
               <p className="text-brand-400 text-sm leading-relaxed mb-4">
                 Please send a detailed message outlining how we can assist you, and our team will get back to you within 24 hours.
               </p>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-brand-300 text-sm">📍 Branches:</span>
-                <span className="text-brand-400 text-sm">{SITE_CONFIG.branches.map(b => b.name).join(' | ')}</span>
+              
+              {/* Branch Addresses */}
+              <div className="space-y-3 mb-4">
+                <h5 className="text-brand-300 text-sm font-semibold mb-2">Our Locations:</h5>
+                {SITE_CONFIG.branches.map((branch, index) => (
+                  <div key={index} className="text-brand-400 text-xs leading-relaxed">
+                    <p className="font-medium text-brand-300">{branch.name}</p>
+                    <p className="mb-1">{branch.address}</p>
+                    <p className="text-brand-500">{branch.phone}</p>
+                  </div>
+                ))}
               </div>
+              
               <div className="flex items-center gap-2">
-                <span className="text-brand-300 text-sm">🕘 Operating Hours:</span>
+                <span className="text-brand-300 text-sm">🕘 General Hours:</span>
                 <span className="text-brand-400 text-sm">{SITE_CONFIG.operatingHours}</span>
               </div>
               {SITE_CONFIG.business.accredited && (
@@ -477,6 +486,17 @@ export default function StorePage() {
             </div>
             
             <div>
+              <h4 className="text-white font-semibold mb-6 text-lg">Quick Links</h4>
+              <div className="space-y-3">
+                <a href="/store" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Shop</a>
+                <a href="/terms" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Terms & Conditions</a>
+                <a href="/booking" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Book Consultation</a>
+                <a href="/products" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">All Products</a>
+                <a href="/admin" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Admin Portal</a>
+              </div>
+            </div>
+            
+            <div>
               <h4 className="text-white font-semibold mb-6 text-lg">Order Enquiries</h4>
               <div className="text-sm text-brand-400 space-y-3">
                 <p className="mb-4 leading-relaxed">Please follow up {SITE_CONFIG.shipping.followUpDays} days after receiving your order confirmation.</p>
@@ -507,22 +527,22 @@ export default function StorePage() {
             
             <div>
               <h4 className="text-white font-semibold mb-6 text-lg">Follow Us</h4>
-              <div className="flex gap-4 mb-6">
+              <div className="flex gap-3 mb-6">
                 <a
                   href={SITE_CONFIG.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gradient-to-br from-brand-700 to-brand-800 hover:from-brand-600 hover:to-brand-700 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg shadow-brand-200"
+                  className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
                 >
-                  <Facebook className="w-6 h-6 text-brand-300" />
+                  <Facebook className="w-5 h-5 text-brand-300" />
                 </a>
                 <a
                   href={SITE_CONFIG.social.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gradient-to-br from-brand-700 to-brand-800 hover:from-brand-600 hover:to-brand-700 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg shadow-brand-200"
+                  className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
                 >
-                  <MessageCircle className="w-6 h-6 text-brand-300" />
+                  <MessageCircle className="w-5 h-5 text-brand-300" />
                 </a>
                 <a
                   href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
