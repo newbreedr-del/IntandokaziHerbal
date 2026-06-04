@@ -419,58 +419,69 @@ export default function StorePage() {
       {/* Footer */}
       <footer className="bg-brand-900 border-t border-brand-800 py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Logo and Brand */}
-            <div className="flex items-center gap-3">
-              <div className="relative w-8 h-8 flex-shrink-0 bg-brand-600 rounded-lg p-2">
-                <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+
+            {/* Brand + Contact */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative w-9 h-9 flex-shrink-0 bg-brand-600 rounded-lg p-2">
+                  <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
+                </div>
+                <span className="text-white font-elegant-title text-lg">Intandokazi Herbal</span>
               </div>
-              <span className="text-white font-elegant-title text-lg">Intandokazi Herbal</span>
-            </div>
-            
-            {/* Navigation Links */}
-            <nav className="flex flex-wrap items-center justify-center gap-6 text-sm">
-              <a href="/about" className="text-brand-400 hover:text-brand-300 transition-colors">About</a>
-              <a href="/faq" className="text-brand-400 hover:text-brand-300 transition-colors">FAQ</a>
-              <a href="/contact" className="text-brand-400 hover:text-brand-300 transition-colors">Contact</a>
-              <a href="/find-store" className="text-brand-400 hover:text-brand-300 transition-colors">Find A Store</a>
-              <a href="/terms" className="text-brand-400 hover:text-brand-300 transition-colors">Terms</a>
-              <a href="/store" className="text-brand-400 hover:text-brand-300 transition-colors">Shop</a>
-            </nav>
-            
-            {/* Social Media */}
-            <div className="flex items-center gap-3">
-              <a
-                href={SITE_CONFIG.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-4 h-4 text-brand-300" />
-              </a>
-              <a
-                href={SITE_CONFIG.social.tiktok}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <MessageCircle className="w-4 h-4 text-brand-300" />
-              </a>
-              {SITE_CONFIG.social.instagram && (
-                <a
-                  href={SITE_CONFIG.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <Instagram className="w-4 h-4 text-brand-300" />
+              <p className="text-brand-400 text-sm mb-4 leading-relaxed">Traditional African herbal remedies and wellness products, delivered nationwide.</p>
+              <div className="space-y-2 text-sm">
+                <a href={`tel:${SITE_CONFIG.phone}`} className="flex items-center gap-2 text-brand-400 hover:text-brand-300 transition-colors">
+                  <Phone className="w-3.5 h-3.5 flex-shrink-0" />{SITE_CONFIG.phoneFormatted}
                 </a>
-              )}
+                <a href={`mailto:${SITE_CONFIG.email}`} className="flex items-center gap-2 text-brand-400 hover:text-brand-300 transition-colors">
+                  <Mail className="w-3.5 h-3.5 flex-shrink-0" />{SITE_CONFIG.email}
+                </a>
+                <a href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
+                  <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />WhatsApp Us
+                </a>
+                <span className="flex items-center gap-2 text-brand-400">
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" />Nationwide PAXI Delivery
+                </span>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
+            <div>
+              <h4 className="text-white text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h4>
+              <nav className="space-y-2 text-sm">
+                <a href="/store" className="block text-brand-400 hover:text-brand-300 transition-colors">Shop</a>
+                <a href="/about" className="block text-brand-400 hover:text-brand-300 transition-colors">About Us</a>
+                <a href="/faq" className="block text-brand-400 hover:text-brand-300 transition-colors">FAQ</a>
+                <a href="/contact" className="block text-brand-400 hover:text-brand-300 transition-colors">Contact</a>
+                <a href="/find-store" className="block text-brand-400 hover:text-brand-300 transition-colors">Find A Store</a>
+                <a href="/terms" className="block text-brand-400 hover:text-brand-300 transition-colors">Terms &amp; Conditions</a>
+              </nav>
+            </div>
+
+            {/* Hours + Social */}
+            <div>
+              <h4 className="text-white text-sm font-semibold uppercase tracking-wider mb-4">Hours &amp; Social</h4>
+              <p className="text-brand-400 text-sm mb-1">{SITE_CONFIG.operatingHours}</p>
+              <p className="text-brand-500 text-xs mb-5">PAXI orders dispatched within 1 business day</p>
+              <div className="flex items-center gap-3">
+                <a href={SITE_CONFIG.social.facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors">
+                  <Facebook className="w-4 h-4 text-brand-300" />
+                </a>
+                <a href={SITE_CONFIG.social.tiktok} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors">
+                  <MessageCircle className="w-4 h-4 text-brand-300" />
+                </a>
+                {SITE_CONFIG.social.instagram && (
+                  <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors">
+                    <Instagram className="w-4 h-4 text-brand-300" />
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-          
+
           {/* Copyright */}
-          <div className="border-t border-brand-800 mt-8 pt-8 text-center">
+          <div className="border-t border-brand-800 pt-6 text-center">
             <p className="text-brand-600 text-xs">
               © {new Date().getFullYear()} Intandokazi Herbal. All rights reserved.
             </p>
