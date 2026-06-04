@@ -204,9 +204,9 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-white">
       <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/store" className="flex items-center gap-2 text-brand-600 hover:text-brand-900 transition-colors text-sm">
-            <ChevronLeft className="w-4 h-4" />Back to Store
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href="/store" className="flex items-center gap-2 text-brand-600 hover:text-brand-900 transition-colors text-sm sm:text-base">
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />Back to Store
           </Link>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-navy-600 flex items-center justify-center">
@@ -218,9 +218,9 @@ export default function CheckoutPage() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Progress */}
-        <div className="flex items-center gap-2 mb-8">
+        <div className="flex items-center gap-2 mb-6 sm:mb-8">
           {["Details", "Payment", "Review"].map((label, i) => (
             <div key={label} className="flex items-center gap-2">
               <div className={`flex items-center gap-2 text-sm font-medium ${i === stepIndex ? "text-brand-900" : i < stepIndex ? "text-brand-500" : "text-gray-400"}`}>

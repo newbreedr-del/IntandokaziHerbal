@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { SITE_CONFIG } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions | Intandokazi Herbal Products',
@@ -9,20 +10,20 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-white py-12 px-4">
+    <div className="min-h-screen bg-white py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <Link href="/" className="inline-flex items-center mb-6">
-            <Image src="/icon.png" alt="Intandokazi Herbal" width={48} height={48} className="object-contain h-12 w-12" />
+        <div className="text-center mb-8 sm:mb-12">
+          <Link href="/" className="inline-flex items-center mb-4 sm:mb-6">
+            <Image src="/icon.png" alt="Intandokazi Herbal" width={48} height={48} className="object-contain h-10 w-10 sm:h-12 sm:w-12" />
           </Link>
-          <h1 className="text-3xl font-bold text-brand-900 mb-4">Terms & Conditions</h1>
-          <p className="text-brand-600">Last updated: {new Date().toLocaleDateString()}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-brand-900 mb-3 sm:mb-4">Terms & Conditions</h1>
+          <p className="text-brand-600 text-sm sm:text-base">Last updated: {new Date().toLocaleDateString()}</p>
         </div>
 
         {/* Content */}
         <div className="prose prose-brand max-w-none">
-          <div className="bg-white border border-brand-200 rounded-2xl p-8 shadow-sm">
+          <div className="bg-white border border-brand-200 rounded-2xl p-6 sm:p-8 shadow-sm">
             
             {/* Introduction */}
             <section className="mb-8">
@@ -57,18 +58,18 @@ export default function TermsPage() {
             </section>
 
             {/* Branch Locations */}
-            <section className="mb-8">
-              <h2 className="text-xl font-semibold text-brand-900 mb-4">📍 Branch Locations & Hours</h2>
-              <div className="space-y-4">
+            <section className="mb-6 sm:mb-8">
+              <h2 className="text-lg sm:text-xl font-semibold text-brand-900 mb-3 sm:mb-4">📍 Branch Locations & Hours</h2>
+              <div className="space-y-3 sm:space-y-4">
                 {SITE_CONFIG.branches.map((branch, index) => (
-                  <div key={index} className="bg-brand-50 rounded-lg p-4">
-                    <h3 className="font-semibold text-brand-900 mb-2">{branch.name}</h3>
-                    <p className="text-brand-700 text-sm mb-2">{branch.address}</p>
-                    <div className="space-y-1">
-                      <p className="text-brand-600 text-sm">
+                  <div key={index} className="bg-brand-50 rounded-lg p-3 sm:p-4">
+                    <h3 className="font-semibold text-brand-900 mb-2 text-sm sm:text-base">{branch.name}</h3>
+                    <p className="text-brand-700 text-xs sm:text-sm mb-2 leading-relaxed">{branch.address}</p>
+                    <div className="space-y-2">
+                      <p className="text-brand-600 text-xs sm:text-sm leading-relaxed">
                         <span className="font-medium">Hours:</span> {branch.hours}
                       </p>
-                      <p className="text-brand-600 text-sm">
+                      <p className="text-brand-600 text-xs sm:text-sm leading-relaxed">
                         <span className="font-medium">Contact:</span> {branch.phone}
                       </p>
                     </div>
@@ -78,13 +79,13 @@ export default function TermsPage() {
             </section>
 
             {/* Contact Information */}
-            <section className="mb-8">
-              <h2 className="text-xl font-semibold text-brand-900 mb-4">Contact Information</h2>
-              <div className="space-y-4">
-                <div className="bg-brand-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-brand-900 mb-2">📞 Phone & WhatsApp</h3>
-                  <p className="text-brand-700">{SITE_CONFIG.phoneFormatted}</p>
-                  <p className="text-brand-600 text-sm mt-1">WhatsApp: {SITE_CONFIG.whatsappFormatted}</p>
+            <section className="mb-6 sm:mb-8">
+              <h2 className="text-lg sm:text-xl font-semibold text-brand-900 mb-3 sm:mb-4">Contact Information</h2>
+              <div className="space-y-3 sm:space-y-4">
+                <div className="bg-brand-50 rounded-lg p-3 sm:p-4">
+                  <h3 className="font-semibold text-brand-900 mb-2 text-sm sm:text-base">📞 Phone & WhatsApp</h3>
+                  <p className="text-brand-700 text-sm sm:text-base">{SITE_CONFIG.phoneFormatted}</p>
+                  <p className="text-brand-600 text-xs sm:text-sm mt-1">WhatsApp: {SITE_CONFIG.whatsappFormatted}</p>
                   <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p className="text-amber-800 text-sm">
                       <strong>Important:</strong> For urgent inquiries, please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 

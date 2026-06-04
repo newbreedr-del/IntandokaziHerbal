@@ -23,13 +23,13 @@ export default function OrderSuccessPage() {
   const waLink = `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${waMessage}`
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-        <div className="bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-12 h-12 text-green-600" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 px-4 sm:px-6 py-8 sm:py-12">
+      <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full text-center">
+        <div className="bg-green-100 rounded-full h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center mx-auto mb-4 sm:mb-6">
+          <CheckCircle className="w-8 h-8 sm:w-12 sm:h-12 text-green-600" />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Payment Successful!</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Payment Successful!</h1>
         <p className="text-gray-500 mb-2 text-sm">Reference: <span className="font-mono font-semibold text-gray-700">{ref}</span></p>
         <p className="text-gray-600 mb-6">Your order has been confirmed and dispatch has been notified.</p>
 

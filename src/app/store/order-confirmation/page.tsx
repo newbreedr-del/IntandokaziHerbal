@@ -50,17 +50,17 @@ function ConfirmationContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-16">
       {/* Logo */}
-      <div className="flex items-center gap-2 mb-10">
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-navy-600 flex items-center justify-center shadow-lg shadow-brand-900/50">
-          <Leaf className="w-5 h-5 text-white" />
+      <div className="flex items-center gap-2 mb-6 sm:mb-10">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-brand-500 to-navy-600 flex items-center justify-center shadow-lg shadow-brand-900/50">
+          <Leaf className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
-        <span className="text-brand-900 font-elegant-title text-lg">Nthandokazi Herbal</span>
+        <span className="text-brand-900 font-elegant-title text-lg sm:text-xl">Nthandokazi Herbal</span>
       </div>
 
       {/* Success Card */}
-      <div className="w-full max-w-lg bg-white border border-brand-200 rounded-3xl p-8 text-center shadow-2xl shadow-brand-900/20">
+      <div className="w-full max-w-lg bg-white border border-brand-200 rounded-3xl p-6 sm:p-8 text-center shadow-2xl shadow-brand-900/20">
         <div className="w-20 h-20 rounded-full bg-emerald-900/30 border border-emerald-700/40 flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-10 h-10 text-emerald-400" />
         </div>
