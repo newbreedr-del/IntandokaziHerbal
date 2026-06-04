@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useParams } from "next/navigation";
 import { Calendar, Clock, Video, Phone, MessageCircle, Leaf, CheckCircle } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 
 export default function AgentBookingPage() {
   const params = useParams();
-  const router = useRouter();
   const agentId = params.agentId as string;
 
   const [selectedDate, setSelectedDate] = useState("");
@@ -124,21 +124,17 @@ export default function AgentBookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      <PageHeader />
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center">
-              <Leaf className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Intandokazi Herbal</h1>
-          </div>
-          <p className="text-gray-600">Book Your Consultation</p>
+        <div className="text-center mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Book a Consultation</h1>
+          <p className="text-gray-500 text-sm">Traditional herbal health guidance</p>
         </div>
 
         {/* Booking Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-4 sm:p-8 space-y-6">
           {/* Personal Details */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Details</h2>
@@ -183,7 +179,7 @@ export default function AgentBookingPage() {
           {/* Consultation Type */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Consultation Type</h2>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {[
                 { value: 'video', icon: Video, label: 'Video Call' },
                 { value: 'phone', icon: Phone, label: 'Phone Call' },
@@ -193,16 +189,16 @@ export default function AgentBookingPage() {
                   key={type.value}
                   type="button"
                   onClick={() => setConsultationType(type.value as any)}
-                  className={`p-4 rounded-lg border-2 transition-all ${
+                  className={`p-3 sm:p-4 rounded-lg border-2 transition-all ${
                     consultationType === type.value
                       ? 'border-green-600 bg-green-50'
                       : 'border-gray-200 hover:border-green-300'
                   }`}
                 >
-                  <type.icon className={`w-6 h-6 mx-auto mb-2 ${
+                  <type.icon className={`w-5 h-5 mx-auto mb-1.5 ${
                     consultationType === type.value ? 'text-green-600' : 'text-gray-400'
                   }`} />
-                  <span className={`text-sm font-medium ${
+                  <span className={`text-xs sm:text-sm font-medium ${
                     consultationType === type.value ? 'text-green-600' : 'text-gray-600'
                   }`}>
                     {type.label}
@@ -238,13 +234,13 @@ export default function AgentBookingPage() {
           {/* Time Selection */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Select Time</h2>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
               {timeSlots.map(time => (
                 <button
                   key={time}
                   type="button"
                   onClick={() => setSelectedTime(time)}
-                  className={`p-3 rounded-lg border-2 transition-all ${
+                  className={`py-2.5 px-1 rounded-lg border-2 text-sm font-medium transition-all ${
                     selectedTime === time
                       ? 'border-green-600 bg-green-50 text-green-600'
                       : 'border-gray-200 hover:border-green-300 text-gray-700'

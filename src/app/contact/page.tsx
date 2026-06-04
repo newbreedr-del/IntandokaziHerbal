@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
 import { SITE_CONFIG } from '@/lib/constants';
 import { Phone, Mail, MapPin, Clock, MessageCircle, Building } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Intandokazi Herbal Products',
@@ -11,14 +10,11 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <Link href="/" className="inline-flex items-center mb-4 sm:mb-6">
-            <Image src="/icon.png" alt="Intandokazi Herbal" width={48} height={48} className="object-contain h-10 w-10 sm:h-12 sm:w-12" />
-          </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold text-brand-900 mb-3 sm:mb-4">Contact Us</h1>
+    <div className="min-h-screen bg-white">
+      <PageHeader />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-brand-900 mb-2">Contact Us</h1>
           <p className="text-brand-600 text-sm sm:text-base">We're here to help with your herbal remedy needs</p>
         </div>
 
