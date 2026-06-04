@@ -79,180 +79,106 @@ export default function StorePage() {
       </div>
 
       {/* Main nav */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16 gap-2">
+      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center h-14 gap-3">
 
             {/* Logo */}
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-10 h-10 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl p-2 shadow-md shadow-brand-200">
-                <Image src="/icon.png" alt="Intandokazi Herbal Logo" fill className="object-contain" />
+            <a href="/store" className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="relative w-8 h-8 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-lg p-1.5 shadow-sm">
+                <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
               </div>
               <div className="hidden sm:block">
-                <span className="text-brand-900 font-elegant-title text-lg leading-tight block">Intandokazi Herbal</span>
-                <span className="text-brand-500 text-xs font-medium">Traditional African Herbal Remedies</span>
+                <span className="text-brand-900 font-semibold text-sm leading-tight block">Intandokazi Herbal</span>
+                <span className="text-gray-400 text-xs">Traditional African Remedies</span>
               </div>
-            </div>
+            </a>
 
-            {/* Page links — desktop only */}
-            <div className="hidden lg:flex items-center gap-0 flex-1 justify-center">
-              {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
-                <a key={href} href={href} className="px-3.5 py-2 text-sm text-gray-600 hover:text-brand-700 font-medium rounded-lg hover:bg-brand-50 transition-all whitespace-nowrap">
+            {/* Desktop links */}
+            <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+              {[['About','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store']].map(([label, href]) => (
+                <a key={href} href={href} className="px-3 py-1.5 text-sm text-gray-600 hover:text-brand-700 hover:bg-brand-50 rounded-lg transition-all whitespace-nowrap">
                   {label}
                 </a>
               ))}
             </div>
 
-            {/* Spacer on mobile/tablet */}
             <div className="flex-1 lg:hidden" />
 
-            {/* Search toggle */}
-            <button
-              onClick={() => setSearchOpen((v) => !v)}
-              className={`p-2.5 rounded-xl transition-all ${
-                searchOpen ? 'bg-brand-100 text-brand-700' : 'text-gray-600 hover:bg-gray-100 hover:text-brand-700'
-              }`}
-              aria-label="Search"
-            >
+            {/* Search */}
+            <button onClick={() => setSearchOpen((v) => !v)}
+              className={`p-2 rounded-lg transition-all ${searchOpen ? 'bg-brand-100 text-brand-700' : 'text-gray-500 hover:bg-gray-100'}`}
+              aria-label="Search">
               {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
             </button>
 
-            {/* Cart icon */}
-            <button
-              onClick={() => setIsOpen(true)}
-              className="relative p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-brand-700 transition-all"
-              aria-label="Cart"
-            >
+            {/* Cart */}
+            <button onClick={() => setIsOpen(true)}
+              className="relative p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all" aria-label="Cart">
               <ShoppingCart className="w-5 h-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 bg-brand-600 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
                   {totalItems}
                 </span>
               )}
             </button>
 
             {/* Book — desktop */}
-            <button
-              onClick={() => setShowBookingModal(true)}
-              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-md shadow-violet-200"
-            >
+            <button onClick={() => setShowBookingModal(true)}
+              className="hidden lg:flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-lg text-sm font-medium transition-all flex-shrink-0">
               <Calendar className="w-4 h-4" />
               Book Consultation
             </button>
 
-            {/* Hamburger — mobile/tablet */}
-            <button
-              onClick={() => setMobileMenuOpen((v) => !v)}
-              className="lg:hidden flex-shrink-0 p-2.5 rounded-xl text-gray-600 hover:text-brand-700 hover:bg-brand-50 transition-all"
-              aria-label="Menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {/* Hamburger — mobile */}
+            <button onClick={() => setMobileMenuOpen((v) => !v)}
+              className="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all" aria-label="Menu">
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Search dropdown */}
+        {/* Search bar */}
         {searchOpen && (
-          <div className="border-t border-gray-100 bg-white px-4 py-3">
+          <div className="border-t border-gray-100 bg-white px-4 py-2.5">
             <div className="max-w-2xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                autoFocus
-                placeholder="Search herbal remedies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition-all"
-              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input autoFocus type="text" placeholder="Search herbal remedies..."
+                value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-100 transition-all" />
+            </div>
+          </div>
+        )}
+
+        {/* Mobile dropdown menu — simple, no overlap */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-100 bg-white shadow-lg">
+            {/* Nav links */}
+            <div className="px-4 py-2 border-b border-gray-50">
+              {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
+                <a key={href} href={href} onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center py-2.5 text-sm text-gray-700 hover:text-brand-700 font-medium border-b border-gray-50 last:border-0 transition-colors">
+                  {label}
+                </a>
+              ))}
+            </div>
+            {/* Actions */}
+            <div className="px-4 py-3 flex gap-2">
+              <button onClick={() => { setShowBookingModal(true); setMobileMenuOpen(false); }}
+                className="flex-1 flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-lg text-sm font-medium transition-all">
+                <Calendar className="w-4 h-4" />
+                Book Consultation
+              </button>
+              <a href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`} target="_blank" rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-lg text-sm font-medium transition-all">
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp Us
+              </a>
             </div>
           </div>
         )}
       </nav>
-
-      {/* Full-page mobile menu overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-gradient-to-br from-white to-gray-50 flex flex-col md:hidden">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl p-2 shadow-lg">
-                <Image src="/icon.png" alt="Logo" fill className="object-contain" />
-              </div>
-              <span className="text-brand-900 font-elegant-title text-lg">Intandokazi Herbal</span>
-            </div>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-3 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          {/* Search */}
-          <div className="px-6 py-5 border-b border-gray-100 bg-white/60 backdrop-blur-sm">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search herbal remedies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/90 border border-gray-200 text-gray-900 placeholder-gray-500 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all shadow-sm"
-              />
-            </div>
-          </div>
-
-          {/* Categories */}
-          <div className="flex-1 overflow-y-auto px-6 py-5">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Browse by Category</p>
-            <div className="space-y-3">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setSelectedCategory(cat);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`w-full text-left px-5 py-4 rounded-xl text-sm font-medium transition-all transform hover:scale-105 ${
-                    selectedCategory === cat
-                      ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-200"
-                      : "bg-white/80 text-gray-700 hover:bg-white hover:text-brand-700 border border-transparent hover:border-brand-200 shadow-sm"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Page links */}
-          <div className="px-6 py-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2">
-            {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
-              <a key={href} href={href} onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-500 hover:text-brand-700 font-medium transition-colors">{label}</a>
-            ))}
-          </div>
-
-          {/* Bottom actions */}
-          <div className="px-5 py-4 border-t border-gray-100 flex flex-col gap-3">
-            <button
-              onClick={() => { setShowBookingModal(true); setMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white py-3 rounded-xl font-semibold text-sm transition-all"
-            >
-              <Calendar className="w-4 h-4" />
-              Book a Consultation
-            </button>
-            <a
-              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-semibold text-sm transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp Us
-            </a>
-          </div>
-        </div>
-      )}
 
 
       {/* Category filter row */}
