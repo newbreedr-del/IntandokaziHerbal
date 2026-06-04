@@ -18,6 +18,7 @@ export default function StorePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [showBookingPopup, setShowBookingPopup] = useState(false);
   const { totalItems, setIsOpen } = useCart();
 
@@ -77,96 +78,96 @@ export default function StorePage() {
         </div>
       </div>
 
-      {/* Main nav — enhanced design */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-lg">
+      {/* Main nav */}
+      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-18 gap-4">
+          <div className="flex items-center h-16 gap-2">
 
             {/* Logo */}
             <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-12 h-12 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-2.5 shadow-lg shadow-brand-200">
+              <div className="relative w-10 h-10 flex-shrink-0 bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl p-2 shadow-md shadow-brand-200">
                 <Image src="/icon.png" alt="Intandokazi Herbal Logo" fill className="object-contain" />
               </div>
               <div className="hidden sm:block">
-                <span className="text-brand-900 font-elegant-title text-xl leading-tight block">Intandokazi Herbal</span>
+                <span className="text-brand-900 font-elegant-title text-lg leading-tight block">Intandokazi Herbal</span>
                 <span className="text-brand-500 text-xs font-medium">Traditional African Herbal Remedies</span>
               </div>
             </div>
 
-            {/* Category pills — desktop */}
-            <div className="hidden lg:flex gap-2 overflow-x-auto no-scrollbar flex-1 px-4 py-2 bg-gray-50/50 rounded-2xl">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                    selectedCategory === cat
-                      ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-200 scale-105"
-                      : "bg-white/80 text-gray-700 hover:bg-white hover:text-brand-700 border border-transparent hover:border-brand-200"
-                  }`}
-                >
-                  {cat}
-                </button>
+            {/* Page links — desktop only */}
+            <div className="hidden lg:flex items-center gap-0 flex-1 justify-center">
+              {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
+                <a key={href} href={href} className="px-3.5 py-2 text-sm text-gray-600 hover:text-brand-700 font-medium rounded-lg hover:bg-brand-50 transition-all whitespace-nowrap">
+                  {label}
+                </a>
               ))}
             </div>
 
-            {/* Search */}
-            <div className="relative flex-1 lg:flex-none lg:w-64 max-w-sm">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search herbal remedies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/80 border border-gray-200 text-gray-900 placeholder-gray-500 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all shadow-sm"
-              />
-            </div>
+            {/* Spacer on mobile/tablet */}
+            <div className="flex-1 lg:hidden" />
 
-            {/* Book button — desktop */}
+            {/* Search toggle */}
             <button
-              onClick={() => setShowBookingModal(true)}
-              className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-lg shadow-violet-200"
+              onClick={() => setSearchOpen((v) => !v)}
+              className={`p-2.5 rounded-xl transition-all ${
+                searchOpen ? 'bg-brand-100 text-brand-700' : 'text-gray-600 hover:bg-gray-100 hover:text-brand-700'
+              }`}
+              aria-label="Search"
             >
-              <Calendar className="w-4 h-4" />
-              <span>Book Consultation</span>
+              {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
             </button>
 
-            {/* Cart */}
+            {/* Cart icon */}
             <button
               onClick={() => setIsOpen(true)}
-              className="relative flex items-center gap-2 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-500 text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-lg shadow-brand-200"
+              className="relative p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-brand-700 transition-all"
+              aria-label="Cart"
             >
-              <ShoppingCart className="w-4 h-4" />
-              <span className="hidden sm:inline">Cart</span>
+              <ShoppingCart className="w-5 h-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
             </button>
 
-            {/* Hamburger — mobile */}
+            {/* Book — desktop */}
+            <button
+              onClick={() => setShowBookingModal(true)}
+              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex-shrink-0 shadow-md shadow-violet-200"
+            >
+              <Calendar className="w-4 h-4" />
+              Book Consultation
+            </button>
+
+            {/* Hamburger — mobile/tablet */}
             <button
               onClick={() => setMobileMenuOpen((v) => !v)}
-              className="md:hidden flex-shrink-0 p-3 rounded-xl text-gray-600 hover:text-brand-700 hover:bg-brand-50 transition-all"
+              className="lg:hidden flex-shrink-0 p-2.5 rounded-xl text-gray-600 hover:text-brand-700 hover:bg-brand-50 transition-all"
               aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
-      </nav>
 
-      {/* Page nav links bar */}
-      <div className="bg-gray-50 border-b border-gray-200 w-full flex justify-center overflow-x-auto">
-        <div className="flex items-center gap-0">
-          {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
-            <a key={href} href={href} className="whitespace-nowrap px-5 py-2.5 text-sm text-gray-500 hover:text-brand-700 hover:bg-white font-medium transition-all border-b-2 border-transparent hover:border-brand-600">
-              {label}
-            </a>
-          ))}
-        </div>
-      </div>
+        {/* Search dropdown */}
+        {searchOpen && (
+          <div className="border-t border-gray-100 bg-white px-4 py-3">
+            <div className="max-w-2xl mx-auto relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search herbal remedies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition-all"
+              />
+            </div>
+          </div>
+        )}
+      </nav>
 
       {/* Full-page mobile menu overlay */}
       {mobileMenuOpen && (
@@ -253,6 +254,27 @@ export default function StorePage() {
         </div>
       )}
 
+
+      {/* Category filter row */}
+      <div className="bg-white border-b border-gray-100 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 py-3 no-scrollbar">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                  selectedCategory === cat
+                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-brand-700'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Products Section */}
       <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
