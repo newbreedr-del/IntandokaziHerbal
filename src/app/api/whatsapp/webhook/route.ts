@@ -28,17 +28,18 @@ export async function POST(req: NextRequest) {
     }
 
     // Extract message data (Evolution API v2 structure)
-    const msgData =
-      body.data?.messages?.[0] ??
-      body.data?.message ??
-      body.message ??
-      null;
+    // Two possible formats:
+    // 1. body.data.key.remoteJid + body.data.message (direct format)
+    // 2. body.data.messages[0].key.remoteJid (array format)
+    const directKey = body.data?.key;
+    const arrayMsg = body.data?.messages?.[0];
+    const msgData = arrayMsg ?? body.data ?? null;
 
     console.log('[Webhook] Message data:', msgData ? 'present' : 'missing');
     if (!msgData) return NextResponse.json({ received: true });
 
     // Only handle incoming messages (fromMe = false)
-    const fromMe = msgData.key?.fromMe === true;
+    const fromMe = directKey?.fromMe === true || msgData.key?.fromMe === true;
     console.log('[Webhook] fromMe:', fromMe);
     if (fromMe) {
       console.log('[Webhook] Ignoring own message');
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
 
     // Extract phone number — strip the WhatsApp suffix (@s.whatsapp.net)
     const rawJid: string =
+      directKey?.remoteJid ??
       msgData.key?.remoteJid ??
       msgData.remoteJid ??
       '';
@@ -68,12 +70,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true });
     }
 
-    // Extract message text
+    // Extract message text (Evolution API format)
+    const messageObj = body.data?.message ?? msgData.message;
     const text: string =
-      msgData.message?.conversation ??
-      msgData.message?.extendedTextMessage?.text ??
-      msgData.message?.imageMessage?.caption ??
-      msgData.message?.documentMessage?.caption ??
+      messageObj?.conversation ??
+      messageObj?.extendedTextMessage?.text ??
+      messageObj?.imageMessage?.caption ??
+      messageObj?.documentMessage?.caption ??
       '';
 
     console.log('[Webhook] Text:', text);
@@ -83,6 +86,7 @@ export async function POST(req: NextRequest) {
     }
 
     const senderName: string =
+      body.data?.pushName ??
       msgData.pushName ??
       msgData.key?.participant ??
       phone;
