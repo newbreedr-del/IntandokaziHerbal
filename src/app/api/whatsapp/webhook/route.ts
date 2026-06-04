@@ -70,8 +70,9 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Webhook] Message from ${senderName} (${phone}): ${text.slice(0, 80)}`);
 
-    // Handle asynchronously — return 200 immediately so Evolution API doesn't retry
-    handleWhatsAppMessage(phone, text, senderName).catch((err) =>
+    // Await the handler — Vercel kills the function after response is sent
+    // so fire-and-forget does not work on serverless. Evolution API waits up to 30s.
+    await handleWhatsAppMessage(phone, text, senderName).catch((err) =>
       console.error('[Webhook] Handler error:', err?.message),
     );
 
