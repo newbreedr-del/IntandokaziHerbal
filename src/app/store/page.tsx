@@ -26,7 +26,7 @@ export default function StorePage() {
     return () => clearTimeout(timer);
   }, []);
   const { products, loading, error } = useProducts();
-  
+
   // Filter products based on category and search
   const filteredProducts = products.filter(product => {
     // Handle "Popular" tab - show only featured products
@@ -417,159 +417,63 @@ export default function StorePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-900 border-t border-brand-700 py-16 px-4">
+      <footer className="bg-brand-900 border-t border-brand-800 py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-10 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="relative w-10 h-10 flex-shrink-0 bg-brand-600 rounded-xl p-2">
-                  <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
-                </div>
-                <span className="text-white font-elegant-title text-xl">Intandokazi Herbal</span>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            {/* Logo and Brand */}
+            <div className="flex items-center gap-3">
+              <div className="relative w-8 h-8 flex-shrink-0 bg-brand-600 rounded-lg p-2">
+                <Image src="/icon.png" alt="Intandokazi Herbal" fill className="object-contain" />
               </div>
-              <p className="text-brand-400 text-sm leading-relaxed mb-4">
-                Welcome to Intandokazi Herbal Products 🌿
-              </p>
-              <p className="text-brand-400 text-sm leading-relaxed mb-4">
-                Please send a detailed message outlining how we can assist you, and our team will get back to you within 24 hours.
-              </p>
-              
-              {/* Branch Addresses */}
-              <div className="space-y-3 mb-4">
-                <h5 className="text-brand-300 text-sm font-semibold mb-2">Our Locations:</h5>
-                {SITE_CONFIG.branches.map((branch, index) => (
-                  <div key={index} className="text-brand-400 text-xs leading-relaxed">
-                    <p className="font-medium text-brand-300">{branch.name}</p>
-                    <p className="mb-1">{branch.address}</p>
-                    <p className="text-brand-500">{branch.phone}</p>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <span className="text-brand-300 text-sm">🕘 General Hours:</span>
-                <span className="text-brand-400 text-sm">{SITE_CONFIG.operatingHours}</span>
-              </div>
-              {SITE_CONFIG.business.accredited && (
-                <div className="mt-3 inline-flex items-center gap-1 bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full">
-                  <span className="text-amber-400 text-xs font-medium">✓ Accredited Company</span>
-                </div>
+              <span className="text-white font-elegant-title text-lg">Intandokazi Herbal</span>
+            </div>
+            
+            {/* Navigation Links */}
+            <nav className="flex flex-wrap items-center justify-center gap-6 text-sm">
+              <a href="/about" className="text-brand-400 hover:text-brand-300 transition-colors">About</a>
+              <a href="/faq" className="text-brand-400 hover:text-brand-300 transition-colors">FAQ</a>
+              <a href="/contact" className="text-brand-400 hover:text-brand-300 transition-colors">Contact</a>
+              <a href="/find-store" className="text-brand-400 hover:text-brand-300 transition-colors">Find A Store</a>
+              <a href="/terms" className="text-brand-400 hover:text-brand-300 transition-colors">Terms</a>
+              <a href="/store" className="text-brand-400 hover:text-brand-300 transition-colors">Shop</a>
+            </nav>
+            
+            {/* Social Media */}
+            <div className="flex items-center gap-3">
+              <a
+                href={SITE_CONFIG.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <Facebook className="w-4 h-4 text-brand-300" />
+              </a>
+              <a
+                href={SITE_CONFIG.social.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <MessageCircle className="w-4 h-4 text-brand-300" />
+              </a>
+              {SITE_CONFIG.social.instagram && (
+                <a
+                  href={SITE_CONFIG.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
+                >
+                  <Instagram className="w-4 h-4 text-brand-300" />
+                </a>
               )}
             </div>
-            
-            <div>
-              <h4 className="text-white font-semibold mb-6 text-lg">Contact Us</h4>
-              <div className="space-y-4 text-sm text-brand-400">
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                  <Phone className="w-5 h-5 text-brand-300" />
-                  <span className="font-medium">{SITE_CONFIG.phoneFormatted}</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                  <MessageCircle className="w-5 h-5 text-brand-300" />
-                  <span className="font-medium">WhatsApp: {SITE_CONFIG.whatsappFormatted}</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                  <Mail className="w-5 h-5 text-brand-300" />
-                  <span className="font-medium">{SITE_CONFIG.email}</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                  <MapPin className="w-5 h-5 text-brand-300" />
-                  <span className="font-medium">Nationwide Delivery</span>
-                </div>
-              </div>
-              <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl border border-amber-500/30 shadow-lg">
-                <p className="text-brand-200 text-sm leading-relaxed">
-                  <strong className="text-amber-400">⚡ Urgent Inquiries:</strong> Please call {SITE_CONFIG.phoneFormatted} (no WhatsApp calls). 
-                  Kindly avoid calling for faster response - messages are attended to in order received.
-                </p>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-semibold mb-6 text-lg">Quick Links</h4>
-              <div className="space-y-3">
-                <a href="/store" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Shop</a>
-                <a href="/terms" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Terms & Conditions</a>
-                <a href="/booking" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Book Consultation</a>
-                <a href="/products" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">All Products</a>
-                <a href="/admin" className="block text-brand-400 hover:text-brand-300 text-sm transition-colors">Admin Portal</a>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-semibold mb-6 text-lg">Order Enquiries</h4>
-              <div className="text-sm text-brand-400 space-y-3">
-                <p className="mb-4 leading-relaxed">Please follow up {SITE_CONFIG.shipping.followUpDays} days after receiving your order confirmation.</p>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                    <Mail className="w-4 h-4 text-brand-300" />
-                    <span className="font-medium">{SITE_CONFIG.emails.info}</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                    <Mail className="w-4 h-4 text-brand-300" />
-                    <span className="font-medium">{SITE_CONFIG.emails.sales}</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                    <Mail className="w-4 h-4 text-brand-300" />
-                    <span className="font-medium">{SITE_CONFIG.emails.disputes}</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                    <Mail className="w-4 h-4 text-brand-300" />
-                    <span className="font-medium">{SITE_CONFIG.emails.accounts}</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-800/30 hover:bg-brand-800/50 transition-all">
-                    <Mail className="w-4 h-4 text-brand-300" />
-                    <span className="font-medium">{SITE_CONFIG.emails.admin}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-semibold mb-6 text-lg">Follow Us</h4>
-              <div className="flex gap-3 mb-6">
-                <a
-                  href={SITE_CONFIG.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <Facebook className="w-5 h-5 text-brand-300" />
-                </a>
-                <a
-                  href={SITE_CONFIG.social.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <MessageCircle className="w-5 h-5 text-brand-300" />
-                </a>
-                {SITE_CONFIG.social.instagram && (
-                  <a
-                    href={SITE_CONFIG.social.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
-                  >
-                    <Instagram className="w-5 h-5 text-brand-300" />
-                  </a>
-                )}
-              </div>
-              <h4 className="text-white font-semibold mb-4">Delivery</h4>
-              <div className="text-sm text-brand-400 space-y-1">
-                <p>We ship via <strong className="text-brand-300">PAXI Courier</strong> nationwide.</p>
-                <p>Orders placed before 12pm ship same day.</p>
-                <p>Delivery: 2–5 business days.</p>
-                <p>Free delivery on orders over R500.</p>
-              </div>
-            </div>
           </div>
-          <div className="border-t border-brand-900/50 pt-6 text-center">
-            <p className="text-brand-600 text-xs mb-2">© {new Date().getFullYear()} Nthandokazi Herbal. All rights reserved.</p>
-            <p className="text-brand-600 text-xs">These products are not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional for medical advice.</p>
-            <div className="mt-3">
-              <a href="/terms" className="text-brand-400 hover:text-brand-300 text-xs underline">Terms & Conditions</a>
-            </div>
+          
+          {/* Copyright */}
+          <div className="border-t border-brand-800 mt-8 pt-8 text-center">
+            <p className="text-brand-600 text-xs">
+              © {new Date().getFullYear()} Intandokazi Herbal. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
