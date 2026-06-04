@@ -31,7 +31,11 @@ export async function sendWhatsAppText(
     const res = await fetch(`${url}/message/sendText/${instance}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', apikey: key },
-      body: JSON.stringify({ number: phone, textMessage: { text } }),
+      body: JSON.stringify({
+        number: phone,
+        options: { delay: 1200, presence: 'composing' },
+        textMessage: { text },
+      }),
       signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok) {
