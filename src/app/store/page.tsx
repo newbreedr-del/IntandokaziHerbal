@@ -158,15 +158,13 @@ export default function StorePage() {
       </nav>
 
       {/* Page nav links bar */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center gap-1 overflow-x-auto no-scrollbar py-0">
-            {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
-              <a key={href} href={href} className="whitespace-nowrap px-4 py-2.5 text-sm text-gray-500 hover:text-brand-700 hover:bg-white font-medium transition-all border-b-2 border-transparent hover:border-brand-500">
-                {label}
-              </a>
-            ))}
-          </div>
+      <div className="bg-gray-50 border-b border-gray-200 w-full flex justify-center overflow-x-auto">
+        <div className="flex items-center gap-0">
+          {[['About Us','/about'],['FAQ','/faq'],['Contact','/contact'],['Find A Store','/find-store'],['Terms','/terms']].map(([label, href]) => (
+            <a key={href} href={href} className="whitespace-nowrap px-5 py-2.5 text-sm text-gray-500 hover:text-brand-700 hover:bg-white font-medium transition-all border-b-2 border-transparent hover:border-brand-600">
+              {label}
+            </a>
+          ))}
         </div>
       </div>
 
