@@ -14,7 +14,7 @@ INSERT INTO ai_settings (key, value, updated_by) VALUES
   (
     'llm_config',
     '{
-      "model": "gemini-pro",
+      "model": "anthropic/claude-3-haiku",
       "temperature": 0.75,
       "maxOutputTokens": 400,
       "timeoutMs": 15000,

@@ -60,7 +60,7 @@ interface AIConfig {
 }
 
 const DEFAULT_CONFIG: AIConfig = {
-  model: 'gemini-pro',
+  model: 'anthropic/claude-3-haiku',
   temperature: 0.75,
   maxOutputTokens: 400,
   timeoutMs: 15_000,
@@ -186,41 +186,42 @@ async function callGemini(
   userMessage: string,
   config: AIConfig,
 ): Promise<string> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error('OPENROUTER_API_KEY not configured');
 
-  const contents = [
+  const messages = [
+    { role: 'system', content: systemPrompt },
     ...history.map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }],
+      role: m.role,
+      content: m.content,
     })),
-    { role: 'user', parts: [{ text: userMessage }] },
+    { role: 'user', content: userMessage },
   ];
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents,
-        generationConfig: {
-          maxOutputTokens: config.maxOutputTokens,
-          temperature: config.temperature,
-        },
-      }),
-      signal: AbortSignal.timeout(config.timeoutMs),
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': process.env.NEXT_PUBLIC_BASE_URL ?? 'https://intandokaziherbal.co.za',
+      'X-Title': 'Intandokazi Herbal',
     },
-  );
+    body: JSON.stringify({
+      model: config.model,
+      messages,
+      max_tokens: config.maxOutputTokens,
+      temperature: config.temperature,
+    }),
+    signal: AbortSignal.timeout(config.timeoutMs),
+  });
 
   if (!res.ok) {
     const err = await res.text().catch(() => '');
-    throw new Error(`Gemini error ${res.status}: ${err}`);
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
   }
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+  return data.choices?.[0]?.message?.content ?? '';
 }
 
 // ── Order Intent Detection ────────────────────────────────────────────────────
