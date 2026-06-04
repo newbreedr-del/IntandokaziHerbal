@@ -9,7 +9,8 @@ import ProductCard from "@/components/store/ProductCard";
 import ProductModal from "@/components/store/ProductModal";
 import CartDrawer from "@/components/store/CartDrawer";
 import BookingCalendar from "@/components/BookingCalendar";
-import { SITE_CONFIG, PRODUCT_CATEGORIES } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
+import ChatWidget from "@/components/ChatWidget";
 
 export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -55,29 +56,7 @@ export default function StorePage() {
     return categoryMatch && searchMatch;
   });
 
-  // Get all categories - use predefined categories plus any from products
-  const allCategories = [
-    "Internal Health",
-    "External Health", 
-    "Mental Wellness",
-    "Traditional Remedies",
-    "Natural Beauty",
-    "Immune Support",
-    "Digestive Health"
-  ];
-  
-  // Get unique categories from products and combine with predefined ones
-  const productCategories = Array.from(new Set(products.map(p => p.category)));
-  const categories = ["All", "Popular", ...allCategories.filter(cat => 
-    allCategories.includes(cat) || productCategories.includes(cat)
-  )].sort((a, b) => {
-    // Keep "All" and "Popular" at the beginning
-    if (a === "All") return -1;
-    if (b === "All") return 1;
-    if (a === "Popular") return -1;
-    if (b === "Popular") return 1;
-    return a.localeCompare(b);
-  });
+  const categories = ['All', 'Popular', ...Array.from(new Set(products.map(p => p.category).filter(Boolean))).sort()];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -90,8 +69,8 @@ export default function StorePage() {
             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />Nationwide PAXI Delivery</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>Mon–Sat 8am–6pm</span>
-            <a href="https://wa.me/27604964105" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-green-400 hover:text-green-300">
+            <span>{SITE_CONFIG.operatingHours}</span>
+            <a href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-green-400 hover:text-green-300">
               <MessageCircle className="w-3 h-3" />WhatsApp Us
             </a>
           </div>
@@ -244,7 +223,7 @@ export default function StorePage() {
               Book a Consultation
             </button>
             <a
-              href="https://wa.me/27604964105"
+              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-semibold text-sm transition-all"
@@ -625,7 +604,7 @@ export default function StorePage() {
                   Book Now
                 </button>
                 <a
-                  href="https://wa.me/27604964105"
+                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setShowBookingPopup(false)}
@@ -684,6 +663,7 @@ export default function StorePage() {
       )}
       
       <CartDrawer />
+      <ChatWidget />
     </div>
   );
 }

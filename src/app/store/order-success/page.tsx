@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle, MessageCircle, Home } from 'lucide-react'
 import Link from 'next/link'
+import { SITE_CONFIG } from '@/lib/constants'
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams()
@@ -18,9 +19,8 @@ export default function OrderSuccessPage() {
       .catch(() => {})
   }, [ref])
 
-  const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '27685037221'
   const waMessage = encodeURIComponent(`Hi! I just paid for my order (Ref: ${ref}). Can you confirm my order details?`)
-  const waLink = `https://wa.me/${waNumber}?text=${waMessage}`
+  const waLink = `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${waMessage}`
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 px-4 py-12">
