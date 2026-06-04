@@ -60,7 +60,7 @@ export const SITE_CONFIG = {
   // Social Media
   social: {
     facebook: 'https://www.facebook.com/profile.php?id=61580754737593',
-    tiktok: 'https://www.tiktok.com/@nthonambeautygarden',
+    tiktok: 'https://www.tiktok.com/@nthonambeautygarden/video/7600373503430266133',
     instagram: '', // Add when available
     twitter: '', // Add when available
   },

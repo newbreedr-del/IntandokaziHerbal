@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook, CheckCircle, Calendar, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, Leaf, Phone, Mail, MapPin, Star, ChevronDown, AlertCircle, MessageCircle, Facebook, CheckCircle, Calendar, Menu, X, Instagram } from "lucide-react";
 import { useCart } from "@/lib/cartContext";
 import { useProducts, Product } from "@/hooks/useProducts";
 import ProductCard from "@/components/store/ProductCard";
@@ -544,14 +544,16 @@ export default function StorePage() {
                 >
                   <MessageCircle className="w-5 h-5 text-brand-300" />
                 </a>
-                <a
-                  href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-green-600 hover:bg-green-500 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <MessageCircle className="w-5 h-5 text-white" />
-                </a>
+                {SITE_CONFIG.social.instagram && (
+                  <a
+                    href={SITE_CONFIG.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-brand-700 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors"
+                  >
+                    <Instagram className="w-5 h-5 text-brand-300" />
+                  </a>
+                )}
               </div>
               <h4 className="text-white font-semibold mb-4">Delivery</h4>
               <div className="text-sm text-brand-400 space-y-1">
