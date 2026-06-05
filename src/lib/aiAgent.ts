@@ -60,7 +60,7 @@ interface AIConfig {
 }
 
 const DEFAULT_CONFIG: AIConfig = {
-  model: 'anthropic/claude-3-haiku',
+  model: 'nvidia/nemotron-nano-9b-v2:free',
   temperature: 0.75,
   maxOutputTokens: 400,
   timeoutMs: 15_000,
